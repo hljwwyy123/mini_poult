@@ -1,0 +1,11 @@
+{
+    "permission": {
+        "scope.userLocation": {
+            "desc": "小程序将会根据你的位置推荐好货"
+        }
+    },
+    "pages": [
+        "pages/poult/main"
+
+    ]
+}
