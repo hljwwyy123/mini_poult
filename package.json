@@ -1,8 +1,8 @@
 {
-    "name": "mini_menpiao",
+    "name": "mini_poult",
     "version": "1.0.0",
-    "description": "马蜂窝门票小程序",
-    "author": "陈丹君 <chendanjun@mafengwo.com>",
+    "description": "走小鸡小程序",
+    "author": "",
     "private": true,
     "scripts": {
         "dev": "node build/dev-server.js",
