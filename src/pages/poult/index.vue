@@ -24,7 +24,7 @@ export default {
         this.doubleCount = 0; // 暴击次数
         this.totalScore = 0; // 获得总大力丸
         this.scoreList = [1, 2, 3]; // 获得大力丸随机个数列表
-        this.mostScore = 50; // 最多可以在该小鸡获得都少大力丸
+        this.mostScore = 50; // 最多可以在该小鸡获得都少大力丸 由接口获得
         this.serialCount = 0; // 300ms 内连续点击的次数 -> 提高概率
         this.beatTimer = null; // debounce timerid
         this.serialDuration = 300; // 连续点击 timer 间隔
@@ -70,11 +70,19 @@ export default {
                 console.log(value);
             }
             if (this.totalScore >= this.mostScore) {
-                wx.showToast({
-                    title: "不要再打我了",
-                    icon: "none",
-                    duration: 2000
-                });
+                if (this.mostScore === 0) {
+                    wx.showToast({
+                        title: "今天打得够多了",
+                        icon: "none",
+                        duration: 2000
+                    });
+                } else {
+                    wx.showToast({
+                        title: "不要再打我了",
+                        icon: "none",
+                        duration: 2000
+                    });
+                }
                 this.totalScore = this.mostScore;
             }
             const context = wx.createCanvasContext("score");
