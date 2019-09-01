@@ -5,7 +5,7 @@
         }
     },
     "pages": [
-        "pages/poult/main"
-
+        "pages/poult/main",
+        "pages/user/main"
     ]
 }
