@@ -1,6 +1,6 @@
 {
   "navigationBarBackgroundColor": "#FFFFFF",
-  "navigationBarTitleText": "我的主页",
+  "navigationBarTitleText": "联系我们",
   "navigationBarTextStyle": "black",
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 30

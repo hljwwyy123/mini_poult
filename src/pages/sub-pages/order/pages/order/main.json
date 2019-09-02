@@ -1,6 +1,6 @@
 {
   "navigationBarBackgroundColor": "#FFFFFF",
-  "navigationBarTitleText": "我的主页",
+  "navigationBarTitleText": "下单",
   "navigationBarTextStyle": "black",
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 30

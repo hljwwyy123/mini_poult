@@ -1,6 +1,6 @@
 {
   "navigationBarBackgroundColor": "#FFFFFF",
-  "navigationBarTitleText": "我的主页",
+  "navigationBarTitleText": "订单详情",
   "navigationBarTextStyle": "black",
   "enablePullDownRefresh": true,
   "onReachBottomDistance": 30
