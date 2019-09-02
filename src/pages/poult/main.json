@@ -1,5 +1,6 @@
 {
     "navigationStyle": "custom",
     "enablePullDownRefresh": false,
-    "onReachBottomDistance": 30
+    "navigationBarBackgroundColor": "skyblue",
+    "backgroundColor": "skyblue"
 }
