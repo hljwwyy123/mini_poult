@@ -1,25 +1,30 @@
 {
-  "permission": {
-    "scope.userLocation": {
-      "desc": "小程序将会根据你的位置推荐好货"
-    }
-  },
-  "pages": ["pages/poult/main", "pages/user/main"],
-  "subpackages": [
-    {
-      "root": "pages/sub-pages/mine/",
-      "pages": [
-        "pages/concat/main",
-        "pages/exchange-record/main",
-        "pages/rules/main",
-        "pages/score-detail/main",
-        "pages/prizes-list/main",
-        "pages/prizes-detail/main"
-      ]
+    "permission": {
+        "scope.userLocation": {
+            "desc": "小程序将会根据你的位置推荐好货"
+        }
     },
-    {
-      "root": "pages/sub-pages/order/",
-      "pages": ["pages/list/main", "pages/order/main", "pages/detail/main"]
-    }
-  ]
+    "pages": [
+        "pages/major-package/poult/main",
+        "pages/major-package/mine/main"
+    ],
+    "subpackages": [{
+            "root": "pages/sub-package/mine/",
+            "pages": [
+                "exchange-record/main",
+                "rules/main",
+                "score-detail/main",
+                "prizes-list/main",
+                "prizes-detail/main"
+            ]
+        },
+        {
+            "root": "pages/sub-package/order/",
+            "pages": [
+                "list/main",
+                "order/main",
+                "detail/main"
+            ]
+        }
+    ]
 }
