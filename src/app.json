@@ -5,11 +5,11 @@
         }
     },
     "pages": [
-        "pages/major-package/poult/main",
-        "pages/major-package/mine/main"
+        "pages/major/poult/main",
+        "pages/major/mine/main"
     ],
     "subpackages": [{
-            "root": "pages/sub-package/mine/",
+            "root": "pages/sub/mine/",
             "pages": [
                 "exchange-record/main",
                 "rules/main",
@@ -19,7 +19,7 @@
             ]
         },
         {
-            "root": "pages/sub-package/order/",
+            "root": "pages/sub/order/",
             "pages": [
                 "list/main",
                 "order/main",
