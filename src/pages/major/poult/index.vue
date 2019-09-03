@@ -48,6 +48,7 @@ export default {
       }
       console.log("rate ", this.rate);
       const random = (Math.random() * 100) | 0;
+      console.log("random", random);
       if (this.rate && random <= this.rate) {
         // 取余 此处待议
         const remider = parseInt(random % this.scoreList.length, 10);
@@ -96,14 +97,13 @@ export default {
       context.draw();
       this.handleResult();
     },
-    handleResult: debounce(
-      function() {
+    handleResult() {
+      clearTimeout(this.beatTimer);
+      this.beatTimer = setTimeout(() => {
         console.log("ajax");
         this.serialCount = 0;
-      },
-      this.serialDuration,
-      { leading: true, trailing: false }
-    )
+      }, this.serialDuration);
+    }
   }
 };
 </script>

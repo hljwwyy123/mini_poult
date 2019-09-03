@@ -27,19 +27,19 @@ export default {
       pages: [
         {
           name: "兑换记录",
-          url: "pages/exchange-record/main"
+          url: "/pages/sub/mine/exchange-record/main"
         },
         {
           name: "奖品列表",
-          url: "pages/prizes-list/main"
+          url: "/pages/sub/mine/prizes-list/main"
         },
         {
           name: "规则",
-          url: "pages/rules/main"
+          url: "/pages/sub/mine/rules/main"
         },
         {
           name: "联系我们",
-          url: "pages/concat/main"
+          url: "/pages/concat/main"
         }
       ]
     };
@@ -68,11 +68,9 @@ export default {
       });
     },
     handleNavigate(url) {
-      if (url) {
-        wx.navigateTo({
-          url: `/pages/sub-pages/mine/${url}`
-        });
-      }
+      wx.navigateTo({
+        url
+      });
     }
   }
 };
