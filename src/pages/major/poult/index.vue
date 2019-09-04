@@ -2,31 +2,35 @@
   <div class="wrapper">
     <!-- <div class="header"></div> -->
     <div class="content">
-      <canvas class="poult-bg" canvas-id="poult-bg"></canvas>
-      <canvas id="score" class="canvas score" canvas-id="score"></canvas>
-      <canvas id="text" class="canvas text" canvas-id="text"></canvas>
-      <canvas @click="handlePoultClick" id="poult" class="canvas poult" canvas-id="poult"></canvas>
+      <div>点击次数：{{beatCount}}</div>
+      <div>获得分数：{{totalScore}}</div>
+      <div>连击次数：{{serialCount}}</div>
+      <div>暴击次数：{{doubleCount}}</div>
+      <div>当前概率：{{rate}}</div>
+      <image class="canvas poult" @click="handlePoultClick" scr="/static/images/poult.png" />
+      <tabs />
     </div>
   </div>
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
+import debounce from "@/utils/debounce.js";
+import tabs from "@/components/tabs";
 export default {
   data() {
-    return {};
+    return {
+      beatCount: 0, // 点击次数
+      totalScore: 0, // 获得总大力丸
+      serialCount: 0, // 300ms 内连续点击的次数 -> 提高概率
+      doubleCount: 0, // 暴击次数
+      rate: 20 // 单次点击获得大力丸概率 %
+    };
   },
   onLoad() {
-    const context = wx.createCanvasContext("poult");
-    context.drawImage("/static/images/poult.png", 0, 0, 100, 100);
-    context.draw();
-    this.rate = 20; // 单次点击获得大力丸概率 %
     this.doubleRate = 20; // 在获得大力丸基础上暴击的概率 %
-    this.beatCount = 0; // 点击次数
-    this.doubleCount = 0; // 暴击次数
-    this.totalScore = 0; // 获得总大力丸
     this.scoreList = [1, 2, 3]; // 获得大力丸随机个数列表
+    // TODO: 根据接口确定需要打多少大力丸
     this.mostScore = 50; // 最多可以在该小鸡获得都少大力丸 由接口获得
-    this.serialCount = 0; // 300ms 内连续点击的次数 -> 提高概率
     this.beatTimer = null; // debounce timerid
     this.serialDuration = 300; // 连续点击 timer 间隔
   },
@@ -87,14 +91,6 @@ export default {
         }
         this.totalScore = this.mostScore;
       }
-      const context = wx.createCanvasContext("score");
-      context.setFontSize(14);
-      context.fillText(`点击次数：${this.beatCount}`, 0, 24);
-      context.fillText(`获得分数：${this.totalScore}`, 0, 48);
-      context.fillText(`连击次数：${this.serialCount}`, 0, 72);
-      context.fillText(`暴击次数：${this.doubleCount}`, 0, 96);
-      context.fillText(`当前概率：${this.rate}`, 0, 120);
-      context.draw();
       this.handleResult();
     },
     handleResult() {
@@ -104,6 +100,9 @@ export default {
         this.serialCount = 0;
       }, this.serialDuration);
     }
+  },
+  components: {
+    tabs
   }
 };
 </script>
@@ -120,17 +119,10 @@ export default {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  .canvas {
-    position: absolute;
-    left: 50%;
-    width: 100px;
-    transform: translateX(-50%);
-  }
   .score {
     top: 120px;
   }
   .poult {
-    top: 50%;
     height: 150px;
     background-color: greenyellow;
   }
