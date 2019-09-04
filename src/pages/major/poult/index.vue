@@ -77,13 +77,13 @@ export default {
       }
       if (this.totalScore >= this.mostScore) {
         if (this.mostScore === 0) {
-          wx.showToast({
+          uni.showToast({
             title: "今天打得够多了",
             icon: "none",
             duration: 2000
           });
         } else {
-          wx.showToast({
+          uni.showToast({
             title: "不要再打我了",
             icon: "none",
             duration: 2000

@@ -1,18 +1,18 @@
 {
     "pages": [{
+            "path": "pages/major/mine/index",
+            "style": {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+                "navigationBarBackgroundColor": "#feb683"
+            }
+        },
+        {
             "path": "pages/major/poult/index",
             "style": {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-                "backgroundColor": "#FFB784"
-            }
-        },
-        {
-            "path": "pages/major/mine/index",
-            "style": {
-                "navigationBarTitleText": "最热",
-                "enablePullDownRefresh": false,
-                "backgroundColor": "#FFB784"
+                "backgroundColor": "#feb683"
             }
         }
     ],
@@ -80,11 +80,6 @@
                 }
             ]
         }
-    ],
-    "globalStyle": {
-        "navigationBarTextStyle": "white",
-        "navigationBarTitleText": "看图",
-        "navigationBarBackgroundColor": "#FF80AB",
-        "backgroundColor": "#EFEFEF"
-    }
+    ]
+
 }

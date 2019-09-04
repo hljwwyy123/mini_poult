@@ -1,7 +1,7 @@
 import Store from '@/utils/store';
 
 export function toast(msg, callback) {
-    wx.showToast({
+    uni.showToast({
         icon: "none",
         title: msg,
         duration: 2000,
@@ -78,7 +78,7 @@ export const getWXQrcode = (page, param, type = 'unlimit') => {
                     }
                 },
                 beforeSend: function() {
-                    wx.showToast({
+                    uni.showToast({
                         title: '生成中',
                         icon: 'loading',
                         mask: true,
@@ -86,7 +86,7 @@ export const getWXQrcode = (page, param, type = 'unlimit') => {
                 },
                 success: function(res) {
                     resolve(res)
-                    wx.hideToast();
+                    uni.hideToast();
                 },
                 fail: function(error) {
                     reject(error)
@@ -130,13 +130,13 @@ export function getUserInfo(successCallback, failCallback) {
 }
 
 export function autoUpdateManager() {
-    if (wx.canIUse('getUpdateManager')) {
-        const updateManager = wx.getUpdateManager()
+    if (uni.canIUse('getUpdateManager')) {
+        const updateManager = uni.getUpdateManager()
         updateManager.onCheckForUpdate(function(res) {
             console.log("检查是否有新版本 ", res)
         });
         updateManager.onUpdateReady(function() {
-            wx.showModal({
+            uni.showModal({
                 title: '更新提示',
                 content: '新版本已经准备好，是否重启小程序？',
                 success: function(res) {

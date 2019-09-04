@@ -31,7 +31,7 @@
 export default {
   data() {
     return {
-      canIUse: wx.canIUse("button.open-type.getUserInfo"),
+      canIUse: uni.canIUse("button.open-type.getUserInfo"),
       userInfo: {},
       pages: [
         {
@@ -54,11 +54,11 @@ export default {
     };
   },
   onLoad() {
-    wx.getSetting({
+    uni.getSetting({
       success: res => {
         if (res.authSetting["scope.userInfo"]) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-          wx.getUserInfo({
+          uni.getUserInfo({
             success: res => {
               this.userInfo = res.userInfo;
               console.log(this.userInfo);
@@ -70,14 +70,14 @@ export default {
   },
   methods: {
     getUserInfo() {
-      wx.getUserInfo({
+      uni.getUserInfo({
         success: res => {
           this.userInfo = res.userInfo;
         }
       });
     },
     handleNavigate(url) {
-      wx.navigateTo({
+      uni.navigateTo({
         url
       });
     }
