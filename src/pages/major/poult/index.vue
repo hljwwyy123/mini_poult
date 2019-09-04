@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import debounce from "@/utils/debounce.js";
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {};
@@ -54,7 +54,7 @@ export default {
         const remider = parseInt(random % this.scoreList.length, 10);
         const value = this.scoreList[remider];
         // 暴击概率映射随机数值
-        if (random <= this.rate * this.doubleRate / 100) {
+        if (random <= (this.rate * this.doubleRate) / 100) {
           console.log("暴击啦");
           this.doubleCount += 1;
           return value * 2;

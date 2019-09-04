@@ -75,6 +75,7 @@ export default {
   }
 };
 </script>
+
 <style scoped lang="scss">
 .wrapper {
   background-color: #f4f4f4;

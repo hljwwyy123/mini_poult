@@ -1,7 +1,0 @@
-{
-  "navigationBarBackgroundColor": "#FFFFFF",
-  "navigationBarTitleText": "奖品列表",
-  "navigationBarTextStyle": "black",
-  "enablePullDownRefresh": true,
-  "onReachBottomDistance": 30
-}

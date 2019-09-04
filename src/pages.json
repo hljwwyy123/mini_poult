@@ -1,0 +1,90 @@
+{
+    "pages": [{
+            "path": "pages/major/poult/index",
+            "style": {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+                "backgroundColor": "#FFB784"
+            }
+        },
+        {
+            "path": "pages/major/mine/index",
+            "style": {
+                "navigationBarTitleText": "最热",
+                "enablePullDownRefresh": false,
+                "backgroundColor": "#FFB784"
+            }
+        }
+    ],
+    "subpackages": [{
+            "root": "pages/sub/mine/",
+            "pages": [{
+                    "path": "exchange-record/index",
+                    "style": {
+                        "navigationBarTitleText": "兑换记录",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
+                    "path": "rules/index",
+                    "style": {
+                        "navigationBarTitleText": "规则",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
+                    "path": "score-detail/index",
+                    "style": {
+                        "navigationBarTitleText": "大力丸明细",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
+                    "path": "prizes-list/index",
+                    "style": {
+                        "navigationBarTitleText": "奖品列表",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
+                    "path": "prizes-detail/index",
+                    "style": {
+                        "navigationBarTitleText": "奖品详情",
+                        "enablePullDownRefresh": false
+                    }
+                }
+            ]
+        },
+        {
+            "root": "pages/sub/order/",
+            "pages": [{
+                    "path": "list/index",
+                    "style": {
+                        "navigationBarTitleText": "订单列表",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
+                    "path": "order/index",
+                    "style": {
+                        "navigationBarTitleText": "订单详情",
+                        "enablePullDownRefresh": false
+                    }
+                },
+                {
+                    "path": "detail/index",
+                    "style": {
+                        "navigationBarTitleText": "订单详情",
+                        "enablePullDownRefresh": false
+                    }
+                }
+            ]
+        }
+    ],
+    "globalStyle": {
+        "navigationBarTextStyle": "white",
+        "navigationBarTitleText": "看图",
+        "navigationBarBackgroundColor": "#FF80AB",
+        "backgroundColor": "#EFEFEF"
+    }
+}
