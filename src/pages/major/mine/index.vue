@@ -3,7 +3,10 @@
     <div class="section">
       <div class="summary">
         <div class="score">123</div>
-        <div @click="handleNavigate('/pages/sub/mine/score-detail/index')" class="info">{{userInfo.nickName}}的大力丸 查看明细>></div>
+        <div
+          @click="handleNavigate('/pages/sub/mine/score-detail/index')"
+          class="info"
+        >{{userInfo.nickName}}的大力丸 查看明细>></div>
         <image :src="userInfo.avatarUrl" class="avator" />
       </div>
     </div>
@@ -39,11 +42,11 @@
       </div>
     </div>
     <div class="section">
-      <div v-for="item in menus" :key="item.url" class="menu" @click="handleNavigate(item.url)">
-        <div class="menu-item">
+      <div v-for="item in menus" :key="item.url" class="list" @click="handleNavigate(item.url)">
+        <div class="item">
           <div>
-            <div class="menu-item-image">icon</div>
-            <div class="menu-item-title">{{item.name}}</div>
+            <div class="item-image">icon</div>
+            <div class="item-title">{{item.name}}</div>
           </div>
           <div class="icon">></div>
         </div>
@@ -138,6 +141,10 @@ export default {
 };
 </script>
 
+<style lang="scss">
+@import "@/styles/common.scss";
+</style>
+
 <style scoped lang="scss">
 .wrapper {
   background-color: #fff;
@@ -145,33 +152,33 @@ export default {
     .summary {
       position: relative;
       background-image: linear-gradient(180deg, #ffb784, #fb6f72);
-      height: 145px;
-      border-bottom-left-radius: 40px;
-      border-bottom-right-radius: 40px;
+      height: 290upx;
+      border-bottom-left-radius: 80upx;
+      border-bottom-right-radius: 80upx;
       text-align: center;
       box-sizing: border-box;
-      margin-bottom: 52.5px;
+      margin-bottom: 105upx;
       .score {
-        font-size: 40px;
-        line-height: 56px;
+        font-size: 80upx;
+        line-height: 112upx;
         color: #fff;
         font-weight: 600;
       }
       .info {
         color: #fff;
-        font-size: 13px;
-        line-height: 18px;
+        font-size: 26upx;
+        line-height: 36upx;
       }
       .avator {
         position: absolute;
         bottom: 0;
         left: 50%;
         transform: translate(-50%, 50%);
-        width: 105px;
-        height: 105px;
+        width: 210upx;
+        height: 210upx;
         border-radius: 50%;
-        margin-top: 15px;
-        border: 2px solid #fff;
+        margin-top: 30upx;
+        border: 4upx solid #fff;
       }
     }
     .header {
@@ -179,22 +186,22 @@ export default {
       justify-content: space-between;
       align-items: center;
       color: #000;
-      font-size: 21px;
+      font-size: 42upx;
       font-weight: 500;
-      padding-left: 15px;
-      padding-right: 15px;
-      padding-bottom: 15px;
+      padding-left: 30upx;
+      padding-right: 30upx;
+      padding-bottom: 30upx;
       .header-more {
-        font-size: 14px;
+        font-size: 28upx;
         color: #676c7c;
       }
     }
     .content {
       display: flex;
       justify-content: space-between;
-      padding-left: 15px;
-      padding-right: 15px;
-      padding-bottom: 15px;
+      padding-left: 30upx;
+      padding-right: 30upx;
+      padding-bottom: 30upx;
     }
     .day {
       color: #828282;
@@ -202,14 +209,14 @@ export default {
       .day-content {
         border: 1px solid #828282;
         border-radius: 50%;
-        width: 33px;
-        height: 33px;
-        line-height: 33px;
-        font-size: 12px;
+        width: 66upx;
+        height: 66upx;
+        line-height: 66upx;
+        font-size: 24upx;
       }
       .day-footer {
-        font-size: 10px;
-        padding-top: 2.5px;
+        font-size: 20upx;
+        padding-top: 5upx;
       }
     }
     .share-button {
@@ -217,18 +224,18 @@ export default {
       justify-content: center;
       align-items: center;
       color: #fff;
-      font-size: 20px;
+      font-size: 40upx;
       width: 84vw;
       height: 12.4vw;
       background-color: #fb6f72;
       border-radius: 6.2vw;
-      margin-top: 5px;
+      margin-top: 10upx;
     }
     .prizes-item {
       .prizes-image {
-        width: 88px;
-        height: 83.5px;
-        border-radius: 4px;
+        width: 176upx;
+        height: 167upx;
+        border-radius: 8upx;
         background-color: #f4f4f4;
       }
       .prizes-content {
@@ -236,7 +243,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         flex: 1;
-        padding-left: 10px;
+        padding-left: 20upx;
         .prizes-info {
           display: flex;
           flex-direction: column;
@@ -244,7 +251,7 @@ export default {
           justify-content: space-between;
           height: 100%;
           .prizes-title {
-            font-size: 16px;
+            font-size: 32upx;
             color: #000;
             font-weight: 500;
           }
@@ -255,58 +262,39 @@ export default {
           }
           .prizes-source-price {
             display: inline-block;
-            font-size: 12px;
+            font-size: 24upx;
             color: #676c7c;
             text-decoration: line-through;
-            padding-right: 5px;
+            padding-right: 10upx;
           }
         }
         .prizes-button {
-          width: 70px;
-          height: 32.5px;
-          line-height: 32.5px;
+          width: 140upx;
+          height: 65upx;
+          line-height: 65upx;
           text-align: center;
           background-color: rgba(251, 111, 114, 0.09);
-          border-radius: 14px;
-          font-size: 14px;
+          border-radius: 28upx;
+          font-size: 28upx;
           color: #fb6f72;
         }
       }
     }
-    .menu {
-      height: 55px;
-      padding-left: 15px;
-      box-sizing: border-box;
-      .menu-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 100%;
-        padding-right: 15px;
-        border-bottom: 1px solid #eaecf0;
-        box-sizing: border-box;
-        .menu-item-image {
-          display: inline-block;
-          width: 18px;
-          height: 19px;
-          margin-right: 10px;
-        }
-        .menu-item-title {
-          display: inline-block;
-          font-size: 15px;
-          color: #212830;
-        }
-        .icon {
-          color: #a4adc0;
-        }
-      }
+    .item-image {
+      display: inline-block;
+      width: 36upx;
+      height: 38upx;
+      margin-right: 20upx;
+    }
+    .icon {
+      color: #a4adc0;
     }
     &.section-center {
       display: flex;
       justify-content: center;
     }
     &:not(:last-child) {
-      padding-bottom: 20px;
+      padding-bottom: 40upx;
     }
   }
 }
