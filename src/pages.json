@@ -17,7 +17,7 @@
             }
         }
     ],
-    "subpackages": [{
+    "subPackages": [{
             "root": "pages/sub/mine/",
             "pages": [{
                     "path": "exchange-record/index",
@@ -62,13 +62,6 @@
                     "path": "list/index",
                     "style": {
                         "navigationBarTitleText": "订单列表",
-                        "enablePullDownRefresh": false
-                    }
-                },
-                {
-                    "path": "order/index",
-                    "style": {
-                        "navigationBarTitleText": "订单详情",
                         "enablePullDownRefresh": false
                     }
                 },
