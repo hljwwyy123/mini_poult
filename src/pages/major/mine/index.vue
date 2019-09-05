@@ -3,7 +3,7 @@
     <div class="section">
       <div class="summary">
         <div class="score">123</div>
-        <div class="info">{{userInfo.nickName}}的大力丸 查看明细>></div>
+        <div @click="handleNavigate('/pages/sub/mine/score-detail/index')" class="info">{{userInfo.nickName}}的大力丸 查看明细>></div>
         <image :src="userInfo.avatarUrl" class="avator" />
       </div>
     </div>
@@ -23,7 +23,7 @@
     <div class="section">
       <div class="header">
         奖品兑换
-        <div class="header-more">更多奖品</div>
+        <div @click="handleNavigate('/pages/sub/mine/prizes-list/index')" class="header-more">更多奖品</div>
       </div>
       <div class="content prizes-item">
         <div class="prizes-image">image</div>
@@ -39,12 +39,15 @@
       </div>
     </div>
     <div class="section">
-      <div
-        v-for="item in pages"
-        :key="item.url"
-        class="item"
-        @click="handleNavigate(item.url)"
-      >{{item.name}}</div>
+      <div v-for="item in menus" :key="item.url" class="menu" @click="handleNavigate(item.url)">
+        <div class="menu-item">
+          <div>
+            <div class="menu-item-image">icon</div>
+            <div class="menu-item-title">{{item.name}}</div>
+          </div>
+          <div class="icon">></div>
+        </div>
+      </div>
     </div>
     <button v-if="canIUse" open-type="getUserInfo" @click="getUserInfo">授权登录</button>
   </div>
@@ -55,22 +58,18 @@ export default {
     return {
       canIUse: uni.canIUse("button.open-type.getUserInfo"),
       userInfo: {},
-      pages: [
+      menus: [
         {
           name: "兑换记录",
-          url: "/pages/sub/mine/exchange-record/main"
+          url: "/pages/sub/mine/exchange-record/index"
         },
         {
-          name: "奖品列表",
-          url: "/pages/sub/mine/prizes-list/main"
-        },
-        {
-          name: "规则",
-          url: "/pages/sub/mine/rules/main"
+          name: "规则说明",
+          url: "/pages/sub/mine/rules/index"
         },
         {
           name: "联系我们",
-          url: "/pages/concat/main"
+          url: ""
         }
       ],
       daysInfo: [
@@ -129,9 +128,11 @@ export default {
       });
     },
     handleNavigate(url) {
-      uni.navigateTo({
-        url
-      });
+      if (url) {
+        uni.navigateTo({
+          url
+        });
+      }
     }
   }
 };
@@ -185,7 +186,7 @@ export default {
       padding-bottom: 15px;
       .header-more {
         font-size: 14px;
-        color: #676C7C;
+        color: #676c7c;
       }
     }
     .content {
@@ -272,12 +273,40 @@ export default {
         }
       }
     }
-    &:not(:last-child) {
-      padding-bottom: 20px;
+    .menu {
+      height: 55px;
+      padding-left: 15px;
+      box-sizing: border-box;
+      .menu-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 100%;
+        padding-right: 15px;
+        border-bottom: 1px solid #eaecf0;
+        box-sizing: border-box;
+        .menu-item-image {
+          display: inline-block;
+          width: 18px;
+          height: 19px;
+          margin-right: 10px;
+        }
+        .menu-item-title {
+          display: inline-block;
+          font-size: 15px;
+          color: #212830;
+        }
+        .icon {
+          color: #a4adc0;
+        }
+      }
     }
     &.section-center {
       display: flex;
       justify-content: center;
+    }
+    &:not(:last-child) {
+      padding-bottom: 20px;
     }
   }
 }
