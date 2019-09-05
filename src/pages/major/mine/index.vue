@@ -10,9 +10,31 @@
     <div class="section">
       <div class="header">已连续打卡1天</div>
       <div class="content">
-        <div class="day">
-          <div class="day-content">+10</div>
-          <div class="day-footer">第1天</div>
+        <div v-for="(item, index) in daysInfo" :key="index" class="day">
+          <div v-if="item.isSigned" class="day-content">biu</div>
+          <div v-else class="day-content">{{item.prizes}}</div>
+          <div class="day-footer">第{{index + 1}}天</div>
+        </div>
+      </div>
+      <div class="section section-center">
+        <div class="share-button">邀请好友立得100大力丸</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="header">
+        奖品兑换
+        <div class="header-more">更多奖品</div>
+      </div>
+      <div class="content prizes-item">
+        <div class="prizes-image">image</div>
+        <div class="prizes-content">
+          <div class="prizes-info">
+            <div class="prizes-title">空气加湿器</div>
+            <div class="prizes-price">
+              <div class="prizes-source-price">4500大力丸</div>3800
+            </div>
+          </div>
+          <div class="prizes-button">去兑换</div>
         </div>
       </div>
     </div>
@@ -24,7 +46,7 @@
         @click="handleNavigate(item.url)"
       >{{item.name}}</div>
     </div>
-    <button v-if="canIUse" open-type="getUserInfo" @click="geiUserInfo">授权登录</button>
+    <button v-if="canIUse" open-type="getUserInfo" @click="getUserInfo">授权登录</button>
   </div>
 </template>
 <script>
@@ -49,6 +71,36 @@ export default {
         {
           name: "联系我们",
           url: "/pages/concat/main"
+        }
+      ],
+      daysInfo: [
+        {
+          prizes: "+10",
+          isSigned: true
+        },
+        {
+          prizes: "+10",
+          isSigned: false
+        },
+        {
+          prizes: "+10",
+          isSigned: false
+        },
+        {
+          prizes: "+10",
+          isSigned: false
+        },
+        {
+          prizes: "+10",
+          isSigned: false
+        },
+        {
+          prizes: "+10",
+          isSigned: false
+        },
+        {
+          prizes: "+10",
+          isSigned: false
         }
       ]
     };
@@ -92,7 +144,7 @@ export default {
     .summary {
       position: relative;
       background-image: linear-gradient(180deg, #ffb784, #fb6f72);
-      height: 50vw;
+      height: 145px;
       border-bottom-left-radius: 40px;
       border-bottom-right-radius: 40px;
       text-align: center;
@@ -122,12 +174,19 @@ export default {
       }
     }
     .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       color: #000;
       font-size: 21px;
       font-weight: 500;
       padding-left: 15px;
       padding-right: 15px;
       padding-bottom: 15px;
+      .header-more {
+        font-size: 14px;
+        color: #676C7C;
+      }
     }
     .content {
       display: flex;
@@ -135,24 +194,90 @@ export default {
       padding-left: 15px;
       padding-right: 15px;
       padding-bottom: 15px;
-      .day {
-        color: #828282;
-        text-align: center;
-        .day-content {
-          border: 1px solid #828282;
-          border-radius: 50%;
-          width: 33px;
-          height: 33px;
-          line-height: 33px;
+    }
+    .day {
+      color: #828282;
+      text-align: center;
+      .day-content {
+        border: 1px solid #828282;
+        border-radius: 50%;
+        width: 33px;
+        height: 33px;
+        line-height: 33px;
+        font-size: 12px;
+      }
+      .day-footer {
+        font-size: 10px;
+        padding-top: 2.5px;
+      }
+    }
+    .share-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 20px;
+      width: 84vw;
+      height: 12.4vw;
+      background-color: #fb6f72;
+      border-radius: 6.2vw;
+      margin-top: 5px;
+    }
+    .prizes-item {
+      .prizes-image {
+        width: 88px;
+        height: 83.5px;
+        border-radius: 4px;
+        background-color: #f4f4f4;
+      }
+      .prizes-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex: 1;
+        padding-left: 10px;
+        .prizes-info {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          justify-content: space-between;
+          height: 100%;
+          .prizes-title {
+            font-size: 16px;
+            color: #000;
+            font-weight: 500;
+          }
+          .prizes-price {
+            font-size: 14px;
+            color: #fb6f72;
+            font-weight: 500;
+          }
+          .prizes-source-price {
+            display: inline-block;
+            font-size: 12px;
+            color: #676c7c;
+            text-decoration: line-through;
+            padding-right: 5px;
+          }
         }
-        .day-footer {
-          font-size: 10px;
-          padding-top: 2.5px;
+        .prizes-button {
+          width: 70px;
+          height: 32.5px;
+          line-height: 32.5px;
+          text-align: center;
+          background-color: rgba(251, 111, 114, 0.09);
+          border-radius: 14px;
+          font-size: 14px;
+          color: #fb6f72;
         }
       }
     }
     &:not(:last-child) {
       padding-bottom: 20px;
+    }
+    &.section-center {
+      display: flex;
+      justify-content: center;
     }
   }
 }
