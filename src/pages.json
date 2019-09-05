@@ -4,6 +4,7 @@
             "style": {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
+                "backgroundColor": "#feb683",
                 "navigationBarBackgroundColor": "#feb683"
             }
         },

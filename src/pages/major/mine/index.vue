@@ -96,7 +96,6 @@ export default {
       border-bottom-left-radius: 40px;
       border-bottom-right-radius: 40px;
       text-align: center;
-      padding-top: 50px;
       box-sizing: border-box;
       margin-bottom: 52.5px;
       .score {
@@ -104,12 +103,10 @@ export default {
         line-height: 56px;
         color: #fff;
         font-weight: 600;
-        font-family: PingFangSC;
       }
       .info {
         color: #fff;
         font-size: 13px;
-        font-family: PingFangSC;
         line-height: 18px;
       }
       .avator {
@@ -121,14 +118,13 @@ export default {
         height: 105px;
         border-radius: 50%;
         margin-top: 15px;
-        border: 5px solid #fff;
+        border: 2px solid #fff;
       }
     }
     .header {
       color: #000;
       font-size: 21px;
       font-weight: 500;
-      font-family: PingFangSC;
       padding-left: 15px;
       padding-right: 15px;
       padding-bottom: 15px;
