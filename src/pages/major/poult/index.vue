@@ -14,7 +14,7 @@
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
-import debounce from "@/utils/debounce.js";
+// import debounce from "@/utils/debounce.js";
 import tabs from "@/components/tabs";
 export default {
   data() {
