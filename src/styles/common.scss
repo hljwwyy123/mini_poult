@@ -1,0 +1,25 @@
+.list {
+  height: 110upx;
+  padding-left: 30upx;
+  box-sizing: border-box;
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding-right: 30upx;
+    border-bottom: 1upx solid #eaecf0;
+    box-sizing: border-box;
+
+    .item-title {
+      display: inline-block;
+      font-size: 30upx;
+      color: #212830;
+    }
+    .item-subtitle {
+      font-size: 24upx;
+      color: #828282;
+      line-height: 34upx;
+    }
+  }
+}
