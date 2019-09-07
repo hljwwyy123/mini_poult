@@ -6,7 +6,7 @@
       <div class="info">我的大力丸余额</div>
       <div class="button">邀请好友赚100大力丸</div>
     </div>
-    <div class="content">
+    <scroll-view scroll-y class="content" @scrolltolower="handleLoadData">
       <div class="list">
         <div v-for="(item, index) in list" :key="index" class="item">
           <div class="item-left">
@@ -18,21 +18,43 @@
           </div>
         </div>
       </div>
-    </div>
+      <mix-load-more :status="loadMoreStatus"></mix-load-more>
+    </scroll-view>
   </div>
 </template>
 <script>
+import mixPulldownRefresh from "@/components/mix-pulldown-refresh/mix-pulldown-refresh";
+import mixLoadMore from "@/components/mix-load-more/mix-load-more";
+
 export default {
   data() {
     return {
-      list: [
-        {
-          title: "7天打卡",
-          time: "2019-08-27 16:28:32",
-          detail: "-20"
-        }
-      ]
+      list: [],
+      loadMoreStatus: 0
     };
+  },
+  onLoad() {
+    this.handleLoadData();
+  },
+  methods: {
+    handleLoadData() {
+      this.loadMoreStatus = 1;
+      setTimeout(() => {
+        const list = Array.from({ length: 10 }).map((item, index) => {
+          return {
+            title: "7天打卡",
+            time: "2019-08-27 16:28:32",
+            detail: `${Math.random() > 0.5 ? "+" : "-"}${index}`
+          };
+        });
+        this.list.push(...list);
+        this.loadMoreStatus = 0;
+      }, 1000);
+    }
+  },
+  components: {
+    mixPulldownRefresh,
+    mixLoadMore
   }
 };
 </script>
@@ -76,6 +98,9 @@ export default {
       border-radius: 6.2vw;
       margin-top: 30upx;
     }
+  }
+  .content {
+    height: calc(100vh - 400upx);
   }
   .item-detail {
     font-size: 32upx;
