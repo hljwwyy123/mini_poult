@@ -42,9 +42,30 @@ export default {
   },
   onLoad() {
     // todo ajax
+    this.getPrizeList();
   },
   methods: {
-    getPrizeList() {}
+    getPrizeList() {
+      uni.request({
+        url: this.$serverUrl + "/mp/login",
+        success: res => {
+          // if (res.data.code !== 0) {
+          // 	uni.showModal({
+          // 		content: '请求失败，失败原因：' + res.data.msg,
+          // 		showCancel: false
+          // 	})
+          // 	return;
+          // }
+          // this.data = this.data.concat(res.data.data);
+        },
+        fail: () => {
+          uni.showModal({
+            content: "请求失败，请重试!",
+            showCancel: false
+          });
+        }
+      });
+    }
   }
 };
 </script>
