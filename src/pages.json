@@ -86,14 +86,18 @@
           "path": "list/index",
           "style": {
             "navigationBarTitleText": "订单列表",
-            "enablePullDownRefresh": false
+            "enablePullDownRefresh": false,
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
           }
         },
         {
           "path": "detail/index",
           "style": {
             "navigationBarTitleText": "订单详情",
-            "enablePullDownRefresh": false
+            "enablePullDownRefresh": false,
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
           }
         }
       ]
