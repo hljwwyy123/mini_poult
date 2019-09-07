@@ -55,6 +55,15 @@
                         "navigationBarTitleText": "奖品详情",
                         "enablePullDownRefresh": false
                     }
+                },
+                {
+                    "path": "rank-list/index",
+                    "style": {
+                        "navigationBarTitleText": "大力丸排行版",
+                        "enablePullDownRefresh": false,
+                        "navigationBarBackgroundColor": "#fff",
+                        "navigationBarTextStyle": "black"
+                    }
                 }
             ]
         },

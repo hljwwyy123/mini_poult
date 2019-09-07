@@ -66,67 +66,33 @@ export const getAddDayDate = (AddDayCount) => {
      * @param type 获取二维码方式 unlimit 不限制生成二维码数量，但是参数不能超过32个字符。非unlimit方式，每天10w个码，参数128个字符
      */
 export const getWXQrcode = (page, param, type = 'unlimit') => {
-        return new Promise((resolve, reject) => {
-            let requestUrl = type === 'unlimit' ? '/tickets/wxcode/getWxacodeUnlimit' : '/tickets/wxcode/getwxacode';
-            mfwSdk.request({
-                url: requestUrl,
-                method: "GET",
-                data: {
-                    "data_decorate": {
-                        "page": page,
-                        "param": param
-                    }
-                },
-                beforeSend: function() {
-                    uni.showToast({
-                        title: '生成中',
-                        icon: 'loading',
-                        mask: true,
-                    });
-                },
-                success: function(res) {
-                    resolve(res)
-                    uni.hideToast();
-                },
-                fail: function(error) {
-                    reject(error)
+    return new Promise((resolve, reject) => {
+        let requestUrl = type === 'unlimit' ? '/tickets/wxcode/getWxacodeUnlimit' : '/tickets/wxcode/getwxacode';
+        mfwSdk.request({
+            url: requestUrl,
+            method: "GET",
+            data: {
+                "data_decorate": {
+                    "page": page,
+                    "param": param
                 }
-            })
+            },
+            beforeSend: function() {
+                uni.showToast({
+                    title: '生成中',
+                    icon: 'loading',
+                    mask: true,
+                });
+            },
+            success: function(res) {
+                resolve(res)
+                uni.hideToast();
+            },
+            fail: function(error) {
+                reject(error)
+            }
         })
-    }
-    /**
-     * 根据 appid + openid 获取 mfw 账号信息
-     * 如获取到绑定信息 会自动登录 setLogin ，并且返回 mfw 账号相关信息
-     * 如没有获取到绑定信息 什么都不会做
-     */
-export function getUserInfo(successCallback, failCallback) {
-    mfwSdk.getMfwUserInfo({
-        login: mfwSdk.LOGIN_GENTLE, // 非必须，默认为mfwSdk.LOGIN_GENTLE
-        success: function(res) {
-            if (res && res.wxInfo) {
-                Store.commit('updateOpenId', res.wxInfo.openid);
-            }
-            if (res.userInfo) {
-                syncOpenidAndUid(res.wxInfo.openid, res.userInfo.uid);
-                Store.commit('updateMfwUserLogo', res.userInfo.logo);
-                Store.commit('updateMfwUserName', res.userInfo.name);
-                Store.commit('updateMfwUserId', res.userInfo.uid);
-                Store.commit('updateHasBindTel', res.userInfo.verify);
-                console.log('登录成功', res);
-            } else {
-                console.log('未绑定');
-            }
-            if (successCallback && typeof successCallback === 'function') {
-                successCallback(res);
-            }
-        },
-        fail: function() {
-            if (failCallback && typeof failCallback === 'function') {
-                failCallback();
-            }
-            console.log('获取失败')
-        }
-    });
+    })
 }
 
 export function autoUpdateManager() {
@@ -148,4 +114,8 @@ export function autoUpdateManager() {
             })
         })
     }
+}
+
+export function formatScore(num) {
+    return num;
 }
