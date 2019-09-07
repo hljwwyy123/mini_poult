@@ -1,16 +1,14 @@
 .list {
-  height: 110upx;
   padding-left: 30upx;
   box-sizing: border-box;
   .item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 100%;
     padding-right: 30upx;
     border-bottom: 1upx solid #eaecf0;
     box-sizing: border-box;
-
+    min-height: 110upx;
     .item-title {
       display: inline-block;
       font-size: 30upx;

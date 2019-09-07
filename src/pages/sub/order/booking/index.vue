@@ -1,10 +1,13 @@
 <template>
-  <div class="wrapper">下单</div>
+  <div class="wrapper">确认订单</div>
 </template>
 <script>
 export default {
   data() {
     return {};
+  },
+  onLoad(param) {
+    console.log(param)
   }
 };
 </script>

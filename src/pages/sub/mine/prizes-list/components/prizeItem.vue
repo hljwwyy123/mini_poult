@@ -10,7 +10,7 @@
       <div class="prize-changeNum">已兑换: {{prize.changedNum}}</div>
       <div class="prize-remainNum">剩余: {{prize.remainNum}}</div>
     </div>
-    <a url="/pages/major/mine/index" v-if="prize.remainNum > 0" class="prize-button">立即兑换</a>
+    <a url="/pages/sub/order/booking/index" v-if="prize.remainNum > 0" class="prize-button">立即兑换</a>
     <div v-else class="prize-button no-remain">已兑换完</div>
   </view>
 </template>
