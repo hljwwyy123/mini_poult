@@ -49,6 +49,8 @@
           "path": "prizes-list/index",
           "style": {
             "navigationBarTitleText": "奖品列表",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black",
             "enablePullDownRefresh": false
           }
         },

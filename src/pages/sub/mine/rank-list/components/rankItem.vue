@@ -1,7 +1,9 @@
 <template>
   <view class="list-item">
     <view class="avatar-container">
-      <view class="rank" :class="{top: data.rank < 3}">{{data.rank}}</view>
+      <view class="rank" :class="{top: data.rank < 3}">
+        <view class="rank-num">{{data.rank}}</view>
+      </view>
       <image class="avatar" :src="data.avatar" />
       <view class="top-mark" v-if="data.rank < 3" />
     </view>
@@ -27,7 +29,6 @@ export default {
   font-weight: bold;
   font-size: 32upx;
   color: #333;
-  background: #fff;
   &:nth-child(even) {
     background: rgba(255, 183, 132, 0.07);
   }
@@ -39,15 +40,21 @@ export default {
     display: flex;
     align-items: center;
     .rank {
+      position: relative;
       width: 90upx;
-      margin-right: -36upx;
+      margin-right: -32upx;
       height: 59upx;
       line-height: 59upx;
-      text-align: left;
-      text-indent: 30upx;
       color: #fea47f;
       font-size: 30upx;
       font-weight: 600;
+      .rank-num {
+        text-align: right;
+        width: 45upx;
+        position: absolute;
+        left: 6upx;
+        top: 0;
+      }
       &.top {
         color: white;
         background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/top-rank.png")
@@ -65,8 +72,8 @@ export default {
     }
     .top-mark {
       position: absolute;
-      top: -18upx;
-      right: -18upx;
+      top: -25upx;
+      right: -27upx;
       width: 60upx;
       height: 60upx;
       background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/avatar-mark.png")
@@ -84,6 +91,7 @@ export default {
     width: 80upx;
     color: rgba(69, 31, 31, 0.52);
     font-size: 36upx;
+    text-align: right;
     &.top {
       color: #fb6f72;
     }

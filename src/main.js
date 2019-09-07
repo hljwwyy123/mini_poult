@@ -4,7 +4,7 @@ import store from './store'
 
 Vue.config.productionTip = false
 
-Vue.prototype.$serverUrl = 'https://unidemo.dcloud.net.cn';
+Vue.prototype.$serverUrl = 'http://112.125.25.43:9090';
 Vue.prototype.$store = store;
 App.mpType = 'app';
 
