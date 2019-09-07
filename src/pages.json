@@ -1,89 +1,102 @@
 {
-    "pages": [{
-            "path": "pages/major/mine/index",
-            "style": {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
-                "backgroundColor": "#feb683",
-                "navigationBarBackgroundColor": "#feb683"
-            }
+  "pages": [
+    {
+      "path": "pages/major/mine/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false,
+        "backgroundColor": "#feb683",
+        "navigationBarBackgroundColor": "#feb683"
+      }
+    },
+    {
+      "path": "pages/major/poult/index",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false,
+        "backgroundColor": "#feb683"
+      }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "pages/sub/mine/",
+      "pages": [
+        {
+          "path": "exchange-record/index",
+          "style": {
+            "navigationBarTitleText": "兑换记录",
+            "enablePullDownRefresh": false
+          }
         },
         {
-            "path": "pages/major/poult/index",
-            "style": {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
-                "backgroundColor": "#feb683"
-            }
-        }
-    ],
-    "subPackages": [{
-            "root": "pages/sub/mine/",
-            "pages": [{
-                    "path": "exchange-record/index",
-                    "style": {
-                        "navigationBarTitleText": "兑换记录",
-                        "enablePullDownRefresh": false
-                    }
-                },
-                {
-                    "path": "rules/index",
-                    "style": {
-                        "navigationBarTitleText": "规则",
-                        "enablePullDownRefresh": false
-                    }
-                },
-                {
-                    "path": "score-detail/index",
-                    "style": {
-                        "navigationBarTitleText": "大力丸明细",
-                        "navigationBarBackgroundColor": "#fff",
-                        "navigationBarTextStyle": "black",
-                        "enablePullDownRefresh": false
-                    }
-                },
-                {
-                    "path": "prizes-list/index",
-                    "style": {
-                        "navigationBarTitleText": "奖品列表",
-                        "enablePullDownRefresh": false
-                    }
-                },
-                {
-                    "path": "prizes-detail/index",
-                    "style": {
-                        "navigationBarTitleText": "奖品详情",
-                        "enablePullDownRefresh": false
-                    }
-                },
-                {
-                    "path": "rank-list/index",
-                    "style": {
-                        "navigationBarTitleText": "大力丸排行版",
-                        "enablePullDownRefresh": false,
-                        "navigationBarBackgroundColor": "#fff",
-                        "navigationBarTextStyle": "black"
-                    }
-                }
-            ]
+          "path": "rules/index",
+          "style": {
+            "navigationBarTitleText": "规则",
+            "enablePullDownRefresh": false
+          }
         },
         {
-            "root": "pages/sub/order/",
-            "pages": [{
-                    "path": "list/index",
-                    "style": {
-                        "navigationBarTitleText": "订单列表",
-                        "enablePullDownRefresh": false
-                    }
-                },
-                {
-                    "path": "detail/index",
-                    "style": {
-                        "navigationBarTitleText": "订单详情",
-                        "enablePullDownRefresh": false
-                    }
-                }
-            ]
+          "path": "score-detail/index",
+          "style": {
+            "navigationBarTitleText": "大力丸明细",
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "prizes-list/index",
+          "style": {
+            "navigationBarTitleText": "奖品列表",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "prizes-detail/index",
+          "style": {
+            "navigationBarTitleText": "奖品详情",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "rank-list/index",
+          "style": {
+            "navigationBarTitleText": "大力丸排行版",
+            "enablePullDownRefresh": false,
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
         }
-    ]
+      ]
+    },
+    {
+      "root": "pages/sub/order/",
+      "pages": [
+        {
+          "path": "booking/index",
+          "style": {
+            "navigationBarTitleText": "确认订单",
+            "enablePullDownRefresh": false,
+            "navigationBarBackgroundColor": "#fff",
+            "navigationBarTextStyle": "black"
+          }
+        },
+        {
+          "path": "list/index",
+          "style": {
+            "navigationBarTitleText": "订单列表",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "detail/index",
+          "style": {
+            "navigationBarTitleText": "订单详情",
+            "enablePullDownRefresh": false
+          }
+        }
+      ]
+    }
+  ]
 }

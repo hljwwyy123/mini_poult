@@ -37,7 +37,7 @@
               <div class="prizes-source-price">4500大力丸</div>3800
             </div>
           </div>
-          <div class="prizes-button">去兑换</div>
+          <div @click="handleBooking()" class="prizes-button">去兑换</div>
         </div>
       </div>
     </div>
@@ -123,6 +123,11 @@ export default {
     });
   },
   methods: {
+    handleBooking(orderId = 1) {
+      uni.navigateTo({
+        url: `/pages/sub/order/booking/index?orderId=${orderId}`
+      })
+    },
     getUserInfo() {
       uni.getUserInfo({
         success: res => {
