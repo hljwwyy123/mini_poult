@@ -23,6 +23,8 @@
                     "path": "exchange-record/index",
                     "style": {
                         "navigationBarTitleText": "兑换记录",
+                        "navigationBarBackgroundColor": "#fff",
+                        "navigationBarTextStyle": "black",
                         "enablePullDownRefresh": false
                     }
                 },
@@ -30,6 +32,8 @@
                     "path": "rules/index",
                     "style": {
                         "navigationBarTitleText": "规则",
+                        "navigationBarBackgroundColor": "#fff",
+                        "navigationBarTextStyle": "black",
                         "enablePullDownRefresh": false
                     }
                 },
@@ -45,7 +49,9 @@
                 {
                     "path": "prizes-list/index",
                     "style": {
-                        "navigationBarTitleText": "奖品列表",
+                        "navigationBarTitleText": "奖品兑换",
+                        "navigationBarBackgroundColor": "#fff",
+                        "navigationBarTextStyle": "black",
                         "enablePullDownRefresh": false
                     }
                 },
@@ -53,6 +59,8 @@
                     "path": "prizes-detail/index",
                     "style": {
                         "navigationBarTitleText": "奖品详情",
+                        "navigationBarBackgroundColor": "#fff",
+                        "navigationBarTextStyle": "black",
                         "enablePullDownRefresh": false
                     }
                 },
@@ -60,9 +68,9 @@
                     "path": "rank-list/index",
                     "style": {
                         "navigationBarTitleText": "大力丸排行版",
-                        "enablePullDownRefresh": false,
                         "navigationBarBackgroundColor": "#fff",
-                        "navigationBarTextStyle": "black"
+                        "navigationBarTextStyle": "black",
+                        "enablePullDownRefresh": false
                     }
                 }
             ]

@@ -65,8 +65,8 @@ export default {
     }
     .top-mark {
       position: absolute;
-      top: -18upx;
-      right: -18upx;
+      top: -25upx;
+      right: -27upx;
       width: 60upx;
       height: 60upx;
       background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/avatar-mark.png")
