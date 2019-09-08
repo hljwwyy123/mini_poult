@@ -1,5 +1,6 @@
 <template>
   <view class="list-item">
+    <image src="/static/mine-mark.png"  v-if="data.rank === 6" class="mine-mark"></image>
     <view class="avatar-container">
       <view class="rank" :class="{top: data.rank < 3}">
         <view class="rank-num">{{data.rank}}</view>
@@ -20,6 +21,7 @@ export default {
 </script>
 <style scoped lang="scss">
 .list-item {
+  position: relative;
   display: flex;
   margin: 0 40upx;
   align-items: center;
@@ -34,6 +36,14 @@ export default {
   }
   &:last-child {
     border-radius: 0 20upx 20upx 0;
+  }
+  .mine-mark {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: -40upx;
+    width: 53upx;
+    height: 51upx;
   }
   .avatar-container {
     position: relative;

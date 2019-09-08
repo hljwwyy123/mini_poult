@@ -30,6 +30,7 @@
             <rank-item
               class="rank-item"
               v-for="item in tabItem.list"
+              :class="{mine: item.rank === 6}"
               :key="item.rank"
               :data="item"
             />
@@ -202,9 +203,14 @@ export default {
       height: 100%;
     }
     .rank-item {
+      position: relative;
       display: block;
       &:nth-child(even) {
         background: rgba(255, 183, 132, 0.07);
+      }
+
+      &.mine {
+        background: rgba(255, 183, 132, 0.4);
       }
     }
     .empty-list {
