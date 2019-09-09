@@ -1,17 +1,17 @@
 <template>
-  <view class="list-item">
-    <image class="prize-img" :src="prize.picture" />
+  <view class="prize-item">
+    <image class="prize-item-img" :src="prize.goodImg || '/static/goods.jpg'" />
     <div class="prize-info">
-      <div class="prize-title">{{prize.name}}</div>
+      <div class="prize-title">{{prize.goodName}}</div>
       <div class="prize-price">
-        <div class="prize-source-price">{{prize.originPrice}}大力丸</div>
-        {{prize.price}}
+        <div class="prize-source-price">{{prize.goodVirtual}}大力丸</div>
+        {{prize.goodDownVirtual}}
       </div>
-      <div class="prize-changeNum">已兑换: {{prize.changedNum}}</div>
-      <div class="prize-remainNum">剩余: {{prize.remainNum}}</div>
+      <div class="prize-changeNum">已兑换: {{prize.goodNum}}</div>
+      <div class="prize-remainNum">剩余: {{prize.goodNum}}</div>
     </div>
-    <a url="/pages/sub/order/booking/index" v-if="prize.remainNum > 0" class="prize-button">立即兑换</a>
-    <div v-else class="prize-button no-remain">已兑换完</div>
+    <a url="/pages/sub/order/booking/index" v-if="prize.goodNum > 0" class="prize-button">立即兑换</a>
+    <div v-else class="prize-button no-remain">已抢光</div>
   </view>
 </template>
 <script>
@@ -22,23 +22,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.list-item {
-  display: flex;
-  margin: 30upx 30upx 30upx 44upx;
-  align-items: center;
-  justify-content: space-between;
-  height: 165upx;
-  line-height: 165upx;
-  font-weight: bold;
-  font-size: 32upx;
-  color: #333;
-  background: #fff;
-  .prize-img {
-    width: 165upx;
-    height: 165upx;
-    border-radius: 8upx;
-    margin-right: 30upx;
-  }
+.prize-item {
   .prize-info {
     display: flex;
     flex: 1;

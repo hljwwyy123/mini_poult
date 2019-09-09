@@ -1,6 +1,6 @@
 <template>
   <view class="prize-wrapper">
-    <prize-item v-for="item in list" :key="item" :prize="item" />
+    <prize-item v-for="item in goodList" :key="item.id" :prize="item" />
   </view>
 </template>
 <script>
@@ -12,32 +12,7 @@ export default {
   },
   data() {
     return {
-      list: [
-        {
-          picture: "/static/goods.jpg",
-          name: "Diesel男表个性手表",
-          originPrice: "4999",
-          price: "3999",
-          changedNum: (Math.random() * 1000) | 0,
-          remainNum: (Math.random() * 10) | 0
-        },
-        {
-          picture: "/static/goods.jpg",
-          name: "Diesel男表个性手表",
-          originPrice: "4999",
-          price: "3999",
-          changedNum: (Math.random() * 1000) | 0,
-          remainNum: (Math.random() * 10) | 0
-        },
-        {
-          picture: "/static/goods.jpg",
-          name: "Diesel男表个性手表",
-          originPrice: "4999",
-          price: "3999",
-          changedNum: (Math.random() * 1000) | 0,
-          remainNum: 0
-        }
-      ]
+      goodList: []
     };
   },
   onLoad() {
@@ -47,16 +22,9 @@ export default {
   methods: {
     getPrizeList() {
       uni.request({
-        url: this.$serverUrl + "/mp/login",
+        url: this.$serverUrl + "/mp/goodInfoList",
         success: res => {
-          // if (res.data.code !== 0) {
-          // 	uni.showModal({
-          // 		content: '请求失败，失败原因：' + res.data.msg,
-          // 		showCancel: false
-          // 	})
-          // 	return;
-          // }
-          // this.data = this.data.concat(res.data.data);
+          this.goodList = res.data.result;
         },
         fail: () => {
           uni.showModal({

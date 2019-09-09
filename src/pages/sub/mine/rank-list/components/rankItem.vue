@@ -92,10 +92,14 @@ export default {
     }
   }
   .name {
+    flex: 1;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     margin: 0 23upx;
     font-size: 32upx;
     color: #000000;
-    flex: 1;
   }
   .score {
     width: 80upx;
