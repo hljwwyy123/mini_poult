@@ -1,12 +1,12 @@
 <template>
   <div class="wrapper">
     <div class="summary">
-      <div v-if="userInfo.nickName" class="info">{{userInfo.nickName}}的大力丸</div>
-      <div class="score">123</div>
+      <div class="info">{{userInfo.nickName || '我'}}的大力丸</div>
+      <div class="score">0</div>
       <div
         @click="handleNavigate('/pages/sub/mine/score-detail/index')"
         class="info"
-      >{{userInfo.nickName ? '查看明细>>' : '获取个人信息'}}</div>
+      >{{userInfo.nickName ? '查看明细>>' : '点击获取个人信息>>'}}</div>
       <image :src="userInfo.avatarUrl" class="avator" />
     </div>
     <div class="content">
@@ -25,6 +25,13 @@
           </div>
         </div>
         <div class="share-button">邀请好友立得100大力丸</div>
+        <div class="tips-content">
+          <swiper class="swiper" autoplay circular vertical skip-hidden-item-layout :interval="2000">
+            <block v-for="item in tips" :key="item.title">
+              <swiper-item class="swiper-item">{{item.title}}</swiper-item>
+            </block>
+          </swiper>
+        </div>
       </div>
       <div class="section section-shadow">
         <div class="section-header">
@@ -94,10 +101,14 @@
         </div>
       </div>
       <div class="section section-shadow">
-        <div class="section-header">其他工具</div>
         <div class="section-content">
           <div class="menu">
-            <div v-for="item in menus" :key="item.url" @click="handleNavigate(item.url)" class="menu-item">
+            <div
+              v-for="item in menus"
+              :key="item.url"
+              @click="handleNavigate(item.url)"
+              class="menu-item"
+            >
               <div class="menu-item-content">
                 <div class="menu-item-image">ic</div>
                 <div class="menu-item-title">{{item.name}}</div>
@@ -162,6 +173,14 @@ export default {
           prizes: "+10",
           isSigned: false
         }
+      ],
+      tips: [
+        {
+          title: "biubiubiu"
+        },
+        {
+          title: "jiujiujiu"
+        }
       ]
     };
   },
@@ -210,7 +229,7 @@ export default {
   .summary {
     position: relative;
     background-image: linear-gradient(180deg, #ffb784, #fb6f72);
-    height: 290upx;
+    height: 320upx;
     border-bottom-left-radius: 80upx;
     border-bottom-right-radius: 80upx;
     text-align: center;
@@ -218,14 +237,16 @@ export default {
     margin-bottom: 105upx;
     .score {
       font-size: 80upx;
-      line-height: 112upx;
       color: #fff;
       font-weight: 600;
+      padding-bottom: 20upx;
+      line-height: 1;
     }
     .info {
       color: #fff;
       font-size: 26upx;
       line-height: 36upx;
+      padding-bottom: 20upx;
     }
     .avator {
       position: absolute;
@@ -236,7 +257,7 @@ export default {
       height: 210upx;
       border-radius: 50%;
       margin-top: 30upx;
-      border: 4upx solid #fff;
+      border: 10upx solid #fff;
     }
   }
   .content {
@@ -293,6 +314,23 @@ export default {
         height: 12.4vw;
         background-color: #fb6f72;
         border-radius: 6.2vw;
+      }
+      .tips-content {
+        align-self: center;
+        width: 490upx;
+        height: 58upx;
+        background-color: rgba(251, 111, 114, 0.06);
+        border-radius: 29upx;
+        font-size: 24upx;
+        padding: 15upx 30upx;
+        box-sizing: border-box;
+        margin-top: 26upx;
+        .swiper {
+          height: 100%;
+        }
+        .swiper-item {
+          color: #676C7C;
+        }
       }
       .prizes-item {
         display: inline-block;
@@ -356,13 +394,14 @@ export default {
       .menu {
         flex: 1;
         .menu-item {
+          position: relative;
           display: inline-block;
           width: 31%;
           padding: 15upx;
-          background-color: #f4f4f4;
           box-sizing: border-box;
           .menu-item-content {
             display: flex;
+            flex-direction: column;
             align-items: center;
             color: #212830;
             .menu-item-title {
@@ -371,6 +410,16 @@ export default {
           }
           &:not(:last-child) {
             margin-right: 3.5%;
+            &:after {
+              position: absolute;
+              right: 0;
+              top: 50%;
+              transform: translateY(-50%);
+              content: " ";
+              width: 1upx;
+              height: 30upx;
+              background-color: #d8d8d8;
+            }
           }
         }
       }
