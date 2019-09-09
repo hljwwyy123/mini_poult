@@ -1,5 +1,5 @@
 <template>
-  <view class="prize-item active">
+  <view class="prize-item active" @click="gotoDetail(prize.id)">
     <image class="prize-item-img" :src="prize.goodImg || '/static/goods.jpg'" />
     <div class="prize-info">
       <div class="prize-title">{{prize.goodName}}</div>
@@ -20,6 +20,13 @@ export default {
       default(){
         return {}
       }
+    }
+  },
+  methods:{
+    gotoDetail(orderId){
+      uni.navigateTo({
+        url: `/pages/sub/order/detail/index?orderId=${orderId}`
+      });
     }
   }
 };

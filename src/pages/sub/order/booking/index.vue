@@ -43,7 +43,7 @@ export default {
     handleBooking() {
       if (this.address.telNumber) {
         uni.navigateTo({
-          url: "/pages/sub/order/detail/index"
+          url: "/pages/sub/order/booking/success/index"
         });
       } else {
         uni.showToast({

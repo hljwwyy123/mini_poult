@@ -83,6 +83,15 @@
                     }
                 },
                 {
+                    "path": "booking/success/index",
+                    "style": {
+                        "navigationBarTitleText": "兑换成功",
+                        "enablePullDownRefresh": false,
+                        "navigationBarBackgroundColor": "#fff",
+                        "navigationBarTextStyle": "black"
+                    }
+                },
+                {
                     "path": "list/index",
                     "style": {
                         "navigationBarTitleText": "订单列表",
@@ -91,6 +100,7 @@
                         "navigationBarTextStyle": "black"
                     }
                 },
+
                 {
                     "path": "detail/index",
                     "style": {

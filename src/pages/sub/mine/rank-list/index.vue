@@ -91,6 +91,21 @@ export default {
     this.loadData("add");
   },
   methods: {
+    requestData() {
+      uni.request({
+        url: this.$serverUrl + "/mp/integralTopTen",
+        success: res => {
+          // this.goodList = res.data.result;
+          console.log(res.data.result);
+        },
+        fail: () => {
+          uni.showModal({
+            content: "请求失败，请重试!",
+            showCancel: false
+          });
+        }
+      });
+    },
     loadData(type) {
       let tabItem = this.tabList[this.activeTab];
       //type add 加载更多 refresh下拉刷新
@@ -109,6 +124,7 @@ export default {
           tabItem.refreshing = true;
         }
         // TODO ajax
+        this.requestData();
         let length = tabItem.list.length; // todo mock数据
         for (let i = length; i < length + 10; i++) {
           tabItem.list.push({
