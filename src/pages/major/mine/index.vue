@@ -26,7 +26,14 @@
         </div>
         <div class="share-button">邀请好友立得100大力丸</div>
         <div class="tips-content">
-          <swiper class="swiper" autoplay circular vertical skip-hidden-item-layout :interval="2000">
+          <swiper
+            class="swiper"
+            autoplay
+            circular
+            vertical
+            skip-hidden-item-layout
+            :interval="2000"
+          >
             <block v-for="item in tips" :key="item.title">
               <swiper-item class="swiper-item">{{item.title}}</swiper-item>
             </block>
@@ -198,8 +205,19 @@ export default {
         }
       }
     });
+    this.fetchData();
   },
   methods: {
+    fetchData() {
+      Promise.all([this.fetchGoodsList()])
+        .then(res => console.log('res ', res))
+        .catch(error => console.error(error));
+    },
+    fetchGoodsList() {
+      return uni.request({
+        url: `${this.$serverUrl}/mp/goodInfoList`
+      });
+    },
     handleBooking(orderId = 1) {
       uni.navigateTo({
         url: `/pages/sub/order/booking/index?orderId=${orderId}`
@@ -329,7 +347,7 @@ export default {
           height: 100%;
         }
         .swiper-item {
-          color: #676C7C;
+          color: #676c7c;
         }
       }
       .prizes-item {
