@@ -51,58 +51,18 @@
         <div class="section-content">
           <scroll-view scroll-x>
             <div class="scroll-horizontal">
-              <div class="prizes-item" @click="handleBooking()">
-                <image
-                  src="https://gw.alicdn.com/i1/49692482/O1CN01TtDPJz1UCnZ8cppZQ_!!49692482.jpg_300x10000Q75.jpg_.webp"
-                  class="prizes-image"
-                />
-                <div class="prizes-info">
-                  <div class="prizes-title">空气加湿器</div>
-                  <div class="prizes-price">
-                    <div class="prizes-source-price">4500大力丸</div>
-                    <div>3800</div>
+              <block v-for="(item, index) in goodsList" :key="index">
+                <div class="prizes-item" @click="handleBooking(item)">
+                  <image :src="item.goodImg" class="prizes-image" />
+                  <div class="prizes-info">
+                    <div class="prizes-title">{{item.goodName}}</div>
+                    <div class="prizes-price">
+                      <div class="prizes-source-price">{{item.goodVirtual}}大力丸</div>
+                      <div>{{item.goodDownVirtual}}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="prizes-item" @click="handleBooking()">
-                <image
-                  src="https://gw.alicdn.com/i1/49692482/O1CN01TtDPJz1UCnZ8cppZQ_!!49692482.jpg_300x10000Q75.jpg_.webp"
-                  class="prizes-image"
-                />
-                <div class="prizes-info">
-                  <div class="prizes-title">空气加湿器</div>
-                  <div class="prizes-price">
-                    <div class="prizes-source-price">4500大力丸</div>
-                    <div>3800</div>
-                  </div>
-                </div>
-              </div>
-              <div class="prizes-item" @click="handleBooking()">
-                <image
-                  src="https://gw.alicdn.com/i1/49692482/O1CN01TtDPJz1UCnZ8cppZQ_!!49692482.jpg_300x10000Q75.jpg_.webp"
-                  class="prizes-image"
-                />
-                <div class="prizes-info">
-                  <div class="prizes-title">空气加湿器</div>
-                  <div class="prizes-price">
-                    <div class="prizes-source-price">4500大力丸</div>
-                    <div>3800</div>
-                  </div>
-                </div>
-              </div>
-              <div class="prizes-item" @click="handleBooking()">
-                <image
-                  src="https://gw.alicdn.com/i1/49692482/O1CN01TtDPJz1UCnZ8cppZQ_!!49692482.jpg_300x10000Q75.jpg_.webp"
-                  class="prizes-image"
-                />
-                <div class="prizes-info">
-                  <div class="prizes-title">空气加湿器</div>
-                  <div class="prizes-price">
-                    <div class="prizes-source-price">4500大力丸</div>
-                    <div>3800</div>
-                  </div>
-                </div>
-              </div>
+              </block>
             </div>
           </scroll-view>
         </div>
@@ -188,7 +148,8 @@ export default {
         {
           title: "jiujiujiu"
         }
-      ]
+      ],
+      goodsList: []
     };
   },
   onLoad() {
@@ -205,12 +166,38 @@ export default {
         }
       }
     });
+    this.requests = {
+      keys: ["goodsList"],
+      fetchMethods: [this.fetchGoodsList()]
+    };
+    this.fetchData(this.requests);
   },
   methods: {
-    handleBooking(orderId = 1) {
-      uni.navigateTo({
-        url: `/pages/sub/order/booking/index?orderId=${orderId}`
+    fetchGoodsList() {
+      return uni.request({
+        url: `${this.$serverUrl}/mp/goodInfoList`
       });
+    },
+    fetchData(requests) {
+      Promise.all(requests.fetchMethods)
+        .then(res => {
+          this.handlePromiseAllData(requests, res);
+        })
+        .catch(error => console.error(error));
+    },
+    handleBooking(goods) {
+      const { id } = goods;
+      if (id) {
+        uni.navigateTo({
+          url: `/pages/sub/order/booking/index?goodsId=${id}`
+        });
+      } else {
+        uni.showToast({
+          title: "商品信息有误",
+          icon: "none",
+          duration: 2000
+        });
+      }
     },
     getUserInfo() {
       uni.getUserInfo({
@@ -225,6 +212,16 @@ export default {
           url
         });
       }
+    },
+    handlePromiseAllData(requests, res) {
+      const { keys } = requests;
+      res.forEach((item, index) => {
+        const key = keys[index];
+        const { data } = item[1];
+        if (data.code === 200) {
+          this[key] = data.result;
+        }
+      });
     }
   }
 };
