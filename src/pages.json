@@ -1,19 +1,20 @@
 {
     "pages": [{
+            "path": "pages/major/poult/index",
+            "style": {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+                "backgroundColor": "#AEE5FF",
+                "navigationBarBackgroundColor": "#AEE5FF"
+            }
+        },
+        {
             "path": "pages/major/mine/index",
             "style": {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
                 "backgroundColor": "#feb683",
                 "navigationBarBackgroundColor": "#feb683"
-            }
-        },
-        {
-            "path": "pages/major/poult/index",
-            "style": {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
-                "backgroundColor": "#feb683"
             }
         }
     ],
