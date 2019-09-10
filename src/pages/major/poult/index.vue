@@ -1,14 +1,14 @@
 <template>
   <div class="wrapper">
     <div class="content">
-      <image class="cloud clound-1" src="/static/cloud3.png"/>
+      <image class="cloud clound-1" src="/static/cloud4.png"/>
       <image class="cloud clound-2" src="/static/cloud2.png"/>
       <image class="cloud clound-3" src="/static/cloud3.png"/>
-      <div class="my-info">
+      <a url="/pages/major/mine/index" class="my-info" >
         <image class="avatar" src="/static/avatar.jpeg" />
         <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon"></image>
         {{totalScore}}
-      </div>
+      </a>
       <div class="rank-info">
         <div class="rank-icon" />我的排名：102
       </div>
@@ -139,9 +139,9 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #99d476;
-  background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/poult-bg1.png")
+  background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/poult-bg.png")
     no-repeat;
-  background-size: 100% 1048upx;
+  background-size: 100% 961upx;
   background-position: center bottom;
   box-sizing: border-box;
   text-align: center;
@@ -150,14 +150,14 @@ export default {
     position: absolute;
     animation: move linear infinite;
     &.clound-1{
-      top: 350upx;
+      top: 180upx;
       left: -100upx;
       width: 120upx;
       height: 107upx;
       animation-duration: 40s;
     }
     &.clound-2{
-      top: 200upx;
+      top: 100upx;
       left: -180upx;
       width: 77upx;
       height: 50upx;
@@ -165,7 +165,7 @@ export default {
       animation-duration: 20s;
     }
     &.clound-3{
-      top: 280upx;
+      top: 380upx;
       left: -250upx;
       width: 98upx;
       height: 63upx;
