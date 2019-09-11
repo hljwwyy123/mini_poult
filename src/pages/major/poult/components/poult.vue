@@ -1,13 +1,13 @@
 <template>
   <view class="poult-container">
-    <image class="poult" @click="handlePoultClick" src="/static/poult.png" />
-    <div class="score-test-info">
-      <div>点击次数：{{beatCount}}</div>
-      <div>获得分数：{{totalScore}}</div>
-      <div>连击次数：{{serialCount}}</div>
-      <div>暴击次数：{{doubleCount}}</div>
-      <div>当前概率：{{rate}}</div>
-    </div>
+    <view class="poult-sprit" :class="{normal: status === 0}" @click="handlePoultClick"></view>
+    <view class="score-test-info">
+      <view>点击次数：{{beatCount}}</view>
+      <view>获得分数：{{totalScore}}</view>
+      <view>连击次数：{{serialCount}}</view>
+      <view>暴击次数：{{doubleCount}}</view>
+      <view>当前概率：{{rate}}</view>
+    </view>
   </view>
 </template>
 
@@ -103,13 +103,27 @@ export default {
 
 <style lang="scss" scoped>
 .poult-container {
-  .poult {
+  .poult-sprit {
     position: absolute;
     bottom: 350upx;
     left: 50%;
     margin-left: -142upx;
-    width: 284upx;
-    height: 326upx;
+    width: 340upx;
+    height: 425upx;
+    // background: url("~@/static/sprite-normal.png");
+    background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/sprite-normal.png");
+    background-size: auto 425upx;
+    &.normal {
+      animation: normal-step 1s steps(7, start) 0ms infinite normal backwards;
+    }
+  }
+  @keyframes normal-step {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -2380upx 0;
+    }
   }
   .score-test-info {
     position: absolute;

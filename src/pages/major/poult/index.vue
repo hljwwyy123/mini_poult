@@ -13,12 +13,15 @@
         <div class="rank-icon" />我的排名：102
       </div>
       <div class="menu-list">
-        <a url="/pages/sub/mine/prizes-list/index" class="menu-item">
+        <a url="/pages/sub/mine/rank-list/index" class="menu-item">
           <image class="menu-rank" src="/static/rank-menu.png" />
         </a>
-        <a url="/pages/sub/mine/rank-list/index" class="menu-item">
+        <a url="/pages/sub/mine/prizes-list/index" class="menu-item">
           <image class="menu-prize" src="/static/prize-menu.png" />
         </a>
+        <button class="menu-item" open-type="share">
+          <image class="menu-prize" src="/static/menu-invate.png" />
+        </button>
       </div>
       
       <poult @onSendRequest="onSendRquest" @onBingo="onBingo"/>
@@ -39,6 +42,12 @@ export default {
   },
   onLoad() {
     
+  },
+  onShareAppMessage(res) {
+    return {
+      title: '微信小程序测试分享',
+      path: '/pages/major/poult/index'
+    }
   },
   methods: {
     onBingo(score){
@@ -179,9 +188,12 @@ export default {
       width: 87upx;
       height: 103upx;
     }
-
     .menu-item {
       margin-bottom: 27upx;
+      background-color: transparent;
+    }
+    button:after{
+        border: none;
     }
   }
   @keyframes move {
