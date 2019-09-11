@@ -23,7 +23,7 @@
           <image class="menu-prize" src="/static/menu-invate.png" />
         </button>
       </div>
-      
+      <a url="/pages/major/poult/index" open-type="redirect" class="back-home"></a>
       <poult @onSendRequest="onSendRquest" @onBingo="onBingo"/>
       <tabs />
     </div>
@@ -200,7 +200,16 @@ export default {
     from{transform: translate3d(-130upx,0,0)}
     to{transform: translate3d(1200upx,0,0)}
   }
-
+  .back-home{
+    position: absolute;
+    bottom: 340upx;
+    left: 32upx;
+    width: 83upx;
+    height: 103upx;
+    background: url('~@/static/back-home.png') no-repeat;
+    background-size: 100% 100%;
+    z-index: 3;
+  }
   .score {
     top: 120px;
   }
