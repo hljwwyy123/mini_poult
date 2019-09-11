@@ -85,7 +85,7 @@
         </div>
       </div>
     </div>
-    <button v-if="canIUse" open-type="getUserInfo" @click="getUserInfo">授权登录</button>
+    <button v-if="canIUse" open-type="getUserInfo" @getuserinfo="getUserInfo">授权登录</button>
   </div>
 </template>
 <script>
@@ -199,12 +199,11 @@ export default {
         });
       }
     },
-    getUserInfo() {
-      uni.getUserInfo({
-        success: res => {
-          this.userInfo = res.userInfo;
-        }
-      });
+    getUserInfo(e) {
+      const { userInfo } = e.detail;
+      if (userInfo) {
+        this.userInfo = userInfo;
+      }
     },
     handleNavigate(url) {
       if (url) {

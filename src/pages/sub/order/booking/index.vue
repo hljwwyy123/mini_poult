@@ -5,20 +5,35 @@
       src="https://gw.alicdn.com/i1/49692482/O1CN01TtDPJz1UCnZ8cppZQ_!!49692482.jpg_300x10000Q75.jpg_.webp"
     />
     <div class="content">
-      <div class="title">可爱小熊USB加湿器</div>
+      <div class="title">{{goodsInfo.goodName || '暂无'}}</div>
       <div class="info">
         <div>
-          <div class="price">3800</div>
-          <div class="source-price">4300</div>
+          <div class="price">{{goodsInfo.goodDownVirtual || 0}}</div>
+          <div class="source-price">{{goodsInfo.goodVirtual || 0}}大力丸</div>
         </div>
         <div class="source-price">实际商品价格：45元</div>
       </div>
       <div class="address" @click="getAddrees">
-        <div class="address-button">添加地址</div>
-        <div>{{address.userName}}</div>
-        <div>{{address.telNumber}}</div>
+        <div v-if="!address.telNumber" class="address-button">添加地址</div>
+        <div v-else class="address-content">
+          <div class="address-info">
+            <div class="address-info-header">
+              <div>{{address.userName}} &nbsp;</div>
+              <div>{{address.telNumber}}</div>
+            </div>
+            <div
+              class="address-info-footer"
+            >{{address.provinceName}} {{address.cityName}} {{address.countyName}} {{address.detailInfo}}</div>
+          </div>
+          <div>></div>
+        </div>
       </div>
-      <div class="footer" @click="handleBooking">立即兑换</div>
+    </div>
+    <div class="footer">
+      <div class="footer-left">
+        <div class="text">剩余大力丸:</div>4600
+      </div>
+      <div @click="handleBooking" class="footer-right">立即兑换</div>
     </div>
   </div>
 </template>
@@ -26,31 +41,34 @@
 export default {
   data() {
     return {
+      goodsInfo: {},
       address: {}
     };
   },
   onLoad(param) {
     // fetch prizes info
     // fetch 大力丸 info
-    console.log(param);
+    this.param = param;
+    this.fetchGoodsInfo();
   },
   methods: {
-    getAddrees() {
-      uni.chooseAddress({
-        success: res => {
-          console.log(res);
-          this.address = res;
-        },
-        fail() {
-          console.log("fail");
-        }
-      });
-    },
-    handleBooking() {
+    async handleBooking() {
       if (this.address.telNumber) {
-        uni.navigateTo({
-          url: "/pages/sub/order/booking/success/index"
+        const [error, { data }] = await uni.request({
+          url: `${this.$serverUrl}/mp/goodExchangeById`,
+          method: "POST",
+          data: {
+            userId: "123",
+            goodId: this.param.goodsId,
+            score: this.goodsInfo.goodDownVirtual
+          }
         });
+        // FIXME: 请求失败
+        if (data.code === 200) {
+          uni.navigateTo({
+            url: `/pages/sub/order/booking/success/index?orderId=${data.orderId}`
+          });
+        }
       } else {
         uni.showToast({
           title: "请选择地址",
@@ -58,6 +76,40 @@ export default {
           duration: 2000
         });
       }
+    },
+    async fetchGoodsInfo() {
+      if (this.param.goodsId) {
+        try {
+          const [error, { data }] = await uni.request({
+            url: `${this.$serverUrl}/mp/goodDetailById`,
+            method: "POST",
+            data: {
+              goodId: this.param.goodsId
+            }
+          });
+          if (data.code === 200) {
+            this.goodsInfo = data.result;
+          }
+        } catch (error) {
+          uni.showToast({
+            title: "请求失败",
+            icon: "none",
+            duration: 2000
+          });
+          console.error(error);
+        }
+      }
+    },
+    getAddrees() {
+      uni.chooseAddress({
+        success: res => {
+          console.log(res);
+          this.address = res;
+        },
+        fail(error) {
+          console.error(error);
+        }
+      });
     }
   }
 };
@@ -88,6 +140,11 @@ export default {
         font-size: 30upx;
         color: #fb6f72;
         margin-right: 10upx;
+        padding-left: 24upx;
+        background-image: url("~@/static/wan.png");
+        background-repeat: no-repeat;
+        background-size: 16upx 26upx;
+        background-position: left center;
       }
       .source-price {
         display: inline-block;
@@ -108,6 +165,61 @@ export default {
         font-size: 28upx;
         border: 1upx solid #fb6f72;
       }
+      .address-content {
+        display: flex;
+        align-items: center;
+      }
+      .address-info {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: space-between;
+        &-header {
+          display: flex;
+          color: #000;
+          font-size: 32upx;
+        }
+        &-footer {
+          color: rgba(69, 31, 31, 0.52);
+          font-size: 28upx;
+        }
+      }
+    }
+  }
+  .footer {
+    position: fixed;
+    display: flex;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100upx;
+    &-left {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 68vw;
+      height: 100%;
+      padding-right: 30upx;
+      padding-left: 30upx;
+      box-sizing: border-box;
+      box-shadow: 0 -1upx 0upx 0upx rgba(0, 0, 0, 0.03);
+      font-size: 28upx;
+      color: #272727;
+      .text {
+        color: #9fa1a7;
+        font-size: 18upx;
+        padding-right: 20upx;
+      }
+    }
+    &-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      height: 100%;
+      background-color: #fb6f72;
+      color: #fff;
+      font-size: 36upx;
     }
   }
 }
