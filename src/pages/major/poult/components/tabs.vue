@@ -144,7 +144,7 @@ export default {
             width: 83upx;
             height: 83upx;
             border-radius: 50%;
-            border: 2upx solid #9c6e21;
+            border: 3upx solid #ffa780;
           }
           .nick-name {
             max-width: 100upx;

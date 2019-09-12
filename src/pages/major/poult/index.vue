@@ -1,9 +1,6 @@
 <template>
   <div class="wrapper">
     <div class="content">
-      <image class="cloud clound-1" src="/static/cloud4.png"/>
-      <image class="cloud clound-2" src="/static/cloud2.png"/>
-      <image class="cloud clound-3" src="/static/cloud3.png"/>
       <a url="/pages/major/mine/index" class="my-info" >
         <image class="avatar" src="/static/avatar.jpeg" />
         <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon"></image>
@@ -27,6 +24,9 @@
       <poult @onSendRequest="onSendRquest" @onBingo="onBingo"/>
       <tabs />
     </div>
+    <image class="cloud clound-1" src="/static/cloud4.png"/>
+    <image class="cloud clound-2" src="/static/cloud2.png"/>
+    <image class="cloud clound-3" src="/static/cloud3.png"/>
   </div>
 </template>
 <script>
@@ -67,8 +67,10 @@ export default {
 </script>
 <style scoped lang="scss">
 .wrapper {
-  background-color: #aee5ff;
+  position: fixed;
+  width: 100vw;
   height: 100vh;
+  background-color: #aee5ff;
 }
 
 .content {
@@ -85,33 +87,7 @@ export default {
   box-sizing: border-box;
   text-align: center;
   overflow: hidden;
-  .cloud {
-    position: absolute;
-    animation: move linear infinite;
-    &.clound-1{
-      top: 180upx;
-      left: -100upx;
-      width: 120upx;
-      height: 107upx;
-      animation-duration: 40s;
-    }
-    &.clound-2{
-      top: 100upx;
-      left: -180upx;
-      width: 77upx;
-      height: 50upx;
-      animation-delay: 3s;
-      animation-duration: 20s;
-    }
-    &.clound-3{
-      top: 380upx;
-      left: -250upx;
-      width: 98upx;
-      height: 63upx;
-      animation-delay: 1s;
-      animation-duration: 15s;
-    }
-  }
+  z-index: 3;
   .my-info {
     position: absolute;
     display: flex;
@@ -119,7 +95,7 @@ export default {
     left: 65upx;
     top: 10upx;
     padding: 5upx 40upx 5upx 20upx;
-    background: rgba(98, 76, 61, 1);
+    background:linear-gradient(152deg,rgba(255,174,130,1) 0%,rgba(251,111,114,1) 100%);
     color: white;
     border-radius: 40upx;
     height: 70upx;
@@ -142,7 +118,7 @@ export default {
       width: 80upx;
       height: 80upx;
       border-radius: 50%;
-      border: 5upx solid rgba(98, 76, 61, 1);
+      border: 5upx solid #FE9A7D;
       z-index: 2;
     }
     .wan-icon{
@@ -212,6 +188,34 @@ export default {
   }
   .score {
     top: 120px;
+  }
+}
+.cloud {
+  position: absolute;
+  animation: move linear infinite;
+  z-index: 1;
+  &.clound-1{
+    top: 180upx;
+    left: -100upx;
+    width: 120upx;
+    height: 107upx;
+    animation-duration: 40s;
+  }
+  &.clound-2{
+    top: 100upx;
+    left: -180upx;
+    width: 77upx;
+    height: 50upx;
+    animation-delay: 3s;
+    animation-duration: 30s;
+  }
+  &.clound-3{
+    top: 380upx;
+    left: -250upx;
+    width: 98upx;
+    height: 63upx;
+    animation-delay: 1s;
+    animation-duration: 25s;
   }
 }
 </style>

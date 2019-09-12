@@ -1,6 +1,6 @@
 <template>
   <view class="poult-container">
-    <view class="poult-sprit" :class="{normal: status === 0}" @click="handlePoultClick"></view>
+    <view class="poult-sprit" :class="{happy: status === 0}" @click="handlePoultClick"></view>
     <view class="score-test-info">
       <view>点击次数：{{beatCount}}</view>
       <view>获得分数：{{totalScore}}</view>
@@ -110,11 +110,15 @@ export default {
     margin-left: -142upx;
     width: 340upx;
     height: 425upx;
-    // background: url("~@/static/sprite-normal.png");
+    // background: url("~@/static/01.png");
     background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/sprite-normal.png");
+    background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/happy.png");
     background-size: auto 425upx;
     &.normal {
-      animation: normal-step 1s steps(7, start) 0ms infinite normal backwards;
+      animation: normal-step 0.5s steps(7, start) 0ms infinite normal backwards;
+    }
+    &.happy {
+      animation: happy-step 0.8s steps(4, start) 0ms infinite normal backwards;
     }
   }
   @keyframes normal-step {
@@ -122,7 +126,15 @@ export default {
       background-position: 0 0;
     }
     to {
-      background-position: -2380upx 0;
+      background-position: -2372upx 0;
+    }
+  }
+  @keyframes happy-step {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: -1356upx 0;
     }
   }
   .score-test-info {

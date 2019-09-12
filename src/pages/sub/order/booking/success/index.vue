@@ -47,8 +47,9 @@ export default {
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 360upx;
-    background-image: linear-gradient(90deg, #ffb784, #fb6f72);
+    height: 375upx;
+    background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/booking_success_bg.png")
+      no-repeat;
     background-size: 100% 100%;
     background-position: center;
     text-align: center;
