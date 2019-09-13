@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="summary">
+    <div class="summary" :class="{iphoneX: isIphoneX}">
       <div class="info">{{userInfo.nickName || '我'}}的大力丸</div>
       <div class="score">0</div>
       <div
@@ -89,13 +89,13 @@
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
       canIUse: uni.canIUse("button.open-type.getUserInfo"),
       userInfo: {
-        avatarUrl:
-          "https://gw.alicdn.com/tfs/TB1p.BGQXXXXXbFXFXXXXXXXXXX-160-160.png"
+        avatarUrl: "/static/default-avatar.png"
       },
       menus: [
         {
@@ -151,6 +151,13 @@ export default {
       ],
       goodsList: []
     };
+  },
+  computed: {
+    ...mapState({
+      openId: state => state.openId,
+      nickName: state => state.nickName,
+      isIphoneX: state => state.isIphoneX
+    })
   },
   onLoad() {
     uni.getSetting({
@@ -232,24 +239,32 @@ export default {
   .summary {
     position: relative;
     background-image: linear-gradient(180deg, #ffb784, #fb6f72);
-    height: 320upx;
+    height: 406upx;
     border-bottom-left-radius: 80upx;
     border-bottom-right-radius: 80upx;
     text-align: center;
     box-sizing: border-box;
     margin-bottom: 105upx;
+    .info {
+      color: #fff;
+      font-size: 26upx;
+      line-height: 36upx;
+      padding-bottom: 20upx;
+      &:first-child {
+        padding-top: 60upx;
+      }
+    }
+    &.iphoneX {
+      .info:first-child {
+        padding-top: 90upx;
+      }
+    }
     .score {
       font-size: 80upx;
       color: #fff;
       font-weight: 600;
       padding-bottom: 20upx;
       line-height: 1;
-    }
-    .info {
-      color: #fff;
-      font-size: 26upx;
-      line-height: 36upx;
-      padding-bottom: 20upx;
     }
     .avator {
       position: absolute;

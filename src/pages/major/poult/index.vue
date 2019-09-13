@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <div class="content">
+  <div class="wrapper" >
+    <div class="content" :class="{iphoneX: isIphoneX}">
       <a url="/pages/major/mine/index" class="my-info" >
         <image class="avatar" src="/static/avatar.jpeg" />
         <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon"></image>
@@ -33,12 +33,18 @@
 import { mapState, mapMutations } from "vuex";
 import tabs from "./components/tabs";
 import poult from "./components/poult";
-
 export default {
   data() {
     return {
       totalScore: 0, // 获得总大力丸
     };
+  },
+  computed: {
+    ...mapState({
+      openId: state => state.openId,
+      nickName: state => state.nickName,
+      isIphoneX: state => state.isIphoneX,
+    })
   },
   onLoad() {
     
@@ -93,7 +99,7 @@ export default {
     display: flex;
     align-items: center;
     left: 65upx;
-    top: 10upx;
+    top: 120upx;
     padding: 5upx 40upx 5upx 20upx;
     background:linear-gradient(152deg,rgba(255,174,130,1) 0%,rgba(251,111,114,1) 100%);
     color: white;
@@ -128,10 +134,11 @@ export default {
       height: 26upx;
     }
   }
+  
   .rank-info {
     position: absolute;
     left: 50upx;
-    top: 120upx;
+    top: 220upx;
     padding-right: 20upx;
     height: 56upx;
     line-height: 56upx;
@@ -153,7 +160,7 @@ export default {
     position: absolute;
     width: 125upx;
     right: 44upx;
-    top: 60upx;
+    top: 180upx;
     display: flex;
     flex-direction: column;
     .menu-rank {
@@ -170,6 +177,17 @@ export default {
     }
     button:after{
         border: none;
+    }
+  }
+  &.iphoneX{
+    .my-info{
+      top: 140upx;
+    }
+    .rank-info{
+      top: 240upx;
+    }
+    .menu-list{
+      top: 200upx;
     }
   }
   @keyframes move {
@@ -195,7 +213,7 @@ export default {
   animation: move linear infinite;
   z-index: 1;
   &.clound-1{
-    top: 180upx;
+    top: 300upx;
     left: -100upx;
     width: 120upx;
     height: 107upx;
@@ -203,14 +221,14 @@ export default {
   }
   &.clound-2{
     top: 100upx;
-    left: -180upx;
+    left: -80upx;
     width: 77upx;
     height: 50upx;
     animation-delay: 3s;
     animation-duration: 30s;
   }
   &.clound-3{
-    top: 380upx;
+    top: 200upx;
     left: -250upx;
     width: 98upx;
     height: 63upx;

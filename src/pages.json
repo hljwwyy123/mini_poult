@@ -4,17 +4,16 @@
             "style": {
                 "navigationBarTitleText": "",
                 "enablePullDownRefresh": false,
-                "backgroundColor": "#AEE5FF",
-                "navigationBarBackgroundColor": "#AEE5FF"
+                "navigationStyle": "custom",
+                "backgroundColor": "#AEE5FF"
             }
         },
         {
             "path": "pages/major/mine/index",
             "style": {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
-                "backgroundColor": "#feb683",
-                "navigationBarBackgroundColor": "#feb683"
+                "navigationStyle": "custom",
+                "enablePullDownRefresh": false
             }
         }
     ],
