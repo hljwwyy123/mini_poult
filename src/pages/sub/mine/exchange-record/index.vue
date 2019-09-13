@@ -21,7 +21,12 @@ export default {
   methods: {
     getPrizeList() {
       uni.request({
-        url: this.$serverUrl + "/mp/goodInfoList",
+        url: this.$serverUrl + "/mp/goodExchangeList",
+        data: {
+          openid: "",
+          currentPage: 1,
+          pageSize: 10
+        },
         success: res => {
           this.goodList = res.data.result;
         },

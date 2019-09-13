@@ -28,4 +28,5 @@ export default {
 
 <style>
 @import "./common/css/common.css";
+@import "./common/css/iconfont.css";
 </style>

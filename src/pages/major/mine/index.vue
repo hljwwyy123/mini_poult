@@ -1,12 +1,13 @@
 <template>
   <div class="wrapper">
+    <home-bar />
     <div class="summary" :class="{iphoneX: isIphoneX}">
       <div class="info">{{userInfo.nickName || '我'}}的大力丸</div>
       <div class="score">0</div>
-      <div
-        @click="handleNavigate('/pages/sub/mine/score-detail/index')"
-        class="info"
-      >{{userInfo.nickName ? '查看明细>>' : '点击获取个人信息>>'}}</div>
+      <div @click="handleNavigate('/pages/sub/mine/score-detail/index')" class="info">
+        {{userInfo.nickName ? '查看明细' : '点击获取个人信息'}}
+        <view class="iconfont icon-arrow_right"></view>
+      </div>
       <image :src="userInfo.avatarUrl" class="avator" />
     </div>
     <div class="content">
@@ -35,7 +36,10 @@
             :interval="2000"
           >
             <block v-for="item in tips" :key="item.title">
-              <swiper-item class="swiper-item">{{item.title}}</swiper-item>
+              <swiper-item class="swiper-item">
+                <view class="iconfont icon-notice"></view>
+                {{item.title}}
+              </swiper-item>
             </block>
           </swiper>
         </div>
@@ -43,10 +47,10 @@
       <div class="section section-shadow">
         <div class="section-header">
           奖品兑换
-          <div
-            @click="handleNavigate('/pages/sub/mine/prizes-list/index')"
-            class="header-more"
-          >更多奖品>></div>
+          <div @click="handleNavigate('/pages/sub/mine/prizes-list/index')" class="header-more">
+            更多奖品
+            <view class="iconfont icon-arrow_right"></view>
+          </div>
         </div>
         <div class="section-content">
           <scroll-view scroll-x>
@@ -90,6 +94,7 @@
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
+import { homeBar } from "@/components/homeBar";
 export default {
   data() {
     return {
@@ -151,6 +156,9 @@ export default {
       ],
       goodsList: []
     };
+  },
+  components: {
+    homeBar
   },
   computed: {
     ...mapState({

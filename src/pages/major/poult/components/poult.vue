@@ -1,10 +1,14 @@
 <template>
   <view class="poult-container">
-    <view class="poult-sprit" :class="{happy: status === 0}" @click="handlePoultClick"></view>
+    <view
+      class="poult-sprit"
+      :class="{happy: status === 0, beating: serialCount > 0}"
+      @click="handlePoultClick"
+    ></view>
     <view class="score-test-info">
       <view>点击次数：{{beatCount}}</view>
       <view>获得分数：{{totalScore}}</view>
-      <view>连击次数：{{serialCount}}</view>
+      <view class="score-num">连击次数：{{serialCount}}</view>
       <view>暴击次数：{{doubleCount}}</view>
       <view>当前概率：{{rate}}</view>
     </view>
@@ -120,6 +124,11 @@ export default {
     &.happy {
       animation: happy-step 0.8s steps(4, start) 0ms infinite normal backwards;
     }
+    &.beating {
+      background: url("~@/static/beating.png") no-repeat;
+      background-size: 100% 100%;
+      animation: none;
+    }
   }
   @keyframes normal-step {
     from {
@@ -143,6 +152,9 @@ export default {
     left: 0;
     color: rgba(76, 76, 76, 0.42);
     text-align: center;
+    .score-num {
+      font-family: "EnterSansmanBoldItalic";
+    }
   }
 }
 </style> 

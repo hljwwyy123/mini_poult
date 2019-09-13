@@ -24,7 +24,7 @@
       <poult @onSendRequest="onSendRquest" @onBingo="onBingo"/>
       <tabs />
     </div>
-    <image class="cloud clound-1" src="/static/cloud4.png"/>
+    <image class="cloud clound-1" src="/static/cloud5.png"/>
     <image class="cloud clound-2" src="/static/cloud2.png"/>
     <image class="cloud clound-3" src="/static/cloud3.png"/>
   </div>
@@ -190,10 +190,6 @@ export default {
       top: 200upx;
     }
   }
-  @keyframes move {
-    from{transform: translate3d(-130upx,0,0)}
-    to{transform: translate3d(1200upx,0,0)}
-  }
   .back-home{
     position: absolute;
     bottom: 340upx;
@@ -204,36 +200,41 @@ export default {
     background-size: 100% 100%;
     z-index: 3;
   }
-  .score {
-    top: 120px;
-  }
 }
 .cloud {
   position: absolute;
-  animation: move linear infinite;
   z-index: 1;
   &.clound-1{
     top: 300upx;
-    left: -100upx;
-    width: 120upx;
-    height: 107upx;
-    animation-duration: 40s;
+    left: 100upx;
+    width: 176upx;
+    height: 114upx;
+    animation: move-1 80s linear infinite;
+  }
+  @keyframes move-1 {
+    from{transform: translate3d(-200upx,0,0)}
+    to{transform: translate3d(1000upx,0,0)}
   }
   &.clound-2{
     top: 100upx;
     left: -80upx;
     width: 77upx;
     height: 50upx;
-    animation-delay: 3s;
-    animation-duration: 30s;
+    animation: move-2 40s linear infinite;
+  }
+  @keyframes move-2 {
+    from{transform: translate3d(-80upx,0,0)}
+    to{transform: translate3d(1000upx,0,0)}
   }
   &.clound-3{
     top: 200upx;
-    left: -250upx;
     width: 98upx;
     height: 63upx;
-    animation-delay: 1s;
-    animation-duration: 25s;
+    animation: move-3 35s linear infinite;
+  }
+  @keyframes move-3 {
+    from{transform: translate3d(200upx,0,0)}
+    to{transform: translate3d(1000upx,0,0)}
   }
 }
 </style>

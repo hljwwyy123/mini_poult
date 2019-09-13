@@ -115,6 +115,7 @@ export default {
         }
         tabItem.loadMoreStatus = 1;
       }
+      // 1s 的时间播放加载动画
       setTimeout(() => {
         if (type === "refresh") {
           if (type === "refresh") {
@@ -123,7 +124,6 @@ export default {
         } else if (type === "refresh") {
           tabItem.refreshing = true;
         }
-        // TODO ajax
         this.requestData();
         let length = tabItem.list.length; // todo mock数据
         for (let i = length; i < length + 10; i++) {

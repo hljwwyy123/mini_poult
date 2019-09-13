@@ -1,6 +1,6 @@
 <template>
   <view class="empty-holder">
-    <image src="/static/img-holder.png" />
+    <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/holder-img.png" />
     <view class="holder-text" v-if="text">{{text}}</view>
   </view>
 </template>
@@ -18,8 +18,8 @@ export default {
   text-align: center;
   image {
     margin: auto;
-    width: 280upx;
-    height: 165upx;
+    width: 121upx;
+    height: 194upx;
   }
   .holder-text {
     width: 100%;

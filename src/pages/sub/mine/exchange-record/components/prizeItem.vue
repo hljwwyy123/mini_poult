@@ -9,7 +9,7 @@
       </div>
       <div class="exchange-date">兑换日期：{{prize.date || '2019-09-26'}}</div>
     </div>
-    <view class="icon-text">&#xe65e;</view>
+    <view class="iconfont icon-arrow_right"></view>
   </view>
 </template>
 <script>
