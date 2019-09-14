@@ -32,7 +32,7 @@
               v-for="item in tabItem.list"
               :class="{mine: item.rank === 6}"
               :key="item.rank"
-              :data="item"
+              :itemData="item"
             />
             <empty-holder v-if="activeTab === 0 && tabItem.list <= 0" :text="'您还没有好友哦'"></empty-holder>
             <mix-load-more v-if="tabItem.list.length > 0" :status="tabItem.loadMoreStatus"></mix-load-more>

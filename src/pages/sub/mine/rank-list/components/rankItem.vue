@@ -1,21 +1,21 @@
 <template>
   <view class="list-item">
-    <image src="/static/mine-mark.png"  v-if="data.rank === 6" class="mine-mark"></image>
+    <image src="/static/mine-mark.png"  v-if="itemData.rank === 6" class="mine-mark"></image>
     <view class="avatar-container">
-      <view class="rank" :class="{top: data.rank < 3}">
-        <view class="rank-num">{{data.rank}}</view>
+      <view class="rank" :class="{top: itemData.rank < 3}">
+        <view class="rank-num">{{itemData.rank}}</view>
       </view>
-      <image class="avatar" :src="data.avatar" />
-      <view class="top-mark" v-if="data.rank < 3" />
+      <image class="avatar" :src="itemData.avatar" />
+      <view class="top-mark" v-if="itemData.rank < 3" />
     </view>
-    <view class="name">{{data.name}}</view>
-    <view class="score" :class="{top: data.rank < 3}">{{data.score}}</view>
+    <view class="name">{{itemData.name}}</view>
+    <view class="score" :class="{top: itemData.rank < 3}">{{itemData.score}}</view>
   </view>
 </template>
 <script>
 export default {
   props: {
-    data: {}
+    itemData: {}
   }
 };
 </script>
