@@ -2,7 +2,10 @@
   <view class="poult-container">
     <view
       class="poult-sprit"
-      :class="{happy: status === 0, beating: serialCount > 0}"
+      :class="{happy: status === 0, 
+        beating1: serialCount > 0 && Math.random() >= 0.5,
+        beating2: serialCount > 0 && Math.random() < 0.5
+        }"
       @click="handlePoultClick"
     ></view>
     <view class="score-test-info">
@@ -115,7 +118,6 @@ export default {
     width: 340upx;
     height: 425upx;
     // background: url("~@/static/01.png");
-    background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/sprite-normal.png");
     background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/happy.png");
     background-size: auto 425upx;
     &.normal {
@@ -124,8 +126,13 @@ export default {
     &.happy {
       animation: happy-step 0.8s steps(4, start) 0ms infinite normal backwards;
     }
-    &.beating {
-      background: url("~@/static/beating.png") no-repeat;
+    &.beating1 {
+      background: url("~@/static/betaing-1.png") no-repeat;
+      background-size: 100% 100%;
+      animation: none;
+    }
+    &.beating2 {
+      background: url("~@/static/betaing-2.png") no-repeat;
       background-size: 100% 100%;
       animation: none;
     }
