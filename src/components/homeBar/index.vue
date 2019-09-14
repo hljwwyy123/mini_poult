@@ -10,15 +10,21 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      top: 40,
+      top: 26,
       left: 40,
-      width: 120,
-      height: 80,
+      width: 80,
+      height: 32,
       homeUrl: "/pages/major/poult/index"
     };
+  },
+  computed: {
+    ...mapState({
+      isIphoneX: state => state.isIphoneX
+    })
   },
   created() {
     if (uni.canIUse("getMenuButtonBoundingClientRect")) {
@@ -27,6 +33,8 @@ export default {
       this.left = menuData.left;
       this.width = menuData.width;
       this.height = menuData.height;
+    } else if (this.isIphoneX) {
+      this.top += 20;
     }
   }
 };

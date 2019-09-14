@@ -57,12 +57,12 @@ export default {
   },
   methods: {
     onBingo(score){
-      console.log('onBingo ------------ ', score);
+      // console.log('onBingo ------------ ', score);
       this.totalScore += score;
       // 动画
     },
-    onSendRquest(){
-
+    onSendRquest(score){
+      console.log('send Ajax ===== 还需要判断该不该发请求', score)
     }
   },
   components: {
