@@ -1,4 +1,48 @@
-import Store from '@/utils/store';
+import Store from '@/store/index';
+const serverUrl = "https://poult.mttsmart.com:443";
+export function login(data) {
+    return new Promise((resolve, reject) => {
+        uni.login({
+            success(res) {
+                if (res.code) {
+                    uni.request({
+                        url: serverUrl + "/mp/login",
+                        method: "POST",
+                        data: {
+                            code: res.code,
+                            ...data
+                        },
+                        success: res => {
+                            Store.commit('updateOpenId', res.data.result.openid);
+                            uni.setStorage({
+                                key: 'session_id',
+                                data: res.data.result.sessionId
+                            });
+                            resolve(res)
+                        }
+                    });
+                } else {
+                    console.log("登录失败！" + res.errMsg);
+                    reject(res.errMsg)
+                }
+            }
+        });
+    })
+}
+
+export function request(url, method, data, success, fail) {
+    const sessionId = uni.getStorage('sessionId');
+    const headers = {};
+    headers['sessionId'] = sessionId;
+    return uni.request({
+        url: serverUrl + url,
+        method: method,
+        data: data,
+        header: headers,
+        success: success,
+        fail: fail
+    })
+}
 
 export function toast(msg, callback) {
     uni.showToast({

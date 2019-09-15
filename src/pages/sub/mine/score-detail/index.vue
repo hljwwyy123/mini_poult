@@ -41,8 +41,8 @@ export default {
   methods: {
     async handleLoadData() {
       this.loadMoreStatus = 1;
-      const [error, { data }] = await uni.request({
-        url: `${this.$serverUrl}/mp/consumeList`,
+      const [error, { data }] = await this.$request({
+        url: "/mp/consumeList",
         mode: "POST",
         data: {
           openid: "",

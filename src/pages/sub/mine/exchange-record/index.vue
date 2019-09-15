@@ -20,8 +20,8 @@ export default {
   },
   methods: {
     getPrizeList() {
-      uni.request({
-        url: this.$serverUrl + "/mp/goodExchangeList",
+      this.$request({
+        url: "/mp/goodExchangeList",
         data: {
           openid: "",
           currentPage: 1,

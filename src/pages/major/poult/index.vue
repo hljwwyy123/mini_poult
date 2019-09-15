@@ -1,8 +1,12 @@
 <template>
   <div class="wrapper" >
     <div class="content" :class="{iphoneX: isIphoneX}">
-      <a url="/pages/major/mine/index" class="my-info" >
-        <image class="avatar" src="/static/avatar.jpeg" />
+      <button v-if="!authed" open-type="getUserInfo" @getuserinfo="onGetUserInfo" class="my-info" >
+        <image class="avatar" src="/static/default-avatar.png" />
+        <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon"></image>0
+      </button>
+      <a v-else url="/pages/major/mine/index" class="my-info" >
+        <image class="avatar" :src="userInfo.avatarUrl || '/static/default-avatar.png'" />
         <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon"></image>
         {{totalScore}}
       </a>
@@ -21,7 +25,10 @@
         </button>
       </div>
       <a url="/pages/major/poult/index" open-type="redirect" class="back-home"></a>
-      <poult @onSendRequest="onSendRquest" :todayScore="totalScore" @onBingo="onBingo"/>
+      <poult @onSendRequest="onSendRquest" 
+        :pageShow="pageShow"
+        :todayScore="totalScore" 
+        @onBingo="onBingo"/>
       <tabs />
     </div>
     <image class="cloud clound-1" src="/static/cloud5.png"/>
@@ -31,23 +38,39 @@
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
+import { login } from "@/utils/index.js";
 import tabs from "./components/tabs";
 import poult from "./components/poult";
 export default {
   data() {
     return {
       totalScore: 0, // 获得总大力丸
+      pageShow: true, // 当前页面是否onShow 
+      invate_openId: null,  //邀请人Opoenid
     };
   },
   computed: {
     ...mapState({
+      authed: state => state.authed,
       openId: state => state.openId,
+      userInfo: state => state.userInfo,
+      avatar: state => state.avatar,
       nickName: state => state.nickName,
       isIphoneX: state => state.isIphoneX,
     })
   },
-  onLoad() {
-    
+  onLoad(options) {
+    console.log(options)
+    //如果是别人邀请进入
+    if(options.invate_openId){
+      this.invate_openId = options.invate_openId;
+    }
+  },
+  onHide() {
+    this.pageShow = false;
+  },
+  onShow() {
+    this.pageShow = true;
   },
   onShareAppMessage(res) {
     return {
@@ -56,6 +79,33 @@ export default {
     }
   },
   methods: {
+    onGetUserInfo(el){
+      const self = this;
+      this.$store.commit('loginWx', el.detail.userInfo)
+      this.$store.commit("authed", true);
+      login({
+        openid: self.invate_openId,
+        regSource: 0
+      }).then(()=>{
+        wx.getStorage({
+          key: 'session_id',
+          success: function(res){
+            console.log(res)
+            uni.request({
+              url: self.$serverUrl + '/mp/integralCount',
+              data: {
+                openid: self.openId
+              },
+              method: 'POST',
+              header: {
+                sessionId: res.data
+              }
+            })
+          }
+        });
+        
+      });
+    },
     onBingo(score){
       // console.log('onBingo ------------ ', score);
       this.totalScore += score;
@@ -63,6 +113,19 @@ export default {
     },
     onSendRquest(score){
       console.log('send Ajax ===== 还需要判断该不该发请求', score)
+      const self = this;
+      uni.request({
+        url: self.$serverUrl + "/mp/hitChicken",
+        method: "POST",
+        data: {
+            score: score,
+            hitOpenid: 'wy_test'
+        },
+        header: { 'content-type': 'application/x-www-form-urlencoded' },
+        success: res => {
+          console.log('hit success =====')
+        }
+    });
     }
   },
   components: {
@@ -107,6 +170,7 @@ export default {
     height: 70upx;
     line-height: 70upx;
     font-size: 36pux;
+    overflow: visible;
     &:after {
       content: "";
       position: absolute;

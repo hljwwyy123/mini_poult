@@ -3,24 +3,27 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
+        authed: false,
+        userInfo: {},
+        openId: '',
         login: false,
         token: '',
-        avatar: '',
-        nickName: '',
-        isIphoneX: false,
-        openId: ''
+        isIphoneX: false
     },
     mutations: {
-        login(state, provider) {
-            console.log(provider)
-            state.token = provider.token;
-            state.nickName = provider.nickName;
-            state.openId = provider.openId;
-            state.avatar = provider.avatar;
+        loginWx(state, provider) {
+            // state.openId = provider.openId;
+            state.userInfo = provider;
         },
         updateIsIphoneX(state, el) {
             state.isIphoneX = el;
         },
+        updateOpenId(state, el) {
+            state.openId = el;
+        },
+        authed(state, el) {
+            state.authed = el
+        }
     }
 })
 export default store

@@ -32,13 +32,24 @@ export default {
       positiveStatus: ["naughty", "happy", "crazy", "ease"],
       negativeStatus: ["angry", "sad", "cry", "grievance"],
       statusIndex: 0, //当前timer 随机取值
-      animateTimer: 0
+      animateTimer: null
     };
   },
   props: {
     todayScore: {
       type: Number,
       default: 0
+    },
+    pageShow: Boolean
+  },
+  watch: {
+    pageShow(isShow, old) {
+      if (!isShow) {
+        clearInterval(this.animateTimer);
+        this.animateTimer = null;
+      } else {
+        this.animate();
+      }
     }
   },
   computed: {
@@ -46,6 +57,9 @@ export default {
       let className = "";
       let status = 0;
       // 初始化状态，没揍小鸡的时候。随机从4个正向状态中选一个播放
+      if (!this.pageShow) {
+        return "";
+      }
       if (this.beatCount <= 0) {
         if (!this.animateTimer) {
           this.animate();
@@ -63,9 +77,6 @@ export default {
       }
       return className;
     }
-  },
-  onCreate() {
-    // this.animate();
   },
   methods: {
     beatPoult() {

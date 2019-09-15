@@ -22,8 +22,8 @@ export default {
   },
   async mounted() {
     console.log(123);
-    const [error, { data }] = await uni.request({
-      url: `${this.$serverUrl}/mp/newsNotify`
+    const [error, { data }] = await this.$request({
+      url: "/mp/newsNotify"
     });
     if (data.code === 200) {
       this.tips = data.result;

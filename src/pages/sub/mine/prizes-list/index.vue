@@ -21,8 +21,8 @@ export default {
   },
   methods: {
     getPrizeList() {
-      uni.request({
-        url: this.$serverUrl + "/mp/goodInfoList",
+      this.$request({
+        url: "/mp/goodInfoList",
         success: res => {
           this.goodList = res.data.result;
         },

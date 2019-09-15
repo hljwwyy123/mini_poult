@@ -92,8 +92,8 @@ export default {
   },
   methods: {
     requestData() {
-      uni.request({
-        url: this.$serverUrl + "/mp/integralTopTen",
+      this.$request({
+        url: "/mp/integralTopTen",
         success: res => {
           // this.goodList = res.data.result;
           console.log(res.data.result);

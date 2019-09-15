@@ -51,8 +51,8 @@ export default {
   methods: {
     async handleBooking() {
       if (this.address.telNumber) {
-        const [error, { data }] = await uni.request({
-          url: `${this.$serverUrl}/mp/goodExchangeById`,
+        const [error, { data }] = await this.$request({
+          url: "/mp/goodExchangeById",
           method: "POST",
           data: {
             userId: "1",
@@ -83,8 +83,8 @@ export default {
     async fetchGoodsInfo() {
       if (this.param.goodsId) {
         try {
-          const [error, { data }] = await uni.request({
-            url: `${this.$serverUrl}/mp/goodDetailById`,
+          const [error, { data }] = await this.$request({
+            url: "/mp/goodDetailById",
             method: "POST",
             data: {
               goodId: this.param.goodsId

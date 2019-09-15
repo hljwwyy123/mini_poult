@@ -86,6 +86,7 @@
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
+import { login } from "@/utils/index";
 import { homeBar } from "@/components/homeBar";
 import scrollTips from "@/components/scroll-tips";
 export default {
@@ -158,34 +159,8 @@ export default {
     })
   },
   onLoad() {
-    uni.getSetting({
-      success: res => {
-        if (res.authSetting["scope.userInfo"]) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-          uni.getUserInfo({
-            success: res => {
-              this.userInfo = res.userInfo;
-              console.log(this.userInfo);
-            }
-          });
-        }
-      }
-    });
-    uni.login({
-      success(res) {
-        if (res.code) {
-          console.log("res.code ", res);
-          //发起网络请求
-          // uni.request({
-          //   url: "https://test.com/onLogin",
-          //   data: {
-          //     code: res.code
-          //   }
-          // });
-        } else {
-          console.log("登录失败！" + res.errMsg);
-        }
-      }
+    login().then(res => {
+      console.log("login success");
     });
     this.requests = {
       keys: ["goodsList"],
@@ -205,8 +180,8 @@ export default {
   },
   methods: {
     fetchGoodsList() {
-      return uni.request({
-        url: `${this.$serverUrl}/mp/goodInfoList`
+      return this.$request({
+        url: "/mp/goodInfoList"
       });
     },
     fetchData(requests) {
