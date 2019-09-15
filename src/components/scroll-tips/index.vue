@@ -22,11 +22,14 @@ export default {
   },
   async mounted() {
     console.log(123);
-    const [error, { data }] = await uni.request({
+    const [error, result] = await uni.request({
       url: `${this.$serverUrl}/mp/newsNotify`
     });
-    if (data.code === 200) {
-      this.tips = data.result;
+    if (result) {
+      const { data } = result;
+      if (data.code === 200) {
+        this.tips = data.result;
+      }
     }
   }
 };
