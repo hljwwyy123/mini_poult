@@ -35,21 +35,24 @@ export default {
   },
   onLoad() {
     this.handleLoadData();
+    this.currentPage = 0;
+    this.pageSize = 10;
   },
   methods: {
-    handleLoadData() {
+    async handleLoadData() {
       this.loadMoreStatus = 1;
-      setTimeout(() => {
-        const list = Array.from({ length: 10 }).map((item, index) => {
-          return {
-            title: "7天打卡",
-            time: "2019-08-27 16:28:32",
-            detail: `${Math.random() > 0.5 ? "+" : "-"}${index}`
-          };
-        });
-        this.list.push(...list);
-        this.loadMoreStatus = 0;
-      }, 1000);
+      const [error, { data }] = await uni.request({
+        url: `${this.$serverUrl}/mp/consumeList`,
+        mode: "POST",
+        data: {
+          openid: "",
+          currentPage: this.currentPage,
+          pageSize: this.pageSize
+        }
+      });
+      console.log("大力丸明细 response ", data);
+      this.list.push(...data.list);
+      this.loadMoreStatus = 0;
     }
   },
   components: {

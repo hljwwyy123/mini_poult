@@ -1,9 +1,6 @@
 <template>
   <div class="wrapper">
-    <image
-      class="image"
-      src="https://gw.alicdn.com/i1/49692482/O1CN01TtDPJz1UCnZ8cppZQ_!!49692482.jpg_300x10000Q75.jpg_.webp"
-    />
+    <image class="image" :src="goodsInfo.goodImg" />
     <div class="content">
       <div class="title">{{goodsInfo.goodName || '暂无'}}</div>
       <div class="info">
@@ -18,14 +15,14 @@
         <div v-else class="address-content">
           <div class="address-info">
             <div class="address-info-header">
-              <div>{{address.userName}} &nbsp;</div>
+              <div style="padding-right: 10upx">{{address.userName}}</div>
               <div>{{address.telNumber}}</div>
             </div>
             <div
               class="address-info-footer"
             >{{address.provinceName}} {{address.cityName}} {{address.countyName}} {{address.detailInfo}}</div>
           </div>
-          <div>></div>
+          <div class="icon-text">&#xe65e;</div>
         </div>
       </div>
     </div>
@@ -58,7 +55,7 @@ export default {
           url: `${this.$serverUrl}/mp/goodExchangeById`,
           method: "POST",
           data: {
-            userId: "123",
+            userId: "1",
             goodId: this.param.goodsId,
             score: this.goodsInfo.goodDownVirtual
           }
@@ -67,6 +64,12 @@ export default {
         if (data.code === 200) {
           uni.navigateTo({
             url: `/pages/sub/order/booking/success/index?orderId=${data.orderId}`
+          });
+        } else {
+          uni.showToast({
+            title: data.message,
+            icon: "none",
+            duration: 2000
           });
         }
       } else {
@@ -114,6 +117,7 @@ export default {
   }
 };
 </script>
+
 <style scoped lang="scss">
 .wrapper {
   padding: 30upx;

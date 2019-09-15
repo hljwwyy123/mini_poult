@@ -4,10 +4,18 @@
     <div class="summary" :class="{iphoneX: isIphoneX}">
       <div class="info">{{userInfo.nickName || '我'}}的大力丸</div>
       <div class="score">0</div>
-      <div @click="handleNavigate('/pages/sub/mine/score-detail/index')" class="info">
-        {{userInfo.nickName ? '查看明细' : '点击获取个人信息'}}
+      <div
+        v-if="userInfo.nickName"
+        @click="handleNavigate('/pages/sub/mine/score-detail/index')"
+        class="info"
+      >
+        查看明细
         <view class="iconfont icon-arrow_right"></view>
       </div>
+      <button v-else class="info" open-type="getUserInfo" @getuserinfo="getUserInfo">
+        点击获取个人信息
+        <view class="iconfont icon-arrow_right"></view>
+      </button>
       <image :src="userInfo.avatarUrl" class="avator" />
     </div>
     <div class="content">
@@ -20,29 +28,13 @@
         </div>
         <div class="section-content">
           <div v-for="(item, index) in daysInfo" :key="index" class="day">
-            <div v-if="item.isSigned" class="day-content">biu</div>
+            <div v-if="item.isSigned" class="day-content active"></div>
             <div v-else class="day-content">{{item.prizes}}</div>
             <div class="day-footer">第{{index + 1}}天</div>
           </div>
         </div>
-        <div class="share-button">邀请好友立得100大力丸</div>
-        <div class="tips-content">
-          <swiper
-            class="swiper"
-            autoplay
-            circular
-            vertical
-            skip-hidden-item-layout
-            :interval="2000"
-          >
-            <block v-for="item in tips" :key="item.title">
-              <swiper-item class="swiper-item">
-                <view class="iconfont icon-notice"></view>
-                {{item.title}}
-              </swiper-item>
-            </block>
-          </swiper>
-        </div>
+        <button open-type="share" class="share-button">邀请好友立得100大力丸</button>
+        <scroll-tips />
       </div>
       <div class="section section-shadow">
         <div class="section-header">
@@ -60,9 +52,9 @@
                   <image :src="item.goodImg" class="prizes-image" />
                   <div class="prizes-info">
                     <div class="prizes-title">{{item.goodName}}</div>
-                    <div class="prizes-price">
+                    <div>
                       <div class="prizes-source-price">{{item.goodVirtual}}大力丸</div>
-                      <div>{{item.goodDownVirtual}}</div>
+                      <div class="prizes-price">{{item.goodDownVirtual}}</div>
                     </div>
                   </div>
                 </div>
@@ -81,7 +73,7 @@
               class="menu-item"
             >
               <div class="menu-item-content">
-                <div class="menu-item-image">ic</div>
+                <view :class="['menu-item-icon', 'iconfont', `icon-${item.icon}`]"></view>
                 <div class="menu-item-title">{{item.name}}</div>
               </div>
             </div>
@@ -95,6 +87,7 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 import { homeBar } from "@/components/homeBar";
+import scrollTips from "@/components/scroll-tips";
 export default {
   data() {
     return {
@@ -105,15 +98,18 @@ export default {
       menus: [
         {
           name: "兑换记录",
-          url: "/pages/sub/mine/exchange-record/index"
+          url: "/pages/sub/mine/exchange-record/index",
+          icon: "records"
         },
         {
           name: "规则说明",
-          url: "/pages/sub/mine/rules/index"
+          url: "/pages/sub/mine/rules/index",
+          icon: "info"
         },
         {
           name: "联系我们",
-          url: ""
+          url: "",
+          icon: "contact"
         }
       ],
       daysInfo: [
@@ -143,22 +139,16 @@ export default {
         },
         {
           prizes: "+10",
-          isSigned: false
-        }
-      ],
-      tips: [
-        {
-          title: "biubiubiu"
-        },
-        {
-          title: "jiujiujiu"
+          isSigned: false,
+          isShowGift: true
         }
       ],
       goodsList: []
     };
   },
   components: {
-    homeBar
+    homeBar,
+    scrollTips
   },
   computed: {
     ...mapState({
@@ -181,11 +171,37 @@ export default {
         }
       }
     });
+    uni.login({
+      success(res) {
+        if (res.code) {
+          console.log("res.code ", res);
+          //发起网络请求
+          // uni.request({
+          //   url: "https://test.com/onLogin",
+          //   data: {
+          //     code: res.code
+          //   }
+          // });
+        } else {
+          console.log("登录失败！" + res.errMsg);
+        }
+      }
+    });
     this.requests = {
       keys: ["goodsList"],
       fetchMethods: [this.fetchGoodsList()]
     };
     this.fetchData(this.requests);
+  },
+  onShareAppMessage: function(res) {
+    if (res.from === "button") {
+      // 来自页面内转发按钮
+      console.log(res.target);
+    }
+    return {
+      title: "揍小鸡，得奖品",
+      path: `/pages/major/poult/index?openId=${this.openId}&isSharePage=1`
+    };
   },
   methods: {
     fetchGoodsList() {
@@ -258,8 +274,13 @@ export default {
       font-size: 26upx;
       line-height: 36upx;
       padding-bottom: 20upx;
+      background-color: transparent;
+      border: none;
       &:first-child {
         padding-top: 60upx;
+      }
+      &:after {
+        border: none;
       }
     }
     &.iphoneX {
@@ -323,6 +344,13 @@ export default {
           height: 66upx;
           line-height: 66upx;
           font-size: 24upx;
+          &.active {
+            background-image: url("~@/static/checked.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            background-position: center center;
+            border-color: transparent;
+          }
         }
         .day-footer {
           font-size: 20upx;
@@ -340,23 +368,6 @@ export default {
         height: 12.4vw;
         background-color: #fb6f72;
         border-radius: 6.2vw;
-      }
-      .tips-content {
-        align-self: center;
-        width: 490upx;
-        height: 58upx;
-        background-color: rgba(251, 111, 114, 0.06);
-        border-radius: 29upx;
-        font-size: 24upx;
-        padding: 15upx 30upx;
-        box-sizing: border-box;
-        margin-top: 26upx;
-        .swiper {
-          height: 100%;
-        }
-        .swiper-item {
-          color: #676c7c;
-        }
       }
       .prizes-item {
         display: inline-block;
@@ -382,6 +393,11 @@ export default {
             font-size: 14px;
             color: #fb6f72;
             font-weight: 500;
+            padding-left: 24upx;
+            background-image: url("~@/static/wan.png");
+            background-size: 16upx 26upx;
+            background-position: center left;
+            background-repeat: no-repeat;
           }
           .prizes-source-price {
             display: inline-block;
@@ -430,6 +446,12 @@ export default {
             flex-direction: column;
             align-items: center;
             color: #212830;
+            .menu-item-icon {
+              width: 36upx;
+              height: 38upx;
+              font-size: 34upx;
+              margin-bottom: 15upx;
+            }
             .menu-item-title {
               font-size: 30upx;
             }
