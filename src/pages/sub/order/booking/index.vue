@@ -8,7 +8,7 @@
           <div class="price">{{goodsInfo.goodDownVirtual || 0}}</div>
           <div class="source-price">{{goodsInfo.goodVirtual || 0}}大力丸</div>
         </div>
-        <div class="source-price">实际商品价格：45元</div>
+        <div class="source-price">实际商品价格：{{goodsInfo.goodPrice}}元</div>
       </div>
       <div class="address" @click="getAddrees">
         <div v-if="!address.telNumber" class="address-button">添加地址</div>
@@ -22,7 +22,7 @@
               class="address-info-footer"
             >{{address.provinceName}} {{address.cityName}} {{address.countyName}} {{address.detailInfo}}</div>
           </div>
-          <div class="icon-text">&#xe65e;</div>
+          <div class="iconfont icon-arrow_right"></div>
         </div>
       </div>
     </div>

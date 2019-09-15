@@ -21,12 +21,14 @@ export default {
     };
   },
   async mounted() {
-    console.log(123);
-    const [error, { data }] = await this.$request({
+    const [error, result] = await this.$request({
       url: "/mp/newsNotify"
     });
-    if (data.code === 200) {
-      this.tips = data.result;
+    if (result) {
+      const { data } = result;
+      if (data.code === 200) {
+        this.tips = data.result;
+      }
     }
   }
 };

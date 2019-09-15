@@ -1,10 +1,17 @@
 <template>
   <div class="wrapper">
     <div class="header">
-      <div class="tips">了解大力丸</div>
+      <div class="tips">
+        了解大力丸
+        <image class="tips-icon" src="/static/wan.png" />
+      </div>
       <div class="count">1360</div>
-      <div class="info">我的大力丸余额</div>
-      <div class="button">邀请好友赚100大力丸</div>
+      <div class="info">
+        我的大力丸余额
+      </div>
+      <button open-type="share" class="button">
+        邀请好友赚100大力丸
+      </button>
     </div>
     <scroll-view scroll-y class="content" @scrolltolower="handleLoadData">
       <div class="list">
@@ -37,6 +44,16 @@ export default {
     this.handleLoadData();
     this.currentPage = 0;
     this.pageSize = 10;
+  },
+  onShareAppMessage: function(res) {
+    if (res.from === "button") {
+      // 来自页面内转发按钮
+      console.log(res.target);
+    }
+    return {
+      title: "揍小鸡，得奖品",
+      path: `/pages/major/poult/index?openId=${this.openId}&isSharePage=1`
+    };
   },
   methods: {
     async handleLoadData() {
@@ -77,9 +94,19 @@ export default {
     background-image: linear-gradient(45deg, #ffb784, #fb6f72);
     color: #fff;
     .tips {
+      position: relative;
       font-size: 30upx;
       align-self: flex-end;
       padding-right: 10upx;
+      padding-right: 40upx;
+      &-icon {
+        position: absolute;
+        width: 18.64upx;
+        height: 30upx;
+        top: 10upx;
+        right: 10upx;
+        transform: rotate(45deg);
+      }
     }
     .count {
       font-size: 80upx;

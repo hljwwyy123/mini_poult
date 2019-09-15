@@ -36,7 +36,7 @@
         <button open-type="share" class="share-button">邀请好友立得100大力丸</button>
         <scroll-tips />
       </div>
-      <div class="section section-shadow">
+      <div v-if="goodsList.length" class="section section-shadow">
         <div class="section-header">
           奖品兑换
           <div @click="handleNavigate('/pages/sub/mine/prizes-list/index')" class="header-more">
@@ -222,9 +222,11 @@ export default {
       const { keys } = requests;
       res.forEach((item, index) => {
         const key = keys[index];
-        const { data } = item[1];
-        if (data.code === 200) {
-          this[key] = data.result;
+        if (item[1]) {
+          const { data } = item[1];
+          if (data.code === 200) {
+            this[key] = data.result;
+          }
         }
       });
     }
