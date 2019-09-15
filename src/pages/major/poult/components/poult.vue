@@ -13,6 +13,7 @@
 
 <script>
 import "./poult.css";
+const ANIMTE_DUR = 3200;
 export default {
   data() {
     return {
@@ -29,31 +30,43 @@ export default {
       serialDuration: 300, // 连续点击 timer 间隔
       rate: 20, // 单次点击获得大力丸概率 %
       positiveStatus: ["naughty", "happy", "crazy", "ease"],
-      negativeStatus: ["angry", "sad", "cry", "grievance"]
+      negativeStatus: ["angry", "sad", "cry", "grievance"],
+      statusIndex: 0, //当前timer 随机取值
+      animateTimer: 0
     };
+  },
+  props: {
+    todayScore: {
+      type: Number,
+      default: 0
+    }
   },
   computed: {
     poultClass() {
       let className = "";
       let status = 0;
-      // 初始化状态，小鸡随机从4个正向状态中选一个播放
+      // 初始化状态，没揍小鸡的时候。随机从4个正向状态中选一个播放
       if (this.beatCount <= 0) {
-        status = (Math.random() * 4) | 0;
-        className = `animate-${this.positiveStatus[status]}`;
+        if (!this.animateTimer) {
+          this.animate();
+        }
+        className = `animate-${this.positiveStatus[this.statusIndex]}`;
         console.log("积极状态: => ", className);
       } else if (this.serialCount <= 0) {
         // 如果揍过小鸡了，随机从四个负向 状态中抽取播放
-        status = (Math.random() * 4) | 0;
-        className = `animate-${this.negativeStatus[status]}`;
+        className = `animate-${this.negativeStatus[this.statusIndex]}`;
         console.log("负向状态: => ", className);
       } else {
         // 挨揍中
+        clearInterval(this.animateTimer);
         className = Math.random() > 0.5 ? "beating1" : "beating2";
       }
       return className;
     }
   },
-  onLoad() {},
+  onCreate() {
+    // this.animate();
+  },
   methods: {
     beatPoult() {
       // 连续点击 10 次 提高概率至 40%
@@ -95,7 +108,8 @@ export default {
         this.totalScore += value;
         this.$emit("onBingo", value); // 通知父组件更新总积分
       }
-      if (this.totalScore >= this.mostScore) {
+      console.log("props totalScore", this.totalScore);
+      if (this.todayScore >= this.mostScore) {
         if (this.mostScore === 0) {
           uni.showToast({
             title: "你今天揍到上限了，别揍我了",
@@ -117,9 +131,17 @@ export default {
       clearTimeout(this.beatTimer);
       this.beatTimer = setTimeout(() => {
         this.$emit("onSendRequest", this.totalScore);
+        setTimeout(() => {
+          this.animate();
+        }, 2000);
         this.totalScore = 0; // 发送ajax 后重新计算总分数
         this.serialCount = 0;
       }, this.serialDuration);
+    },
+    animate() {
+      this.animateTimer = setInterval(() => {
+        this.statusIndex = (Math.random() * 4) | 0;
+      }, ANIMTE_DUR);
     }
   }
 };

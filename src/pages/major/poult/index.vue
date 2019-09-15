@@ -21,7 +21,7 @@
         </button>
       </div>
       <a url="/pages/major/poult/index" open-type="redirect" class="back-home"></a>
-      <poult @onSendRequest="onSendRquest" @onBingo="onBingo"/>
+      <poult @onSendRequest="onSendRquest" :todayScore="totalScore" @onBingo="onBingo"/>
       <tabs />
     </div>
     <image class="cloud clound-1" src="/static/cloud5.png"/>
@@ -173,6 +173,7 @@ export default {
     }
     .menu-item {
       margin-bottom: 27upx;
+      padding: 0;
       background-color: transparent;
     }
     button:after{
