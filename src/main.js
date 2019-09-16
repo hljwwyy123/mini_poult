@@ -5,7 +5,7 @@ import { request } from './utils/index'
 
 Vue.config.productionTip = false
 
-Vue.prototype.$serverUrl = 'https://poult.mttsmart.com:443';
+Vue.prototype.$serverUrl = 'https://poult.mttsmart.com';
 Vue.prototype.$store = store;
 Vue.prototype.$request = request;
 App.mpType = 'app';

@@ -8,7 +8,7 @@
       <image class="avatar" :src="itemData.avatar" />
       <view class="top-mark" v-if="itemData.rank < 3" />
     </view>
-    <view class="name">{{itemData.name}}</view>
+    <view class="name">{{itemData.nickName}}</view>
     <view class="score" :class="{top: itemData.rank < 3}">{{itemData.score}}</view>
   </view>
 </template>

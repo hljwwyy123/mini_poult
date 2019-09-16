@@ -65,6 +65,10 @@ export default {
     if(options.invate_openId){
       this.invate_openId = options.invate_openId;
     }
+    // 别人的鸡
+    if(options.openId){
+      this.hitOpenid = options.openId 
+    }
   },
   onHide() {
     this.pageShow = false;
@@ -74,8 +78,8 @@ export default {
   },
   onShareAppMessage(res) {
     return {
-      title: '微信小程序测试分享',
-      path: '/pages/major/poult/index'
+      title: '揍小鸡换奖品',
+      path: `/pages/major/poult/index?openId=${this.openId}`
     }
   },
   methods: {
@@ -86,42 +90,23 @@ export default {
       login({
         openid: self.invate_openId,
         regSource: 0
-      }).then(()=>{
-        wx.getStorage({
-          key: 'session_id',
-          success: function(res){
-            console.log(res)
-            uni.request({
-              url: self.$serverUrl + '/mp/integralCount',
-              data: {
-                openid: self.openId
-              },
-              method: 'POST',
-              header: {
-                sessionId: res.data
-              }
-            })
-          }
-        });
-        
       });
     },
     onBingo(score){
-      // console.log('onBingo ------------ ', score);
       this.totalScore += score;
       // 动画
     },
     onSendRquest(score){
       console.log('send Ajax ===== 还需要判断该不该发请求', score)
+      if(!score)return;
       const self = this;
-      uni.request({
-        url: self.$serverUrl + "/mp/hitChicken",
+      this.$request({
+        url: "/mp/hitChicken",
         method: "POST",
         data: {
             score: score,
-            hitOpenid: 'wy_test'
+            hitOpenid: self.hitOpenid
         },
-        header: { 'content-type': 'application/x-www-form-urlencoded' },
         success: res => {
           console.log('hit success =====')
         }

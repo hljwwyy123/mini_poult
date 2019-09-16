@@ -1,28 +1,47 @@
 import Store from '@/store/index';
-const serverUrl = "https://poult.mttsmart.com:443";
+const serverUrl = "https://poult.mttsmart.com";
 export function login(data) {
     return new Promise((resolve, reject) => {
         uni.login({
             success(res) {
                 if (res.code) {
-                    uni.request({
-                        url: serverUrl + "/mp/login",
-                        method: "POST",
-                        data: {
-                            code: res.code,
-                            ...data
+                    let sessionId = null;
+                    uni.getStorage({
+                        key: 'sessionId',
+                        success: function(storage) {
+                            console.log(storage)
+                            sessionId = storage.data;
                         },
-                        success: res => {
-                            Store.commit('updateOpenId', res.data.result.openid);
-                            uni.setStorage({
-                                key: 'session_id',
-                                data: res.data.result.sessionId
+                        complete: function() {
+                            console.log('sessionId = ', sessionId)
+                            uni.request({
+                                url: serverUrl + "/mp/login",
+                                method: "POST",
+                                data: {
+                                    code: res.code,
+                                    ...data
+                                },
+                                // header: {
+                                //     "sessionId": sessionId || 0
+                                // },
+                                success: loginRes => {
+                                    if (loginRes.data.success) {
+                                        Store.commit('updateOpenId', loginRes.data.result.openid);
+                                        uni.setStorage({
+                                            key: 'sessionId',
+                                            data: loginRes.data.result.sessionId
+                                        });
+                                        resolve(loginRes.data.result)
+                                    } else {
+                                        reject(loginRes.data.message);
+                                    }
+                                }
                             });
-                            resolve(res)
                         }
                     });
+
                 } else {
-                    console.log("登录失败！" + res.errMsg);
+                    console.log("code获取失败！" + res.errMsg);
                     reject(res.errMsg)
                 }
             }
@@ -30,18 +49,19 @@ export function login(data) {
     })
 }
 
-export function request(url, method, data, success, fail) {
-    const sessionId = uni.getStorage('sessionId');
-    const headers = {};
-    headers['sessionId'] = sessionId;
-    return uni.request({
-        url: serverUrl + url,
-        method: method,
-        data: data,
-        header: headers,
-        success: success,
-        fail: fail
-    })
+export function request(param) {
+    uni.getStorage({
+        key: 'sessionId',
+        success: function(storage) {
+            return uni.request({
+                ...param,
+                url: serverUrl + param.url,
+                header: {
+                    "sessionId": storage.data
+                }
+            })
+        }
+    });
 }
 
 export function toast(msg, callback) {

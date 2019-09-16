@@ -29,9 +29,9 @@
           <scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadData">
             <rank-item
               class="rank-item"
-              v-for="item in tabItem.list"
-              :class="{mine: item.rank === 6}"
-              :key="item.rank"
+              v-for="(item, rank) in tabItem.list"
+              :class="{mine: item.openId === openId}"
+              :key="rank"
               :itemData="item"
             />
             <empty-holder v-if="activeTab === 0 && tabItem.list <= 0" :text="'您还没有好友哦'"></empty-holder>
@@ -43,6 +43,7 @@
   </view>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 import mixPulldownRefresh from "@/components/mix-pulldown-refresh/mix-pulldown-refresh";
 import mixLoadMore from "@/components/mix-load-more/mix-load-more";
 import emptyHolder from "@/components/emptyHolder";
@@ -61,17 +62,17 @@ export default {
       activeTab: 0,
       tabList: [
         {
-          id: 1111,
           tabName: "好友排行榜",
-          loadMoreStatus: 0,
+          loadMoreStatus: 0, //0加载前，1加载中，2没有更多了
           refreshing: 0,
+          pageNo: 1,
           list: []
         },
         {
-          id: 222,
           tabName: "土豪排行榜",
-          loadMoreStatus: 0,
+          loadMoreStatus: 0, //0加载前，1加载中，2没有更多了
           refreshing: 0,
+          pageNo: 1,
           list: []
         }
       ],
@@ -79,6 +80,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      openId: state => state.openId
+    }),
     scrollHeight() {
       return uni.upx2px(168);
     }
@@ -92,11 +96,23 @@ export default {
   },
   methods: {
     requestData() {
+      const self = this;
+      let tabItem = this.tabList[this.activeTab];
       this.$request({
-        url: "/mp/integralTopTen",
+        url: "/mp/myFriendRanking",
+        method: "POST",
+        data: {
+          pageNo: tabItem.pageNo,
+          type: self.activeTab + 1, //1:friend, 2: total
+          openid: self.openId
+        },
         success: res => {
-          // this.goodList = res.data.result;
-          console.log(res.data.result);
+          if (res.data.length > 0) {
+            tabItem.pageNo++;
+            tabItem.list = tabItem.list.concat(res.data.result);
+          } else {
+            tabItem.loadMoreStatus = 2;
+          }
         },
         fail: () => {
           uni.showModal({
@@ -125,19 +141,6 @@ export default {
           tabItem.refreshing = true;
         }
         this.requestData();
-        let length = tabItem.list.length; // todo mock数据
-        for (let i = length; i < length + 10; i++) {
-          tabItem.list.push({
-            rank: i,
-            name: "name-" + i,
-            avatar: "/static/avatar.jpeg",
-            score: (Math.random() * 10000) | 0
-          });
-        }
-        //上滑加载 处理状态
-        // if (type === "add") {
-        //   tabItem.loadMoreStatus = tabItem.list.length > 30 ? 2 : 0;
-        // }
         if (type === "refresh") {
           this.$refs.mixPulldownRefresh &&
             this.$refs.mixPulldownRefresh.endPulldownRefresh();

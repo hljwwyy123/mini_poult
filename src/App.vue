@@ -5,6 +5,7 @@ export default {
   onLaunch: function() {
     const self = this;
     // 获取用户信息写入vuex
+    login();
     uni.getSetting({
       success: res => {
         if (res.authSetting["scope.userInfo"]) {
