@@ -81,7 +81,6 @@
         </div>
       </div>
     </div>
-    <button v-if="canIUse" open-type="getUserInfo" @getuserinfo="getUserInfo">授权登录</button>
   </div>
 </template>
 <script>
@@ -93,9 +92,7 @@ export default {
   data() {
     return {
       canIUse: uni.canIUse("button.open-type.getUserInfo"),
-      userInfo: {
-        avatarUrl: "/static/default-avatar.png"
-      },
+      avatarUrl: "/static/default-avatar.png",
       menus: [
         {
           name: "兑换记录",
@@ -154,6 +151,8 @@ export default {
   computed: {
     ...mapState({
       openId: state => state.openId,
+      userInfo: state => state.userInfo,
+      avatar: state => state.avatar,
       nickName: state => state.nickName,
       isIphoneX: state => state.isIphoneX
     })
@@ -222,12 +221,7 @@ export default {
       const { keys } = requests;
       res.forEach((item, index) => {
         const key = keys[index];
-        if (item[1]) {
-          const { data } = item[1];
-          if (data.code === 200) {
-            this[key] = data.result;
-          }
-        }
+        this[key] = item;
       });
     }
   }

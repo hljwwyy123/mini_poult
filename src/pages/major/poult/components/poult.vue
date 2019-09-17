@@ -40,7 +40,9 @@ export default {
       type: Number,
       default: 0
     },
-    pageShow: Boolean
+    pageShow: Boolean,
+    hitOpenId: String,
+    openId: String
   },
   watch: {
     pageShow(isShow, old) {
@@ -112,31 +114,37 @@ export default {
       return null;
     },
     handlePoultClick(e) {
-      const value = this.beatPoult();
-      this.beatCount += 1;
-      this.serialCount += 1;
-      if (value) {
-        this.totalScore += value;
-        this.$emit("onBingo", value); // 通知父组件更新总积分
-      }
-      console.log("props totalScore", this.totalScore);
-      if (this.todayScore >= this.mostScore) {
-        if (this.mostScore === 0) {
-          uni.showToast({
-            title: "你今天揍到上限了，别揍我了",
-            icon: "none",
-            duration: 2000
-          });
-        } else {
-          uni.showToast({
-            title: "这只鸡已经挨揍了50次，再打也不会获得大力丸了",
-            icon: "none",
-            duration: 2000
-          });
+      if (!this.hitOpenId) {
+        this.$toast("数据错误");
+      } else if (this.openId === this.hitOpenId) {
+        this.$toast("自己不能打自己");
+      } else {
+        const value = this.beatPoult();
+        this.beatCount += 1;
+        this.serialCount += 1;
+        if (value) {
+          this.totalScore += value;
+          this.$emit("onBingo", value); // 通知父组件更新总积分
         }
-        this.totalScore = this.mostScore;
+        console.log("props totalScore", this.totalScore);
+        if (this.todayScore >= this.mostScore) {
+          if (this.mostScore === 0) {
+            uni.showToast({
+              title: "你今天揍到上限了，别揍我了",
+              icon: "none",
+              duration: 2000
+            });
+          } else {
+            uni.showToast({
+              title: "这只鸡已经挨揍了50次，再打也不会获得大力丸了",
+              icon: "none",
+              duration: 2000
+            });
+          }
+          this.totalScore = this.mostScore;
+        }
+        this.handleResult();
       }
-      this.handleResult();
     },
     handleResult() {
       clearTimeout(this.beatTimer);

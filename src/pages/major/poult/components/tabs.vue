@@ -11,7 +11,12 @@
     <view class="panel-wrapper">
       <view class="panel-scroll-container">
         <view class="panel-container">
-          <view v-for="(item, index) in activePanelData" :key="index" class="panel-item">
+          <view
+            @click="handlePersonClick(item)"
+            v-for="(item, index) in activePanelData"
+            :key="index"
+            class="panel-item"
+          >
             <image class="item-avatar" :src="item.avatar" />
             <view class="nick-name">{{item.name}}</view>
           </view>
@@ -22,6 +27,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -86,11 +92,40 @@ export default {
   computed: {
     activePanelData: function() {
       return this.tabs[this.activeIndex].data;
-    }
+    },
+    ...mapState({
+      openId: state => state.openId,
+      nickName: state => state.nickName
+    })
+  },
+  mounted() {
+    this.getLists();
   },
   methods: {
     handeTabClick(index) {
       this.activeIndex = index;
+    },
+    /**
+     * 切换别人的小鸡
+     */
+    handlePersonClick(item) {
+      if (item.openId) {
+        this.$emit("changePoult", item);
+      }
+    },
+    getLists() {
+      if (this.openId) {
+        console.log(this.$store.state);
+        this.$request({
+          url: "/mp/operateList",
+          method: "POST",
+          data: {
+            openid: this.openId
+          }
+        }).then(res => {
+          console.log("res ", res);
+        });
+      }
     }
   }
 };

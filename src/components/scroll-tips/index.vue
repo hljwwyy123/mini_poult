@@ -21,15 +21,11 @@ export default {
     };
   },
   async mounted() {
-    const [error, result] = await this.$request({
+    this.$request({
       url: "/mp/newsNotify"
+    }).then(res => {
+      this.tips = res;
     });
-    if (result) {
-      const { data } = result;
-      if (data.code === 200) {
-        this.tips = data.result;
-      }
-    }
   }
 };
 </script>

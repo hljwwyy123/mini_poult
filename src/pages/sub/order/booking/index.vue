@@ -8,7 +8,7 @@
           <div class="price">{{goodsInfo.goodDownVirtual || 0}}</div>
           <div class="source-price">{{goodsInfo.goodVirtual || 0}}大力丸</div>
         </div>
-        <div class="source-price">实际商品价格：{{goodsInfo.goodPrice}}元</div>
+        <div class="source-price">实际商品价格：{{goodsInfo.goodPrice || 0}}元</div>
       </div>
       <div class="address" @click="getAddrees">
         <div v-if="!address.telNumber" class="address-button">添加地址</div>
@@ -49,29 +49,23 @@ export default {
     this.fetchGoodsInfo();
   },
   methods: {
-    async handleBooking() {
+    handleBooking() {
+      console.log(this.$store.state.openId)
       if (this.address.telNumber) {
-        const [error, { data }] = await this.$request({
+        this.$request({
           url: "/mp/goodExchangeById",
           method: "POST",
           data: {
-            userId: "1",
+            openid: this.$store.state.openId,
             goodId: this.param.goodsId,
             score: this.goodsInfo.goodDownVirtual
           }
-        });
-        // FIXME: 请求失败
-        if (data.code === 200) {
+        }).then(res => {
+          console.log("res ", res);
           uni.navigateTo({
-            url: `/pages/sub/order/booking/success/index?orderId=${data.orderId}`
+            url: `/pages/sub/order/booking/success/index?orderId=${res}`
           });
-        } else {
-          uni.showToast({
-            title: data.message,
-            icon: "none",
-            duration: 2000
-          });
-        }
+        });
       } else {
         uni.showToast({
           title: "请选择地址",
@@ -82,25 +76,15 @@ export default {
     },
     async fetchGoodsInfo() {
       if (this.param.goodsId) {
-        try {
-          const [error, { data }] = await this.$request({
-            url: "/mp/goodDetailById",
-            method: "POST",
-            data: {
-              goodId: this.param.goodsId
-            }
-          });
-          if (data.code === 200) {
-            this.goodsInfo = data.result;
+        this.$request({
+          url: "/mp/goodDetailById",
+          method: "POST",
+          data: {
+            goodId: this.param.goodsId
           }
-        } catch (error) {
-          uni.showToast({
-            title: "请求失败",
-            icon: "none",
-            duration: 2000
-          });
-          console.error(error);
-        }
+        }).then(res => {
+          this.goodsInfo = res;
+        });
       }
     },
     getAddrees() {

@@ -1,17 +1,18 @@
 <template>
-  <div class="wrapper" >
+  <div class="wrapper">
     <div class="content" :class="{iphoneX: isIphoneX}">
-      <button v-if="!authed" open-type="getUserInfo" @getuserinfo="onGetUserInfo" class="my-info" >
+      <button v-if="!authed" open-type="getUserInfo" @getuserinfo="onGetUserInfo" class="my-info">
         <image class="avatar" src="/static/default-avatar.png" />
-        <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon"></image>0
+        <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon" />0
       </button>
-      <a v-else url="/pages/major/mine/index" class="my-info" >
+      <a v-else url="/pages/major/mine/index" class="my-info">
         <image class="avatar" :src="userInfo.avatarUrl || '/static/default-avatar.png'" />
-        <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon"></image>
+        <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon" />
         {{totalScore}}
       </a>
       <div class="rank-info">
-        <div class="rank-icon" />我的排名：102
+        <div class="rank-icon" />
+        我的排名：{{userData.ranking}}
       </div>
       <div class="menu-list">
         <a url="/pages/sub/mine/rank-list/index" class="menu-item">
@@ -25,15 +26,19 @@
         </button>
       </div>
       <a url="/pages/major/poult/index" open-type="redirect" class="back-home"></a>
-      <poult @onSendRequest="onSendRquest" 
+      <poult
+        :openId="{openId}"
+        :hitOpenId="{hitOpenId}"
+        @onSendRequest="onSendRquest"
         :pageShow="pageShow"
-        :todayScore="totalScore" 
-        @onBingo="onBingo"/>
-      <tabs />
+        :todayScore="totalScore"
+        @onBingo="onBingo"
+      />
+      <tabs @changePoult="handleChangePoult" v-if="openId" />
     </div>
-    <image class="cloud clound-1" src="/static/cloud5.png"/>
-    <image class="cloud clound-2" src="/static/cloud2.png"/>
-    <image class="cloud clound-3" src="/static/cloud3.png"/>
+    <image class="cloud clound-1" src="/static/cloud5.png" />
+    <image class="cloud clound-2" src="/static/cloud2.png" />
+    <image class="cloud clound-3" src="/static/cloud3.png" />
   </div>
 </template>
 <script>
@@ -45,8 +50,10 @@ export default {
   data() {
     return {
       totalScore: 0, // 获得总大力丸
-      pageShow: true, // 当前页面是否onShow 
-      invate_openId: null,  //邀请人Opoenid
+      pageShow: true, // 当前页面是否onShow
+      invate_openId: null, //邀请人Opoenid
+      hitOpenId: "",
+      userData: {} // 个人数据
     };
   },
   computed: {
@@ -56,18 +63,18 @@ export default {
       userInfo: state => state.userInfo,
       avatar: state => state.avatar,
       nickName: state => state.nickName,
-      isIphoneX: state => state.isIphoneX,
+      isIphoneX: state => state.isIphoneX
     })
   },
   onLoad(options) {
-    console.log(options)
+    console.log("options ", options);
     //如果是别人邀请进入
-    if(options.invate_openId){
+    if (options.invate_openId) {
       this.invate_openId = options.invate_openId;
     }
     // 别人的鸡
-    if(options.openId){
-      this.hitOpenid = options.openId 
+    if (options.hitOpenId) {
+      this.hitOpenid = options.hitOpenId;
     }
   },
   onHide() {
@@ -78,39 +85,63 @@ export default {
   },
   onShareAppMessage(res) {
     return {
-      title: '揍小鸡换奖品',
+      title: "揍小鸡换奖品",
       path: `/pages/major/poult/index?openId=${this.openId}`
-    }
+    };
   },
   methods: {
-    onGetUserInfo(el){
+    onGetUserInfo(el) {
       const self = this;
-      this.$store.commit('loginWx', el.detail.userInfo)
+      this.$store.commit("loginWx", el.detail.userInfo);
       this.$store.commit("authed", true);
       login({
         openid: self.invate_openId,
         regSource: 0
       });
     },
-    onBingo(score){
+    onBingo(score) {
       this.totalScore += score;
       // 动画
     },
-    onSendRquest(score){
-      console.log('send Ajax ===== 还需要判断该不该发请求', score)
-      if(!score)return;
+    onSendRquest(score) {
+      console.log("send Ajax ===== 还需要判断该不该发请求", score);
+      if (!score) return;
       const self = this;
       this.$request({
         url: "/mp/hitChicken",
         method: "POST",
         data: {
-            score: score,
-            hitOpenid: self.hitOpenid
+          openid: self.openId,
+          score: score,
+          hitOpenid: self.hitOpenid
         },
         success: res => {
-          console.log('hit success =====')
+          console.log("hit success =====");
         }
-    });
+      });
+    },
+    handleChangePoult(data) {
+      console.log("data ", data);
+    },
+    fetchIndexData(openid) {
+      this.$request({
+        url: "/mp/index",
+        method: "POST",
+        data: {
+          openid
+        }
+      }).then(res => {
+        this.userData = res;
+        this.totalScore = res.score;
+      });
+    }
+  },
+  watch: {
+    openId(newValue) {
+      if (newValue) {
+        console.log("newValue ", newValue);
+        this.fetchIndexData(newValue);
+      }
     }
   },
   components: {
@@ -149,7 +180,11 @@ export default {
     left: 65upx;
     top: 120upx;
     padding: 5upx 40upx 5upx 20upx;
-    background:linear-gradient(152deg,rgba(255,174,130,1) 0%,rgba(251,111,114,1) 100%);
+    background: linear-gradient(
+      152deg,
+      rgba(255, 174, 130, 1) 0%,
+      rgba(251, 111, 114, 1) 100%
+    );
     color: white;
     border-radius: 40upx;
     height: 70upx;
@@ -173,17 +208,17 @@ export default {
       width: 80upx;
       height: 80upx;
       border-radius: 50%;
-      border: 5upx solid #FE9A7D;
+      border: 5upx solid #fe9a7d;
       z-index: 2;
     }
-    .wan-icon{
+    .wan-icon {
       margin-left: 60upx;
       margin-right: 8upx;
       width: 16upx;
       height: 26upx;
     }
   }
-  
+
   .rank-info {
     position: absolute;
     left: 50upx;
@@ -225,28 +260,28 @@ export default {
       padding: 0;
       background-color: transparent;
     }
-    button:after{
-        border: none;
+    button:after {
+      border: none;
     }
   }
-  &.iphoneX{
-    .my-info{
+  &.iphoneX {
+    .my-info {
       top: 140upx;
     }
-    .rank-info{
+    .rank-info {
       top: 240upx;
     }
-    .menu-list{
+    .menu-list {
       top: 200upx;
     }
   }
-  .back-home{
+  .back-home {
     position: absolute;
     bottom: 340upx;
     left: 32upx;
     width: 83upx;
     height: 103upx;
-    background: url('~@/static/back-home.png') no-repeat;
+    background: url("~@/static/back-home.png") no-repeat;
     background-size: 100% 100%;
     z-index: 3;
   }
@@ -254,7 +289,7 @@ export default {
 .cloud {
   position: absolute;
   z-index: 1;
-  &.clound-1{
+  &.clound-1 {
     top: 300upx;
     left: 100upx;
     width: 176upx;
@@ -262,10 +297,14 @@ export default {
     animation: move-1 80s linear infinite;
   }
   @keyframes move-1 {
-    from{transform: translate3d(-200upx,0,0)}
-    to{transform: translate3d(1000upx,0,0)}
+    from {
+      transform: translate3d(-200upx, 0, 0);
+    }
+    to {
+      transform: translate3d(1000upx, 0, 0);
+    }
   }
-  &.clound-2{
+  &.clound-2 {
     top: 100upx;
     left: -80upx;
     width: 77upx;
@@ -273,18 +312,26 @@ export default {
     animation: move-2 40s linear infinite;
   }
   @keyframes move-2 {
-    from{transform: translate3d(-80upx,0,0)}
-    to{transform: translate3d(1000upx,0,0)}
+    from {
+      transform: translate3d(-80upx, 0, 0);
+    }
+    to {
+      transform: translate3d(1000upx, 0, 0);
+    }
   }
-  &.clound-3{
+  &.clound-3 {
     top: 200upx;
     width: 98upx;
     height: 63upx;
     animation: move-3 35s linear infinite;
   }
   @keyframes move-3 {
-    from{transform: translate3d(200upx,0,0)}
-    to{transform: translate3d(1000upx,0,0)}
+    from {
+      transform: translate3d(200upx, 0, 0);
+    }
+    to {
+      transform: translate3d(1000upx, 0, 0);
+    }
   }
 }
 </style>
