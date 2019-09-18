@@ -10,17 +10,22 @@
     </view>
     <view class="panel-wrapper">
       <view class="panel-scroll-container">
-        <view class="panel-container">
-          <view
-            @click="handlePersonClick(item)"
-            v-for="(item, index) in activePanelData"
-            :key="index"
-            class="panel-item"
-          >
-            <image class="item-avatar" :src="item.avatar" />
-            <view class="nick-name">{{item.name}}</view>
+        <view v-if="activePanelData.length">
+          <view class="panel-container">
+            <a
+              @click="handlePersonClick(item)"
+              v-for="(item, index) in activePanelData"
+              :key="index"
+              class="panel-item"
+              :url="`/pages/major/poult/index?hitOpenId=${item.openid}`"
+              open-type="redirect"
+            >
+              <image class="item-avatar" :src="item.avatar" />
+              <view class="nick-name">{{item.name}}</view>
+            </a>
           </view>
         </view>
+        <view v-else>暂无数据</view>
       </view>
     </view>
   </view>
@@ -31,63 +36,25 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      activeIndex: 0
-    };
-  },
-  props: {
-    tabs: {
-      type: Array,
-      required: true,
-      default: [
+      activeIndex: 0,
+      tabs: [
         {
+          key: "byHitChicken",
           title: "最近揍我的人",
-          data: [
-            {
-              avatar: "/static/avatar.jpeg",
-              name: "1"
-            },
-            {
-              avatar: "/static/avatar.jpeg",
-              name: "2"
-            },
-            {
-              avatar: "/static/avatar.jpeg",
-              name: "3"
-            },
-            {
-              avatar: "/static/avatar.jpeg",
-              name: "4"
-            },
-            {
-              avatar: "/static/avatar.jpeg",
-              name: "5"
-            },
-            {
-              avatar: "/static/avatar.jpeg",
-              name: "6"
-            }
-          ]
+          data: []
         },
         {
+          key: "userInfo",
           title: "附近的人",
-          data: [
-            {
-              avatar: "/static/avatar.jpeg",
-              name: "123"
-            }
-          ]
+          data: []
         },
         {
+          key: "friend",
           title: "我的好友",
-          data: [
-            {
-              avatar: "/static/avatar.jpeg",
-              name: "123"
-            }
-          ]
+          data: []
         }
       ]
-    }
+    };
   },
   computed: {
     activePanelData: function() {
@@ -109,21 +76,27 @@ export default {
      * 切换别人的小鸡
      */
     handlePersonClick(item) {
-      if (item.openId) {
+      if (item.openid) {
         this.$emit("changePoult", item);
+      } else {
+        this.$toast("数据异常");
       }
     },
     getLists() {
       if (this.openId) {
-        console.log(this.$store.state);
         this.$request({
           url: "/mp/operateList",
           method: "POST",
           data: {
-            openid: this.openId
+            openid: this.openId,
+            currentPage: 1
           }
         }).then(res => {
-          console.log("res ", res);
+          const newTabs = this.tabs;
+          newTabs.forEach(tab => {
+            tab.data = res[tab.key];
+          });
+          this.tabs = newTabs;
         });
       }
     }

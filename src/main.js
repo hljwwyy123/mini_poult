@@ -5,7 +5,7 @@ import { request, toast } from './utils/index'
 
 Vue.config.productionTip = false
 
-Vue.prototype.$serverUrl = 'https://poult.mttsmart.com';
+Vue.prototype.$serverUrl = 'https://www.ipoult.com';
 Vue.prototype.$store = store;
 Vue.prototype.$request = request;
 Vue.prototype.$toast = toast;

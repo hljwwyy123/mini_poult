@@ -3,7 +3,7 @@
     <home-bar />
     <div class="summary" :class="{iphoneX: isIphoneX}">
       <div class="info">{{userInfo.nickName || '我'}}的大力丸</div>
-      <div class="score">0</div>
+      <div class="score">{{userData.score || 0}}</div>
       <div
         v-if="userInfo.nickName"
         @click="handleNavigate('/pages/sub/mine/score-detail/index')"
@@ -23,16 +23,10 @@
         <div class="section-header">
           <div>
             已连续打卡
-            <div class="red-text">1</div>天
+            <div class="red-text">{{userData.signedDays}}</div>天
           </div>
         </div>
-        <div class="section-content">
-          <div v-for="(item, index) in daysInfo" :key="index" class="day">
-            <div v-if="item.isSigned" class="day-content active"></div>
-            <div v-else class="day-content">{{item.prizes}}</div>
-            <div class="day-footer">第{{index + 1}}天</div>
-          </div>
-        </div>
+        <sign v-if="openId" :openId="openId" :signedDays="signedDays" />
         <button open-type="share" class="share-button">邀请好友立得100大力丸</button>
         <scroll-tips />
       </div>
@@ -87,7 +81,8 @@
 import { mapState, mapMutations } from "vuex";
 import { login } from "@/utils/index";
 import { homeBar } from "@/components/homeBar";
-import scrollTips from "@/components/scroll-tips";
+import scrollTips from "./components/scroll-tips";
+import sign from "./components/sign";
 export default {
   data() {
     return {
@@ -141,12 +136,15 @@ export default {
           isShowGift: true
         }
       ],
-      goodsList: []
+      goodsList: [],
+      signedData: {},
+      userData: {}
     };
   },
   components: {
     homeBar,
-    scrollTips
+    scrollTips,
+    sign
   },
   computed: {
     ...mapState({
@@ -155,23 +153,23 @@ export default {
       avatar: state => state.avatar,
       nickName: state => state.nickName,
       isIphoneX: state => state.isIphoneX
-    })
+    }),
+    signedDays() {
+      return this.userData.signedDays % 7;
+    }
   },
   onLoad() {
     login().then(res => {
-      console.log("login success");
+      console.log("login res", res);
+      this.signed();
     });
     this.requests = {
-      keys: ["goodsList"],
-      fetchMethods: [this.fetchGoodsList()]
+      keys: ["goodsList", "userData"],
+      fetchMethods: [this.fetchGoodsList(), this.getUserData()]
     };
     this.fetchData(this.requests);
   },
   onShareAppMessage: function(res) {
-    if (res.from === "button") {
-      // 来自页面内转发按钮
-      console.log(res.target);
-    }
     return {
       title: "揍小鸡，得奖品",
       path: `/pages/major/poult/index?openId=${this.openId}&isSharePage=1`
@@ -181,6 +179,24 @@ export default {
     fetchGoodsList() {
       return this.$request({
         url: "/mp/goodInfoList"
+      });
+    },
+    signed() {
+      this.$request({
+        url: "/mp/signed",
+        method: "POST",
+        data: {
+          openid: this.openId
+        }
+      });
+    },
+    getUserData() {
+      return this.$request({
+        url: "/mp/index",
+        method: "POST",
+        data: {
+          openid: this.openId
+        }
       });
     },
     fetchData(requests) {
@@ -220,6 +236,7 @@ export default {
     handlePromiseAllData(requests, res) {
       const { keys } = requests;
       res.forEach((item, index) => {
+        console.log(item);
         const key = keys[index];
         this[key] = item;
       });
@@ -303,29 +320,6 @@ export default {
         justify-content: space-between;
         &:not(:last-child) {
           margin-bottom: 30upx;
-        }
-      }
-      .day {
-        color: #828282;
-        text-align: center;
-        .day-content {
-          border: 1px solid #828282;
-          border-radius: 50%;
-          width: 66upx;
-          height: 66upx;
-          line-height: 66upx;
-          font-size: 24upx;
-          &.active {
-            background-image: url("~@/static/checked.png");
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-            background-position: center center;
-            border-color: transparent;
-          }
-        }
-        .day-footer {
-          font-size: 20upx;
-          padding-top: 5upx;
         }
       }
       .share-button {

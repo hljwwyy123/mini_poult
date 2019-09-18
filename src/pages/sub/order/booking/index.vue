@@ -28,18 +28,24 @@
     </div>
     <div class="footer">
       <div class="footer-left">
-        <div class="text">剩余大力丸:</div>4600
+        <div class="text">剩余大力丸:</div>{{userData.score}}
       </div>
-      <div @click="handleBooking" class="footer-right">立即兑换</div>
+      <div @click="handleBooking" class="footer-right">{{canBuy ? "立即兑换" : "大力丸不足，去赚取"}}</div>
     </div>
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      goodsInfo: {},
-      address: {}
+      goodsInfo: {
+        goodDownVirtual: 0
+      },
+      address: {},
+      userData: {
+        score: 0
+      }
     };
   },
   onLoad(param) {
@@ -47,30 +53,49 @@ export default {
     // fetch 大力丸 info
     this.param = param;
     this.fetchGoodsInfo();
+    this.getUserData();
+  },
+  computed: {
+    ...mapState({
+      openId: state => state.openId,
+      userInfo: state => state.userInfo,
+      avatar: state => state.avatar,
+      nickName: state => state.nickName,
+      isIphoneX: state => state.isIphoneX
+    }),
+    canBuy() {
+      // return this.userData.score >= this.goodsInfo.goodDownVirtual;
+      return true
+    }
   },
   methods: {
     handleBooking() {
-      console.log(this.$store.state.openId)
-      if (this.address.telNumber) {
-        this.$request({
-          url: "/mp/goodExchangeById",
-          method: "POST",
-          data: {
-            openid: this.$store.state.openId,
-            goodId: this.param.goodsId,
-            score: this.goodsInfo.goodDownVirtual
-          }
-        }).then(res => {
-          console.log("res ", res);
-          uni.navigateTo({
-            url: `/pages/sub/order/booking/success/index?orderId=${res}`
+      if (this.canBuy) {
+        if (this.address.telNumber) {
+          this.$request({
+            url: "/mp/goodExchangeById",
+            method: "POST",
+            data: {
+              openid: this.openId,
+              goodId: this.param.goodsId,
+              score: this.goodsInfo.goodDownVirtual
+            }
+          }).then(res => {
+            console.log("res ", res);
+            uni.navigateTo({
+              url: `/pages/sub/order/booking/success/index?orderId=${res}`
+            });
           });
-        });
+        } else {
+          uni.showToast({
+            title: "请选择地址",
+            icon: "none",
+            duration: 2000
+          });
+        }
       } else {
-        uni.showToast({
-          title: "请选择地址",
-          icon: "none",
-          duration: 2000
+        uni.navigateTo({
+          url: "/pages/major/poult/index"
         });
       }
     },
@@ -86,6 +111,15 @@ export default {
           this.goodsInfo = res;
         });
       }
+    },
+    getUserData() {
+      this.$request({
+        url: "/mp/index",
+        method: "POST",
+        data: {
+          openid: this.openId
+        }
+      }).then(res => (this.userData = res));
     },
     getAddrees() {
       uni.chooseAddress({
@@ -185,7 +219,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      width: 68vw;
+      min-width: 50%;
       height: 100%;
       padding-right: 30upx;
       padding-left: 30upx;

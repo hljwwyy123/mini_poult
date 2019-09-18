@@ -1,5 +1,5 @@
 import Store from '@/store/index';
-const serverUrl = 'https://poult.mttsmart.com';
+const serverUrl = 'https://www.ipoult.com';
 export function login(data) {
   return new Promise((resolve, reject) => {
     uni.login({

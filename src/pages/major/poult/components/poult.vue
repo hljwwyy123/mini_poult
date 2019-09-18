@@ -52,7 +52,7 @@ export default {
       } else {
         this.animate();
       }
-    }
+    },
   },
   computed: {
     poultClass() {
@@ -114,20 +114,12 @@ export default {
       return null;
     },
     handlePoultClick(e) {
-      if (!this.hitOpenId) {
-        this.$toast("数据错误");
-      } else if (this.openId === this.hitOpenId) {
-        this.$toast("自己不能打自己");
-      } else {
+      if (this.hitOpenId) {
         const value = this.beatPoult();
         this.beatCount += 1;
         this.serialCount += 1;
-        if (value) {
-          this.totalScore += value;
-          this.$emit("onBingo", value); // 通知父组件更新总积分
-        }
-        console.log("props totalScore", this.totalScore);
-        if (this.todayScore >= this.mostScore) {
+        
+        if (this.totalScore >= this.mostScore) {
           if (this.mostScore === 0) {
             uni.showToast({
               title: "你今天揍到上限了，别揍我了",
@@ -142,6 +134,10 @@ export default {
             });
           }
           this.totalScore = this.mostScore;
+        } else if (value) {
+          this.totalScore += value;
+          this.$emit("onBingo", value); // 通知父组件更新总积分
+          console.log("props totalScore", this.totalScore);
         }
         this.handleResult();
       }
@@ -153,7 +149,7 @@ export default {
         setTimeout(() => {
           this.animate();
         }, 2000);
-        this.totalScore = 0; // 发送ajax 后重新计算总分数
+        // this.totalScore = 0; // 发送ajax 后重新计算总分数 FIXME:
         this.serialCount = 0;
       }, this.serialDuration);
     },

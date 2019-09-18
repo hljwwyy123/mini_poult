@@ -12,7 +12,7 @@
       </a>
       <div class="rank-info">
         <div class="rank-icon" />
-        我的排名：{{userData.ranking}}
+        我的排名：{{userData.ranking || 0}}
       </div>
       <div class="menu-list">
         <a url="/pages/sub/mine/rank-list/index" class="menu-item">
@@ -25,16 +25,24 @@
           <image class="menu-prize" src="/static/menu-invate.png" />
         </button>
       </div>
-      <a url="/pages/major/poult/index" open-type="redirect" class="back-home"></a>
+      <a
+        v-if="hitOpenId && openId !== hitOpenId"
+        url="/pages/major/poult/index"
+        open-type="redirect"
+        class="back-home"
+      ></a>
       <poult
-        :openId="{openId}"
-        :hitOpenId="{hitOpenId}"
+        :openId="openId"
+        :hitOpenId="hitOpenId"
         @onSendRequest="onSendRquest"
         :pageShow="pageShow"
         :todayScore="totalScore"
         @onBingo="onBingo"
       />
-      <tabs @changePoult="handleChangePoult" v-if="openId" />
+      <tabs
+        @changePoult="handlePoultChange"
+        v-if="openId"
+      />
     </div>
     <image class="cloud clound-1" src="/static/cloud5.png" />
     <image class="cloud clound-2" src="/static/cloud2.png" />
@@ -53,7 +61,7 @@ export default {
       pageShow: true, // 当前页面是否onShow
       invate_openId: null, //邀请人Opoenid
       hitOpenId: "",
-      userData: {} // 个人数据
+      userData: {}, // 个人数据
     };
   },
   computed: {
@@ -74,7 +82,11 @@ export default {
     }
     // 别人的鸡
     if (options.hitOpenId) {
-      this.hitOpenid = options.hitOpenId;
+      this.hitOpenId = options.hitOpenId;
+    }
+
+    if (this.openId) {
+      this.fetchIndexData(this.openId);
     }
   },
   onHide() {
@@ -113,15 +125,19 @@ export default {
         data: {
           openid: self.openId,
           score: score,
-          hitOpenid: self.hitOpenid
+          hitOpenid: self.hitOpenId
         },
         success: res => {
-          console.log("hit success =====");
+          console.log("hit success ===== ", res);
+          if (res.data.code === 200) {
+            self.fetchIndexData(this.openId);
+          }
         }
       });
     },
-    handleChangePoult(data) {
+    handlePoultChange(data) {
       console.log("data ", data);
+      this.hitOpenId = data.openid;
     },
     fetchIndexData(openid) {
       this.$request({
@@ -139,7 +155,6 @@ export default {
   watch: {
     openId(newValue) {
       if (newValue) {
-        console.log("newValue ", newValue);
         this.fetchIndexData(newValue);
       }
     }
