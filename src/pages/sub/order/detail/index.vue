@@ -2,26 +2,34 @@
   <div class="wrapper">
     <div class="prize-info">
       <div class="item">
-        <image class="prize-item-img" :src="order.goodImg || '/static/goods.jpg'" />
+        <image class="prize-item-img" :src="orderDetail.goodImg || '/static/goods.jpg'" />
         <div class="info">
-          <div class="item-title">空气加湿器</div>
+          <div class="item-title">{{orderDetail.goodName}}</div>
           <div class="item-subtitle">
             消耗大力丸：
-            <span class="wan-count">{{order.wan || 1200}}</span>
+            <span class="wan-count">{{orderDetail.score || 0}}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="order-info">
-      <address-item concatInfo="夏婷婷 18866251777" concatAddress="北京市朝阳区望京花家地西里一区112号楼" />
-      <list-item :label="'兑换时间'" :text="'2019-09-06 21:14:07'" />
-      <list-item :label="'订单编号'" :text="'1231512413213123'" />
-      <list-item :label="'订单状态'" :text="'已完成'" />
-      <list-item :label="'物流信息'" :text="'顺丰 3872378882378'" />
+      <address-item
+        :concatInfo="`${orderDetail.contact} ${orderDetail.phone}`"
+        :concatAddress="`${orderDetail.province_name} ${orderDetail.city_name} ${orderDetail.county_name} ${orderDetail.addressDetail}`"
+      />
+      <list-item :label="'兑换时间'" :text="orderDetail.exchangeTime" />
+      <list-item :label="'订单编号'" :text="orderDetail.orderNum" />
+      <list-item :label="'订单状态'" :text="orderDetail.exchangeStatus" />
+      <list-item
+        v-if="orderDetail.expressName || orderDetail.expressNum"
+        :label="'物流信息'"
+        :text="`${orderDetail.expressName || ''} ${orderDetail.expressNum || ''}`"
+      />
     </div>
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 import addressItem from "./components/addressItem";
 import listItem from "../components/listItem";
 export default {
@@ -30,7 +38,36 @@ export default {
     listItem
   },
   data() {
-    return {};
+    return {
+      orderDetail: {}
+    };
+  },
+  computed: {
+    ...mapState({
+      openId: state => state.openId
+    })
+  },
+  onLoad(params) {
+    if (params) {
+      this.fetchOrderDetail(params);
+    }
+  },
+  methods: {
+    fetchOrderDetail(params) {
+      if (params.orderId) {
+        this.$request({
+          url: "/mp/goodExchangeDetail",
+          method: "POST",
+          data: {
+            openid: this.openId,
+            orderNum: params.orderId
+          }
+        }).then(res => {
+          console.log("fetchOrderDetail ", res);
+          this.orderDetail = res.data;
+        });
+      }
+    }
   }
 };
 </script>

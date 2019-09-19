@@ -44,6 +44,9 @@ export default {
     hitOpenId: String,
     openId: String
   },
+  mounted() {
+    this.fetchScoreInfo();
+  },
   watch: {
     pageShow(isShow, old) {
       if (!isShow) {
@@ -52,7 +55,7 @@ export default {
       } else {
         this.animate();
       }
-    },
+    }
   },
   computed: {
     poultClass() {
@@ -118,7 +121,7 @@ export default {
         const value = this.beatPoult();
         this.beatCount += 1;
         this.serialCount += 1;
-        
+
         if (this.totalScore >= this.mostScore) {
           if (this.mostScore === 0) {
             uni.showToast({
@@ -157,6 +160,18 @@ export default {
       this.animateTimer = setInterval(() => {
         this.statusIndex = (Math.random() * 4) | 0;
       }, ANIMTE_DUR);
+    },
+    // TODO: 对比分数 限制点击
+    fetchScoreInfo() {
+      this.$request({
+        url: "/mp/integralCount",
+        method: "POST",
+        data: {
+          openid: this.openId
+        }
+      }).then(res => {
+        console.log(res);
+      });
     }
   }
 };

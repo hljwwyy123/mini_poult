@@ -76,12 +76,13 @@ export default {
               openid: this.openId,
               goodId: this.param.goodsId,
               score: this.goodsInfo.goodDownVirtual,
-              ...this.address
+              ...this.address,
+              telNumber: '15210000000' // FIXME: 测试
             }
           }).then(res => {
             console.log("res ", res);
-            uni.navigateTo({
-              url: `/pages/sub/order/booking/success/index?orderId=${res}`
+            uni.redirectTo({
+              url: `/pages/sub/order/booking/success/index?orderId=${res.orderNum}&openId=${this.openId}`
             });
           });
         } else {
@@ -106,7 +107,6 @@ export default {
             goodId: this.param.goodsId
           }
         }).then(res => {
-          delete res.errMsg;
           this.goodsInfo = res;
         });
       }
@@ -124,6 +124,7 @@ export default {
       uni.chooseAddress({
         success: res => {
           console.log(res);
+           delete res.errMsg;
           this.address = res;
         },
         fail(error) {

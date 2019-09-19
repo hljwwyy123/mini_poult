@@ -29,9 +29,9 @@
           <scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadData">
             <rank-item
               class="rank-item"
-              v-for="(item, rank) in tabItem.list"
+              v-for="(item) in tabItem.list"
               :class="{mine: item.openId === openId}"
-              :key="rank"
+              :key="item.openid"
               :itemData="item"
             />
             <empty-holder v-if="activeTab === 0 && tabItem.list <= 0" :text="'您还没有好友哦'"></empty-holder>
@@ -95,6 +95,7 @@ export default {
     this.loadData("add");
   },
   methods: {
+    // FIXME: 切换tab会请求两次
     requestData() {
       const self = this;
       let tabItem = this.tabList[this.activeTab];
@@ -102,16 +103,24 @@ export default {
         url: "/mp/myFriendRanking",
         method: "POST",
         data: {
-          pageNo: tabItem.pageNo,
+          currentPage: tabItem.pageNo,
           type: self.activeTab + 1, //1:friend, 2: total
           openid: self.openId
         },
         success: res => {
-          if (res.data.length > 0) {
-            tabItem.pageNo++;
-            tabItem.list = tabItem.list.concat(res.data.result);
-          } else {
-            tabItem.loadMoreStatus = 2;
+          console.log("requestData ", res);
+          const { data } = res;
+          if (data.code === 200) {
+            const {
+              result: { friendRanking, integralRanking }
+            } = data;
+            const ranking = friendRanking || integralRanking;
+            if (ranking && ranking.length > 0) {
+              tabItem.pageNo++;
+              tabItem.list = tabItem.list.concat(ranking);
+            } else {
+              tabItem.loadMoreStatus = 2;
+            }
           }
         },
         fail: () => {

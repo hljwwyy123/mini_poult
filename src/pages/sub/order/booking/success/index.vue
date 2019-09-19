@@ -3,15 +3,15 @@
     <div class="header">
       <div class="title">兑换成功</div>
       <div class="subtitle">恭喜！你的奖品已兑换成功</div>
-      <div class="button">兑换记录</div>
+      <div @click="navigateToList" class="button">兑换记录</div>
     </div>
     <div class="content">
       <div class="item">
-        <div class="image">image</div>
+        <image :src="orderDetail.goodImg" class="image" />
         <div class="info">
-          <div class="item-title">空气加湿器</div>
-          <div class="item-subtitle">兑换数量：1</div>
-          <div class="item-subtitle">兑换时间：2019-09-26</div>
+          <div class="item-title">{{orderDetail.goodName}}</div>
+          <!-- <div class="item-subtitle">兑换数量：1</div> -->
+          <div class="item-subtitle">兑换时间：{{orderDetail.exchangeTime}}</div>
         </div>
       </div>
       <div class="intro">
@@ -35,7 +35,42 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      orderDetail: {
+        goodImg: "",
+        goodName: "未知",
+        exchangeTime: "0-0-0"
+      }
+    };
+  },
+  onLoad(params) {
+    if (params) {
+      this.fetchOrderInfo(params);
+    }
+  },
+  methods: {
+    fetchOrderInfo(params) {
+      if (params.openId && params.orderId) {
+        this.$request({
+          url: "/mp/goodExchangeDetail",
+          method: "POST",
+          data: {
+            openid: params.openId,
+            orderNum: params.orderId
+          }
+        }).then(res => {
+          console.log("fetchOrderInfo ", res);
+          this.orderDetail = res.data;
+        });
+      } else {
+        this.$toast("数据异常");
+      }
+    },
+    navigateToList() {
+      uni.navigateTo({
+        url: '/pages/sub/order/list/index'
+      })
+    }
   }
 };
 </script>
@@ -93,8 +128,10 @@ export default {
       .info {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         align-items: stretch;
         flex: 1;
+        height: 127upx;
         .item-title {
           font-size: 32upx;
           color: #000;
@@ -111,6 +148,12 @@ export default {
       .intro-header {
         color: #000;
         font-size: 28upx;
+        padding-left: 27upx;
+        margin-left: -27upx;
+        background-image: url("~@/static/wan.png");
+        background-position: left center;
+        background-repeat: no-repeat;
+        background-size: 19upx 30upx;
       }
       .intro-content {
         color: #999;

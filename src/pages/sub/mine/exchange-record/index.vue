@@ -22,21 +22,13 @@ export default {
     getPrizeList() {
       this.$request({
         url: "/mp/goodExchangeList",
+        method: "POST",
         data: {
           openid: "",
           currentPage: 1,
           pageSize: 10
-        },
-        success: res => {
-          this.goodList = res.data.result;
-        },
-        fail: () => {
-          uni.showModal({
-            content: "请求失败，请重试!",
-            showCancel: false
-          });
         }
-      });
+      }).then(res => (this.goodList = res));
     }
   }
 };

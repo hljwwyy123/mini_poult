@@ -32,6 +32,7 @@
         class="back-home"
       ></a>
       <poult
+        v-if="openId"
         :openId="openId"
         :hitOpenId="hitOpenId"
         @onSendRequest="onSendRquest"
