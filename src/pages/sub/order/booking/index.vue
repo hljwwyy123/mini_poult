@@ -28,7 +28,8 @@
     </div>
     <div class="footer">
       <div class="footer-left">
-        <div class="text">剩余大力丸:</div>{{userData.score}}
+        <div class="text">剩余大力丸:</div>
+        {{userData.score}}
       </div>
       <div @click="handleBooking" class="footer-right">{{canBuy ? "立即兑换" : "大力丸不足，去赚取"}}</div>
     </div>
@@ -57,15 +58,11 @@ export default {
   },
   computed: {
     ...mapState({
-      openId: state => state.openId,
-      userInfo: state => state.userInfo,
-      avatar: state => state.avatar,
-      nickName: state => state.nickName,
-      isIphoneX: state => state.isIphoneX
+      openId: state => state.openId
     }),
     canBuy() {
       // return this.userData.score >= this.goodsInfo.goodDownVirtual;
-      return true
+      return true;
     }
   },
   methods: {
@@ -78,7 +75,8 @@ export default {
             data: {
               openid: this.openId,
               goodId: this.param.goodsId,
-              score: this.goodsInfo.goodDownVirtual
+              score: this.goodsInfo.goodDownVirtual,
+              ...this.address
             }
           }).then(res => {
             console.log("res ", res);
@@ -108,6 +106,7 @@ export default {
             goodId: this.param.goodsId
           }
         }).then(res => {
+          delete res.errMsg;
           this.goodsInfo = res;
         });
       }

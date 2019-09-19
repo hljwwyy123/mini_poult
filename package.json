@@ -33,6 +33,7 @@
         "@dcloudio/uni-mp-toutiao": "^2.0.0-22420190823018",
         "@dcloudio/uni-mp-weixin": "^2.0.0-22420190823018",
         "@dcloudio/uni-stat": "^2.0.0-22420190823018",
+        "cross-env": "^6.0.0",
         "flyio": "^0.6.2",
         "regenerator-runtime": "^0.12.1",
         "vue": "^2.6.10",
@@ -53,8 +54,8 @@
         "babel-plugin-import": "^1.11.0",
         "mini-types": "*",
         "miniprogram-api-typings": "^2.8.0-2",
-        "postcss-comment": "^2.0.0",
         "node-sass": "^4.9.2",
+        "postcss-comment": "^2.0.0",
         "sass-loader": "^7.0.3",
         "vue-template-compiler": "^2.6.10"
     },

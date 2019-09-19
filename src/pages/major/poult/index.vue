@@ -47,6 +47,7 @@
     <image class="cloud clound-1" src="/static/cloud5.png" />
     <image class="cloud clound-2" src="/static/cloud2.png" />
     <image class="cloud clound-3" src="/static/cloud3.png" />
+    <multi-form-id />
   </div>
 </template>
 <script>
@@ -54,6 +55,7 @@ import { mapState, mapMutations } from "vuex";
 import { login } from "@/utils/index.js";
 import tabs from "./components/tabs";
 import poult from "./components/poult";
+import multiFormId from '@/components/multiFormId'
 export default {
   data() {
     return {
@@ -161,7 +163,8 @@ export default {
   },
   components: {
     tabs,
-    poult
+    poult,
+    multiFormId
   }
 };
 </script>
