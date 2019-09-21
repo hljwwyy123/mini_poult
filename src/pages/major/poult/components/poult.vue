@@ -44,9 +44,6 @@ export default {
     hitOpenId: String,
     openId: String
   },
-  mounted() {
-    this.fetchScoreInfo();
-  },
   watch: {
     pageShow(isShow, old) {
       if (!isShow) {
@@ -172,6 +169,13 @@ export default {
       }).then(res => {
         console.log(res);
       });
+    }
+  },
+  watch: {
+    openId(newValue) {
+      if (newValue) {
+        this.fetchScoreInfo();
+      }
     }
   }
 };

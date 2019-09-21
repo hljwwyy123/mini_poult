@@ -32,7 +32,6 @@
         class="back-home"
       ></a>
       <poult
-        v-if="openId"
         :openId="openId"
         :hitOpenId="hitOpenId"
         @onSendRequest="onSendRquest"
@@ -40,15 +39,13 @@
         :todayScore="totalScore"
         @onBingo="onBingo"
       />
-      <tabs
-        @changePoult="handlePoultChange"
-        v-if="openId"
-      />
+      <tabs v-if="openId" />
     </div>
     <image class="cloud clound-1" src="/static/cloud5.png" />
     <image class="cloud clound-2" src="/static/cloud2.png" />
     <image class="cloud clound-3" src="/static/cloud3.png" />
     <multi-form-id />
+    <sign-modal :show="signedInfo.isSigned" :title="`大力丸+${signedInfo.score}`" />
   </div>
 </template>
 <script>
@@ -56,7 +53,9 @@ import { mapState, mapMutations } from "vuex";
 import { login } from "@/utils/index.js";
 import tabs from "./components/tabs";
 import poult from "./components/poult";
-import multiFormId from '@/components/multiFormId'
+import multiFormId from "@/components/multiFormId";
+import signModal from "@/components/sign-modal";
+import { handleSign as updateSignState } from "@/services";
 export default {
   data() {
     return {
@@ -65,6 +64,9 @@ export default {
       invate_openId: null, //邀请人Opoenid
       hitOpenId: "",
       userData: {}, // 个人数据
+      signedInfo: {
+        isSigned: false
+      }
     };
   },
   computed: {
@@ -91,6 +93,10 @@ export default {
     if (this.openId) {
       this.fetchIndexData(this.openId);
     }
+    // 如果已经注册 且 已经被微信授权 直接签到
+    if (this.authed && this.userInfo && this.userInfo.avatar) {
+      this.handleSign();
+    }
   },
   onHide() {
     this.pageShow = false;
@@ -101,7 +107,7 @@ export default {
   onShareAppMessage(res) {
     return {
       title: "揍小鸡换奖品",
-      path: `/pages/major/poult/index?openId=${this.openId}`
+      path: `/pages/major/poult/index?invate_openId=${this.openId}`
     };
   },
   methods: {
@@ -111,12 +117,17 @@ export default {
       this.$store.commit("authed", true);
       login({
         openid: self.invate_openId,
-        regSource: 0
+        regSource: self.invate_openId,
+        avatar: this.userInfo.avatar,
+        nickName: this.userInfo.nickName
+      }).then(() => {
+        // 登录成功后 签到
+        this.handleSign();
       });
     },
     onBingo(score) {
       this.totalScore += score;
-      // 动画
+      // TODO: 动画
     },
     onSendRquest(score) {
       console.log("send Ajax ===== 还需要判断该不该发请求", score);
@@ -138,11 +149,7 @@ export default {
         }
       });
     },
-    handlePoultChange(data) {
-      console.log("data ", data);
-      this.hitOpenId = data.openid;
-    },
-    fetchIndexData(openid) {
+    fetchIndexData(openid = this.openId) {
       this.$request({
         url: "/mp/index",
         method: "POST",
@@ -153,19 +160,52 @@ export default {
         this.userData = res;
         this.totalScore = res.score;
       });
+    },
+    /**
+     * 打卡
+     */
+    handleSign() {
+      updateSignState(
+        () =>
+          this.$request({
+            url: "/mp/signed",
+            method: "POST",
+            data: {
+              openid: this.openId
+            }
+          }),
+        res => {
+          // 打卡成功后 拉去最新的大力丸数据
+          this.fetchIndexData();
+          this.signedInfo = {
+            ...res,
+            isSigned: true
+          };
+        }
+      );
     }
   },
   watch: {
     openId(newValue) {
       if (newValue) {
         this.fetchIndexData(newValue);
+        if (this.authed) {
+          this.handleSign();
+        }
+      }
+    },
+    authed(newValue) {
+      if (this.openId) {
+        // 如果已经注册 且 已经被微信授权 直接签到
+        this.handleSign();
       }
     }
   },
   components: {
     tabs,
     poult,
-    multiFormId
+    multiFormId,
+    signModal
   }
 };
 </script>

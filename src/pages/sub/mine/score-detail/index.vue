@@ -52,7 +52,7 @@ export default {
   onShareAppMessage: function(res) {
     return {
       title: "揍小鸡，得奖品",
-      path: `/pages/major/poult/index?openId=${this.openId}&isSharePage=1`
+      path: `/pages/major/poult/index?invate_openId=${this.openId}&isSharePage=1`
     };
   },
   methods: {

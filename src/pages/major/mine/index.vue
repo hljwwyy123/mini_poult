@@ -58,6 +58,7 @@
         </div>
       </div>
     </div>
+    <sign-modal :show="signedInfo.isSigned" :title="`大力丸+${signedInfo.score}`" />
   </div>
 </template>
 <script>
@@ -67,6 +68,8 @@ import { homeBar } from "@/components/homeBar";
 import scrollTips from "./components/scroll-tips";
 import sign from "./components/sign";
 import goodsList from "./components/goods-list";
+import signModal from "@/components/sign-modal";
+import { handleSign as updateSignState } from "@/services";
 export default {
   data() {
     return {
@@ -89,49 +92,21 @@ export default {
           icon: "contact"
         }
       ],
-      daysInfo: [
-        {
-          prizes: "+10",
-          isSigned: true
-        },
-        {
-          prizes: "+10",
-          isSigned: false
-        },
-        {
-          prizes: "+10",
-          isSigned: false
-        },
-        {
-          prizes: "+10",
-          isSigned: false
-        },
-        {
-          prizes: "+10",
-          isSigned: false
-        },
-        {
-          prizes: "+10",
-          isSigned: false
-        },
-        {
-          prizes: "+10",
-          isSigned: false,
-          isShowGift: true
-        }
-      ],
       signedData: {},
-      userData: {}
+      userData: {},
+      signedInfo: {}
     };
   },
   components: {
     homeBar,
     scrollTips,
     sign,
-    goodsList
+    goodsList,
+    signModal
   },
   computed: {
     ...mapState({
+      authed: state => state.authed,
       openId: state => state.openId,
       userInfo: state => state.userInfo,
       avatar: state => state.avatar,
@@ -143,39 +118,46 @@ export default {
     }
   },
   onLoad() {
-    login().then(res => {
-      console.log("login res", res);
-      this.signed();
-    });
-    this.requests = {
-      keys: ["userData"],
-      fetchMethods: [this.getUserData()]
-    };
-    this.fetchData(this.requests);
+    if (this.openId) {
+      this.getUserData();
+    }
   },
   onShareAppMessage: function(res) {
     return {
       title: "揍小鸡，得奖品",
-      path: `/pages/major/poult/index?openId=${this.openId}&isSharePage=1`
+      path: `/pages/major/poult/index?invate_openId=${this.openId}&isSharePage=1`
     };
   },
   methods: {
     signed() {
-      this.$request({
-        url: "/mp/signed",
-        method: "POST",
-        data: {
-          openid: this.openId
+      updateSignState(
+        () =>
+          this.$request({
+            url: "/mp/signed",
+            method: "POST",
+            data: {
+              openid: this.openId
+            }
+          }),
+        res => {
+          // 打卡成功后 拉去最新的大力丸数据
+          this.getUserData();
+          this.signedInfo = {
+            ...res,
+            isSigned: true
+          };
         }
-      }).then(() => {});
+      );
     },
     getUserData() {
-      return this.$request({
+      this.$request({
         url: "/mp/index",
         method: "POST",
         data: {
           openid: this.openId
         }
+      }).then(res => {
+        this.userData = res;
       });
     },
     fetchData(requests) {
@@ -188,7 +170,12 @@ export default {
     getUserInfo(e) {
       const { userInfo } = e.detail;
       if (userInfo) {
-        this.userInfo = userInfo;
+        this.$store.commit("loginWx", userInfo);
+        this.$store.commit("authed", true);
+        login().then(res => {
+          console.log("login res", res);
+          this.signed();
+        });
       }
     },
     handleNavigate(url) {
@@ -204,6 +191,22 @@ export default {
         const key = keys[index];
         this[key] = item;
       });
+    }
+  },
+  watch: {
+    openId(newValue) {
+      if (newValue) {
+        this.getUserData(newValue);
+        if (this.authed) {
+          this.signed();
+        }
+      }
+    },
+    authed(newValue) {
+      if (this.openId) {
+        // 如果已经注册 且 已经被微信授权 直接签到
+        this.signed();
+      }
     }
   }
 };

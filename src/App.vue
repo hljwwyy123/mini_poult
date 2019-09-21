@@ -5,7 +5,6 @@ export default {
   onLaunch: function() {
     const self = this;
     // 获取用户信息写入vuex
-    login();
     uni.getSetting({
       success: res => {
         if (res.authSetting["scope.userInfo"]) {
@@ -16,6 +15,10 @@ export default {
             }
           });
           self.$store.commit("authed", true);
+          // FIXME: login 放到授权后来做
+          // 1. 登录传入头像和昵称等信息
+          // 2. 避免未授权的情况下请求接口 造成页面展示不统一
+          login(res.userInfo);
         } else {
           self.$store.commit("authed", false);
         }
