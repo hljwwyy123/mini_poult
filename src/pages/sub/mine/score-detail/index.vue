@@ -6,22 +6,20 @@
         <image class="tips-icon" src="/static/wan.png" />
       </div>
       <div class="count">1360</div>
-      <div class="info">
-        我的大力丸余额
-      </div>
-      <button open-type="share" class="button">
-        邀请好友赚100大力丸
-      </button>
+      <div class="info">我的大力丸余额</div>
+      <button open-type="share" class="button">邀请好友赚100大力丸</button>
     </div>
     <scroll-view scroll-y class="content" @scrolltolower="handleLoadData">
       <div class="list">
         <div v-for="(item, index) in list" :key="index" class="item">
           <div class="item-left">
-            <div class="item-title">{{item.title}}</div>
-            <div class="item-subtitle">{{item.time}}</div>
+            <div class="item-title">{{item.remark}}</div>
+            <div class="item-subtitle">{{item.operateTime}}</div>
           </div>
           <div class="item-right">
-            <div class="item-detail">{{item.detail}}</div>
+            <div
+              :class="['item-detail', item.score.indexOf('-') >= 0 ? 'danger' : '']"
+            >{{item.score}}</div>
           </div>
         </div>
       </div>
@@ -30,6 +28,7 @@
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 import mixPulldownRefresh from "@/components/mix-pulldown-refresh/mix-pulldown-refresh";
 import mixLoadMore from "@/components/mix-load-more/mix-load-more";
 
@@ -40,36 +39,40 @@ export default {
       loadMoreStatus: 0
     };
   },
+  computed: {
+    ...mapState({
+      openId: state => state.openId
+    })
+  },
   onLoad() {
     this.handleLoadData();
-    this.currentPage = 0;
+    this.currentPage = 1;
     this.pageSize = 10;
   },
   onShareAppMessage: function(res) {
-    if (res.from === "button") {
-      // 来自页面内转发按钮
-      console.log(res.target);
-    }
     return {
       title: "揍小鸡，得奖品",
       path: `/pages/major/poult/index?openId=${this.openId}&isSharePage=1`
     };
   },
   methods: {
+    // FIXME: 加载完成 没有更多数据 处理
     async handleLoadData() {
       this.loadMoreStatus = 1;
-      const [error, { data }] = await this.$request({
+      this.$request({
         url: "/mp/consumeList",
-        mode: "POST",
+        method: "POST",
         data: {
-          openid: "",
+          openid: this.openId,
           currentPage: this.currentPage,
           pageSize: this.pageSize
         }
+      }).then(res => {
+        console.log("大力丸明细 response ", res);
+        this.list.push(...res);
+        this.loadMoreStatus = 0;
+        this.currentPage += 1;
       });
-      console.log("大力丸明细 response ", data);
-      this.list.push(...data.list);
-      this.loadMoreStatus = 0;
     }
   },
   components: {
@@ -135,7 +138,9 @@ export default {
   .item-detail {
     font-size: 32upx;
     font-weight: 500;
-    color: #fb6f72;
+    &.danger {
+      color: #fb6f72;
+    }
   }
 }
 </style>

@@ -108,7 +108,6 @@ export default {
           openid: self.openId
         },
         success: res => {
-          console.log("requestData ", res);
           const { data } = res;
           if (data.code === 200) {
             const {

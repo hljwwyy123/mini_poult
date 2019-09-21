@@ -30,7 +30,7 @@
         <button open-type="share" class="share-button">邀请好友立得100大力丸</button>
         <scroll-tips />
       </div>
-      <div v-if="goodsList.length" class="section section-shadow">
+      <div class="section section-shadow">
         <div class="section-header">
           奖品兑换
           <div @click="handleNavigate('/pages/sub/mine/prizes-list/index')" class="header-more">
@@ -38,24 +38,7 @@
             <view class="iconfont icon-arrow_right"></view>
           </div>
         </div>
-        <div class="section-content">
-          <scroll-view scroll-x>
-            <div class="scroll-horizontal">
-              <block v-for="(item, index) in goodsList" :key="index">
-                <div class="prizes-item" @click="handleBooking(item)">
-                  <image :src="item.goodImg" class="prizes-image" />
-                  <div class="prizes-info">
-                    <div class="prizes-title">{{item.goodName}}</div>
-                    <div>
-                      <div class="prizes-source-price">{{item.goodVirtual}}大力丸</div>
-                      <div class="prizes-price">{{item.goodDownVirtual}}</div>
-                    </div>
-                  </div>
-                </div>
-              </block>
-            </div>
-          </scroll-view>
-        </div>
+        <goods-list />
       </div>
       <div class="section section-shadow">
         <div class="section-content">
@@ -83,6 +66,7 @@ import { login } from "@/utils/index";
 import { homeBar } from "@/components/homeBar";
 import scrollTips from "./components/scroll-tips";
 import sign from "./components/sign";
+import goodsList from "./components/goods-list";
 export default {
   data() {
     return {
@@ -136,7 +120,6 @@ export default {
           isShowGift: true
         }
       ],
-      goodsList: [],
       signedData: {},
       userData: {}
     };
@@ -144,7 +127,8 @@ export default {
   components: {
     homeBar,
     scrollTips,
-    sign
+    sign,
+    goodsList
   },
   computed: {
     ...mapState({
@@ -164,8 +148,8 @@ export default {
       this.signed();
     });
     this.requests = {
-      keys: ["goodsList", "userData"],
-      fetchMethods: [this.fetchGoodsList(), this.getUserData()]
+      keys: ["userData"],
+      fetchMethods: [this.getUserData()]
     };
     this.fetchData(this.requests);
   },
@@ -176,11 +160,6 @@ export default {
     };
   },
   methods: {
-    fetchGoodsList() {
-      return this.$request({
-        url: "/mp/goodInfoList"
-      });
-    },
     signed() {
       this.$request({
         url: "/mp/signed",
@@ -188,7 +167,7 @@ export default {
         data: {
           openid: this.openId
         }
-      });
+      }).then(() => {});
     },
     getUserData() {
       return this.$request({
@@ -206,20 +185,6 @@ export default {
         })
         .catch(error => console.error(error));
     },
-    handleBooking(goods) {
-      const { id } = goods;
-      if (id) {
-        uni.navigateTo({
-          url: `/pages/sub/order/booking/index?goodsId=${id}`
-        });
-      } else {
-        uni.showToast({
-          title: "商品信息有误",
-          icon: "none",
-          duration: 2000
-        });
-      }
-    },
     getUserInfo(e) {
       const { userInfo } = e.detail;
       if (userInfo) {
@@ -236,7 +201,6 @@ export default {
     handlePromiseAllData(requests, res) {
       const { keys } = requests;
       res.forEach((item, index) => {
-        console.log(item);
         const key = keys[index];
         this[key] = item;
       });
@@ -334,58 +298,7 @@ export default {
         background-color: #fb6f72;
         border-radius: 6.2vw;
       }
-      .prizes-item {
-        display: inline-block;
-        width: 205upx;
-        .prizes-image {
-          width: 100%;
-          height: 165upx;
-          border-radius: 8upx;
-          background-color: #f4f4f4;
-        }
-        .prizes-info {
-          display: flex;
-          flex-direction: column;
-          flex: 1;
-          justify-content: space-between;
-          height: 100%;
-          .prizes-title {
-            font-size: 28upx;
-            color: #000;
-            font-weight: 500;
-          }
-          .prizes-price {
-            font-size: 14px;
-            color: #fb6f72;
-            font-weight: 500;
-            padding-left: 24upx;
-            background-image: url("~@/static/wan.png");
-            background-size: 16upx 26upx;
-            background-position: center left;
-            background-repeat: no-repeat;
-          }
-          .prizes-source-price {
-            display: inline-block;
-            font-size: 24upx;
-            color: #676c7c;
-            text-decoration: line-through;
-            padding-right: 10upx;
-          }
-        }
-        .prizes-button {
-          width: 140upx;
-          height: 65upx;
-          line-height: 65upx;
-          text-align: center;
-          background-color: rgba(251, 111, 114, 0.09);
-          border-radius: 28upx;
-          font-size: 28upx;
-          color: #fb6f72;
-        }
-        &:not(:last-child) {
-          margin-right: 19upx;
-        }
-      }
+
       .item-image {
         display: inline-block;
         width: 36upx;
@@ -394,9 +307,6 @@ export default {
       }
       .icon {
         color: #a4adc0;
-      }
-      .scroll-horizontal {
-        white-space: nowrap;
       }
       .menu {
         flex: 1;
