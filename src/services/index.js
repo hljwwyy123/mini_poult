@@ -33,7 +33,6 @@ export function handleSign(request, callback) {
         } else {
           sign(request, callback);
         }
-        sign(request, callback);
       },
       fail() {
         sign(request, callback);
