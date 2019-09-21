@@ -1,11 +1,12 @@
 <template>
   <div class="wrapper">
     <div class="header">
+      <!-- TODO: 了解大力丸 -->
       <div class="tips">
         了解大力丸
         <image class="tips-icon" src="/static/wan.png" />
       </div>
-      <div class="count">1360</div>
+      <div class="count">{{userData.score}}</div>
       <div class="info">我的大力丸余额</div>
       <button open-type="share" class="button">邀请好友赚100大力丸</button>
     </div>
@@ -31,12 +32,15 @@
 import { mapState, mapMutations } from "vuex";
 import mixPulldownRefresh from "@/components/mix-pulldown-refresh/mix-pulldown-refresh";
 import mixLoadMore from "@/components/mix-load-more/mix-load-more";
-
+import { fetchUserData } from "@/services";
 export default {
   data() {
     return {
       list: [],
-      loadMoreStatus: 0
+      loadMoreStatus: 0,
+      userData: {
+        score: 0
+      }
     };
   },
   computed: {
@@ -68,11 +72,22 @@ export default {
           pageSize: this.pageSize
         }
       }).then(res => {
-        console.log("大力丸明细 response ", res);
         this.list.push(...res);
         this.loadMoreStatus = 0;
         this.currentPage += 1;
       });
+    }
+  },
+  watch: {
+    openId: {
+      handler(newValue) {
+        if (newValue) {
+          fetchUserData(newValue).then(res => {
+            this.userData = res;
+          });
+        }
+      },
+      immediate: true
     }
   },
   components: {

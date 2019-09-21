@@ -55,7 +55,7 @@ import tabs from "./components/tabs";
 import poult from "./components/poult";
 import multiFormId from "@/components/multiFormId";
 import signModal from "@/components/sign-modal";
-import { handleSign as updateSignState } from "@/services";
+import { handleSign as updateSignState, fetchUserData } from "@/services";
 export default {
   data() {
     return {
@@ -150,13 +150,7 @@ export default {
       });
     },
     fetchIndexData(openid = this.openId) {
-      this.$request({
-        url: "/mp/index",
-        method: "POST",
-        data: {
-          openid
-        }
-      }).then(res => {
+      fetchUserData(openid).then(res => {
         this.userData = res;
         this.totalScore = res.score;
       });
@@ -165,24 +159,14 @@ export default {
      * 打卡
      */
     handleSign() {
-      updateSignState(
-        () =>
-          this.$request({
-            url: "/mp/signed",
-            method: "POST",
-            data: {
-              openid: this.openId
-            }
-          }),
-        res => {
-          // 打卡成功后 拉去最新的大力丸数据
-          this.fetchIndexData();
-          this.signedInfo = {
-            ...res,
-            isSigned: true
-          };
-        }
-      );
+      updateSignState(this.openId, res => {
+        // 打卡成功后 拉去最新的大力丸数据
+        this.fetchIndexData();
+        this.signedInfo = {
+          ...res,
+          isSigned: true
+        };
+      });
     }
   },
   watch: {

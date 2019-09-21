@@ -69,7 +69,7 @@ import scrollTips from "./components/scroll-tips";
 import sign from "./components/sign";
 import goodsList from "./components/goods-list";
 import signModal from "@/components/sign-modal";
-import { handleSign as updateSignState } from "@/services";
+import { handleSign as updateSignState, fetchUserData } from "@/services";
 export default {
   data() {
     return {
@@ -130,33 +130,17 @@ export default {
   },
   methods: {
     signed() {
-      updateSignState(
-        () =>
-          this.$request({
-            url: "/mp/signed",
-            method: "POST",
-            data: {
-              openid: this.openId
-            }
-          }),
-        res => {
-          // 打卡成功后 拉去最新的大力丸数据
-          this.getUserData();
-          this.signedInfo = {
-            ...res,
-            isSigned: true
-          };
-        }
-      );
+      updateSignState(this.openId, res => {
+        // 打卡成功后 拉去最新的大力丸数据
+        this.getUserData();
+        this.signedInfo = {
+          ...res,
+          isSigned: true
+        };
+      });
     },
     getUserData() {
-      this.$request({
-        url: "/mp/index",
-        method: "POST",
-        data: {
-          openid: this.openId
-        }
-      }).then(res => {
+      fetchUserData(this.openId).then(res => {
         this.userData = res;
       });
     },

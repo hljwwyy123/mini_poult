@@ -4,6 +4,7 @@
   </view>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 import prizeItem from "./components/prizeItem";
 
 export default {
@@ -15,20 +16,34 @@ export default {
       goodList: []
     };
   },
-  onLoad() {
-    this.getPrizeList();
+  computed: {
+    ...mapState({
+      openId: state => state.openId
+    })
   },
   methods: {
+    // TODO: 分页
     getPrizeList() {
       this.$request({
         url: "/mp/goodExchangeList",
         method: "POST",
         data: {
-          openid: "",
+          openid: this.openId,
           currentPage: 1,
           pageSize: 10
         }
-      }).then(res => (this.goodList = res));
+      }).then(res => (this.goodList = res.data));
+    }
+  },
+  watch: {
+    openId: {
+      handler(newValue) {
+        console.log(newValue);
+        if (newValue) {
+          this.getPrizeList();
+        }
+      },
+      immediate: true
     }
   }
 };

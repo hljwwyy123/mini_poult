@@ -20,8 +20,8 @@
               :url="`/pages/major/poult/index?hitOpenId=${item.openid}`"
               open-type="redirect"
             >
-              <image class="item-avatar" :src="item.avatar" />
-              <view class="nick-name">{{item.name}}</view>
+              <image class="item-avatar" :src="item.avatar || '/static/default-avatar.png'" />
+              <view class="nick-name">{{item.nickName || '匿名'}}</view>
             </a>
           </view>
         </view>

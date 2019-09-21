@@ -1,11 +1,11 @@
 <template>
-  <view class="prize-item active" @click="gotoDetail(prize.id)">
+  <view class="prize-item active" @click="gotoDetail(prize.orderNum)">
     <image class="prize-item-img" :src="prize.goodImg || '/static/goods.jpg'" />
     <div class="prize-info">
       <div class="prize-title">{{prize.goodName}}</div>
       <div class="prize-price">
         <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon"></image>
-        {{prize.goodVirtual}}
+        {{prize.score}}
       </div>
       <div class="exchange-date">兑换日期：{{prize.date || '2019-09-26'}}</div>
     </div>

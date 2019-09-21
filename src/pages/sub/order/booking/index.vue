@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="footer">
-      <div class="footer-left">
+      <div v-if="canBuy" class="footer-left">
         <div class="text">剩余大力丸:</div>
         {{userData.score}}
       </div>
@@ -37,6 +37,7 @@
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
+import { fetchUserData } from "@/services";
 export default {
   data() {
     return {
@@ -61,8 +62,7 @@ export default {
       openId: state => state.openId
     }),
     canBuy() {
-      // return this.userData.score >= this.goodsInfo.goodDownVirtual;
-      return true;
+      return this.userData.score >= this.goodsInfo.goodDownVirtual;
     }
   },
   methods: {
@@ -77,23 +77,18 @@ export default {
               goodId: this.param.goodsId,
               score: this.goodsInfo.goodDownVirtual,
               ...this.address,
-              telNumber: '15210000000' // FIXME: 测试
+              telNumber: "15210000000" // FIXME: 测试
             }
           }).then(res => {
-            console.log("res ", res);
             uni.redirectTo({
               url: `/pages/sub/order/booking/success/index?orderId=${res.orderNum}&openId=${this.openId}`
             });
           });
         } else {
-          uni.showToast({
-            title: "请选择地址",
-            icon: "none",
-            duration: 2000
-          });
+          this.$toast("请选择地址");
         }
       } else {
-        uni.navigateTo({
+        uni.redirectTo({
           url: "/pages/major/poult/index"
         });
       }
@@ -112,19 +107,12 @@ export default {
       }
     },
     getUserData() {
-      this.$request({
-        url: "/mp/index",
-        method: "POST",
-        data: {
-          openid: this.openId
-        }
-      }).then(res => (this.userData = res));
+      fetchUserData(this.openId).then(res => (this.userData = res));
     },
     getAddrees() {
       uni.chooseAddress({
         success: res => {
-          console.log(res);
-           delete res.errMsg;
+          delete res.errMsg;
           this.address = res;
         },
         fail(error) {
