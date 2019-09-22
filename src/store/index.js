@@ -9,11 +9,15 @@ const store = new Vuex.Store({
         login: false,
         token: '',
         isIphoneX: false,
-        bookingSuccessTips: ''
+        bookingSuccessTips: '',
+        publicKey: '', // RSA 加密KEY
+        hitRate: 5, // 命中大力丸概率
+        gainRate: 5, // 暴击概率
+        scoreList: [1, 2, 3], // 随机分值表
+        rateConfig: {}
     },
     mutations: {
         loginWx(state, provider) {
-            // state.openId = provider.openId;
             state.userInfo = provider;
         },
         updateIsIphoneX(state, el) {
@@ -27,6 +31,21 @@ const store = new Vuex.Store({
         },
         setBookingSuccessTips(state, payload) {
             state.bookingSuccessTips = payload
+        },
+        setPublicKey(state, el) {
+            state.publicKey = el
+        },
+        setHitRate(state, el) {
+            state.hitRate = el
+        },
+        setGainRate(state, el) {
+            state.gainRate = el
+        },
+        setScoreList(state, el) {
+            state.scoreList = el
+        },
+        setRateConfig(state, el) {
+            state.rateConfig = el
         }
     }
 })

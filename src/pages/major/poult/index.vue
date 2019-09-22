@@ -12,7 +12,7 @@
       </a>
       <div class="rank-info">
         <div class="rank-icon" />
-        我的排名：{{userData.ranking || 0}}
+        {{hitOpenId && hitOpenId !== openId ? 'TA' : '我'}}的排名：{{userData.ranking || 0}}
       </div>
       <div class="menu-list">
         <a url="/pages/sub/mine/rank-list/index" class="menu-item">
@@ -34,9 +34,10 @@
       <poult
         :openId="openId"
         :hitOpenId="hitOpenId"
-        @onSendRequest="onSendRquest"
         :pageShow="pageShow"
         :todayScore="totalScore"
+        :mostScore="mostScore"
+        @onSendRequest="onSendRquest"
         @onBingo="onBingo"
       />
       <tabs v-if="openId" />
@@ -46,10 +47,11 @@
     <image class="cloud clound-3" src="/static/cloud3.png" />
     <multi-form-id />
     <sign-modal :show="signedInfo.isSigned" :title="`大力丸+${signedInfo.score}`" />
-    <auth @authComplete='onGetUserInfo' />
+    <auth @authComplete="onGetUserInfo" />
   </div>
 </template>
 <script>
+var RSA = require("@/utils/wxapp_rsa.js");
 import { mapState, mapMutations } from "vuex";
 import { login } from "@/utils/index.js";
 import tabs from "./components/tabs";
@@ -78,8 +80,25 @@ export default {
       userInfo: state => state.userInfo || {},
       avatar: state => state.avatar,
       nickName: state => state.nickName,
-      isIphoneX: state => state.isIphoneX
+      isIphoneX: state => state.isIphoneX,
+      rateConfig: state => state.rateConfig
     })
+  },
+  watch: {
+    openId(newValue, oldValue) {
+      if (newValue) {
+        this.fetchIndexData(newValue);
+        if (this.authed) {
+          this.handleSign();
+        }
+      }
+    },
+    authed(newValue) {
+      if (this.openId) {
+        // 如果已经注册 且 已经被微信授权 直接签到
+        this.handleSign();
+      }
+    }
   },
   onLoad(options) {
     console.log("options ", options);
@@ -126,10 +145,22 @@ export default {
       });
     },
     onBingo(score) {
-      this.totalScore += score;
+      this.totalScore += Number(score);
       // TODO: 动画
     },
     onSendRquest(score) {
+      var encrypt_rsa = new RSA.RSAKey();
+      let encData = "";
+      try {
+        encrypt_rsa = RSA.KEYUTIL.getKey(
+          `-----BEGIN PUBLIC KEY-----${this.rateConfig.publicKey}-----END PUBLIC KEY-----`
+        ); // localStorate | vuex
+        encData = encrypt_rsa.encrypt(score);
+        encData = RSA.hex2b64(encData);
+      } catch (error) {
+        console.log(`error -> ${error}`);
+      }
+      console.log("encData : ", encData);
       console.log("send Ajax ===== 还需要判断该不该发请求", score);
       if (!score) return;
       const self = this;
@@ -138,7 +169,8 @@ export default {
         method: "POST",
         data: {
           openid: self.openId,
-          score: score,
+          // score: score,
+          data: encData,
           hitOpenid: self.hitOpenId
         },
         success: res => {
@@ -167,22 +199,6 @@ export default {
           isSigned: true
         };
       });
-    }
-  },
-  watch: {
-    openId(newValue) {
-      if (newValue) {
-        this.fetchIndexData(newValue);
-        if (this.authed) {
-          this.handleSign();
-        }
-      }
-    },
-    authed(newValue) {
-      if (this.openId) {
-        // 如果已经注册 且 已经被微信授权 直接签到
-        this.handleSign();
-      }
     }
   },
   components: {

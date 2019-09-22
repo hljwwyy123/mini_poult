@@ -10,19 +10,26 @@ export default {
         if (res.authSetting["scope.userInfo"]) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称
           uni.getUserInfo({
-            success: res => {
-              self.$store.commit("loginWx", res.userInfo);
+            success: info => {
+              self.$store.commit("loginWx", info.userInfo);
+              // FIXME: login 放到授权后来做
+              // 1. 登录传入头像和昵称等信息
+              // 2. 避免未授权的情况下请求接口 造成页面展示不统一
+              login(info.userInfo);
             }
           });
           self.$store.commit("authed", true);
-          // FIXME: login 放到授权后来做
-          // 1. 登录传入头像和昵称等信息
-          // 2. 避免未授权的情况下请求接口 造成页面展示不统一
-          login(res.userInfo);
         } else {
           self.$store.commit("authed", false);
         }
       }
+    });
+    // 获取公共信息
+    this.$request({
+      url: "/mp/commonInterface",
+      method: "GET"
+    }).then(res => {
+      self.$store.commit("setRateConfig", res);
     });
     uni.getSystemInfo({
       success: function(res) {
