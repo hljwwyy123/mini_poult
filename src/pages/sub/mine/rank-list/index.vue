@@ -106,27 +106,36 @@ export default {
           currentPage: tabItem.pageNo,
           type: self.activeTab + 1, //1:friend, 2: total
           openid: self.openId
-        },
-        success: res => {
-          const { data } = res;
-          if (data.code === 200) {
-            const {
-              result: { friendRanking, integralRanking }
-            } = data;
-            const ranking = friendRanking || integralRanking;
-            if (ranking && ranking.length > 0) {
-              tabItem.pageNo++;
-              tabItem.list = tabItem.list.concat(ranking);
-            } else {
-              tabItem.loadMoreStatus = 2;
-            }
-          }
-        },
-        fail: () => {
-          uni.showModal({
-            content: "请求失败，请重试!",
-            showCancel: false
-          });
+        }
+        // success: res => {
+        //   const { data } = res;
+        //   if (data.code === 200) {
+        //     const {
+        //       result: { friendRanking, integralRanking }
+        //     } = data;
+        //     const ranking = friendRanking || integralRanking;
+        //     if (ranking && ranking.length > 0) {
+        //       tabItem.pageNo++;
+        //       tabItem.list = tabItem.list.concat(ranking);
+        //     } else {
+        //       tabItem.loadMoreStatus = 2;
+        //     }
+        //   }
+        // },
+        // fail: () => {
+        //   uni.showModal({
+        //     content: "请求失败，请重试!",
+        //     showCancel: false
+        //   });
+        // }
+      }).then(res => {
+        const { friendRanking, integralRanking } = res;
+        const ranking = friendRanking || integralRanking;
+        if (ranking && ranking.length) {
+          tabItem.pageNo++;
+          tabItem.list = tabItem.list.concat(ranking);
+        } else {
+          tabItem.loadMoreStatus = 2;
         }
       });
     },
