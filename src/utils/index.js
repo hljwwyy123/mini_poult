@@ -21,9 +21,6 @@ export function login(data) {
                   code: res.code,
                   ...data,
                 },
-                // header: {
-                //     "sessionId": sessionId || 0
-                // },
                 success: loginRes => {
                   if (loginRes.data.success) {
                     Store.commit('updateOpenId', loginRes.data.result.openid);

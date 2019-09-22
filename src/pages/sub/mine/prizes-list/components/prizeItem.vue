@@ -4,13 +4,19 @@
     <div class="prize-info">
       <div class="prize-title">{{prize.goodName}}</div>
       <div class="prize-price">
-        <div class="prize-source-price">{{prize.goodVirtual}}大力丸</div>
-        {{prize.goodDownVirtual}}
+        <div
+          :class="['prize-source-price', !!prize.goodDownVirtual ? 'disabled' : '']"
+        >{{prize.goodVirtual}}大力丸</div>
+        <view v-if="!!prize.goodDownVirtual">{{prize.goodDownVirtual}}</view>
       </div>
       <div class="prize-changeNum">已兑换: {{prize.goodNum}}</div>
       <div class="prize-remainNum">剩余: {{prize.goodNum}}</div>
     </div>
-    <a :url="`/pages/sub/order/booking/index?goodsId=${prize.id}`" v-if="prize.goodNum > 0" class="prize-button">立即兑换</a>
+    <a
+      :url="`/pages/sub/order/booking/index?goodsId=${prize.id}`"
+      v-if="prize.goodNum > 0"
+      class="prize-button"
+    >立即兑换</a>
     <div v-else class="prize-button no-remain">已抢光</div>
   </view>
 </template>
@@ -47,8 +53,10 @@ export default {
       display: inline-block;
       font-size: 24upx;
       color: #676c7c;
-      text-decoration: line-through;
       padding-right: 10upx;
+      &.disabled {
+        text-decoration: line-through;
+      }
     }
   }
   .prize-button {

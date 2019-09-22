@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
     <div class="content" :class="{iphoneX: isIphoneX}">
-      <button v-if="!authed" open-type="getUserInfo" @getuserinfo="onGetUserInfo" class="my-info">
+      <view v-if="!authed" class="my-info">
         <image class="avatar" src="/static/default-avatar.png" />
         <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon" />0
-      </button>
+      </view>
       <a v-else url="/pages/major/mine/index" class="my-info">
         <image class="avatar" :src="userInfo.avatarUrl || '/static/default-avatar.png'" />
         <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon" />
@@ -46,6 +46,7 @@
     <image class="cloud clound-3" src="/static/cloud3.png" />
     <multi-form-id />
     <sign-modal :show="signedInfo.isSigned" :title="`大力丸+${signedInfo.score}`" />
+    <auth @authComplete='onGetUserInfo' />
   </div>
 </template>
 <script>
@@ -55,6 +56,7 @@ import tabs from "./components/tabs";
 import poult from "./components/poult";
 import multiFormId from "@/components/multiFormId";
 import signModal from "@/components/sign-modal";
+import auth from "@/components/auth-btn";
 import { handleSign as updateSignState, fetchUserData } from "@/services";
 export default {
   data() {
@@ -73,7 +75,7 @@ export default {
     ...mapState({
       authed: state => state.authed,
       openId: state => state.openId,
-      userInfo: state => state.userInfo,
+      userInfo: state => state.userInfo || {},
       avatar: state => state.avatar,
       nickName: state => state.nickName,
       isIphoneX: state => state.isIphoneX
@@ -113,12 +115,10 @@ export default {
   methods: {
     onGetUserInfo(el) {
       const self = this;
-      this.$store.commit("loginWx", el.detail.userInfo);
-      this.$store.commit("authed", true);
       login({
-        openid: self.invate_openId,
+        openid: self.openId,
         regSource: self.invate_openId,
-        avatar: this.userInfo.avatar,
+        avatar: this.userInfo.avatarUrl,
         nickName: this.userInfo.nickName
       }).then(() => {
         // 登录成功后 签到
@@ -189,7 +189,8 @@ export default {
     tabs,
     poult,
     multiFormId,
-    signModal
+    signModal,
+    auth
   }
 };
 </script>

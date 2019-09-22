@@ -5,7 +5,7 @@
       <swiper class="swiper" autoplay circular vertical skip-hidden-item-layout :interval="2000">
         <block v-for="item in tips" :key="item.title">
           <swiper-item class="swiper-item">
-            <view class="swiper-item-content">{{item.title}}</view>
+            <view class="swiper-item-content">{{item.content}}</view>
           </swiper-item>
         </block>
       </swiper>
@@ -22,7 +22,8 @@ export default {
   },
   async mounted() {
     this.$request({
-      url: "/mp/newsNotify"
+      url: "/mp/newsNotify",
+      // url: '/mp/goodsExchangeNotify' // 后续 需要切换的接口
     }).then(res => {
       this.tips = res;
     });

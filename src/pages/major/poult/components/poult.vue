@@ -121,17 +121,9 @@ export default {
 
         if (this.totalScore >= this.mostScore) {
           if (this.mostScore === 0) {
-            uni.showToast({
-              title: "你今天揍到上限了，别揍我了",
-              icon: "none",
-              duration: 2000
-            });
+            this.$toast("你今天揍到上限了，别揍我了");
           } else {
-            uni.showToast({
-              title: "这只鸡已经挨揍了50次，再打也不会获得大力丸了",
-              icon: "none",
-              duration: 2000
-            });
+            this.$toast("这只鸡已经挨揍了50次，再打也不会获得大力丸了");
           }
           this.totalScore = this.mostScore;
         } else if (value) {

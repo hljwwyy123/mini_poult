@@ -16,7 +16,7 @@
         点击获取个人信息
         <view class="iconfont icon-arrow_right"></view>
       </button>
-      <image :src="userInfo.avatarUrl" class="avator" />
+      <image :src="userInfo.avatarUrl || '/static/default-avatar.png'" class="avator" />
     </div>
     <div class="content">
       <div class="section section-shadow">

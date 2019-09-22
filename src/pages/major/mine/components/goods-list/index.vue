@@ -8,8 +8,10 @@
             <div class="prizes-info">
               <div class="prizes-title">{{item.goodName}}</div>
               <div>
-                <div class="prizes-source-price">{{item.goodVirtual}}大力丸</div>
-                <div class="prizes-price">{{item.goodDownVirtual}}</div>
+                <div
+                  :class="['prizes-source-price', !!item.goodDownVirtual ? 'disabled' : '']"
+                >{{item.goodVirtual}}大力丸</div>
+                <div v-if="!!item.goodDownVirtual" class="prizes-price">{{item.goodDownVirtual}}</div>
               </div>
             </div>
           </div>
@@ -98,8 +100,10 @@ export default {
       display: inline-block;
       font-size: 24upx;
       color: #676c7c;
-      text-decoration: line-through;
       padding-right: 10upx;
+      &.disabled {
+        text-decoration: line-through;
+      }
     }
   }
   .prizes-button {
