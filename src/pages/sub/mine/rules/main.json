@@ -1,7 +1,0 @@
-{
-  "navigationBarBackgroundColor": "#FFFFFF",
-  "navigationBarTitleText": "规则",
-  "navigationBarTextStyle": "black",
-  "enablePullDownRefresh": true,
-  "onReachBottomDistance": 30
-}

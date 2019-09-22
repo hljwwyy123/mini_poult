@@ -1,8 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="header">
-      <!-- TODO: 了解大力丸 -->
-      <div class="tips">
+      <div @click="handleNavigateTo" class="tips">
         了解大力丸
         <image class="tips-icon" src="/static/wan.png" />
       </div>
@@ -75,6 +74,11 @@ export default {
         this.list.push(...res);
         this.loadMoreStatus = 0;
         this.currentPage += 1;
+      });
+    },
+    handleNavigateTo() {
+      uni.navigateTo({
+        url: "/pages/sub/mine/rules/index"
       });
     }
   },
