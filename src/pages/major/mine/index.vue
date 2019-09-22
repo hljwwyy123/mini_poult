@@ -156,8 +156,7 @@ export default {
       if (userInfo) {
         this.$store.commit("loginWx", userInfo);
         this.$store.commit("authed", true);
-        login().then(res => {
-          console.log("login res", res);
+        login(userInfo).then(res => {
           this.signed();
         });
       }

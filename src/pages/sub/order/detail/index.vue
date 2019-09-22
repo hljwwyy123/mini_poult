@@ -17,9 +17,9 @@
         :concatInfo="`${orderDetail.contact} ${orderDetail.phone}`"
         :concatAddress="`${orderDetail.province_name} ${orderDetail.city_name} ${orderDetail.county_name} ${orderDetail.addressDetail}`"
       />
-      <list-item :label="'兑换时间'" :text="orderDetail.exchangeTime" />
-      <list-item :label="'订单编号'" :text="orderDetail.orderNum" />
-      <list-item :label="'订单状态'" :text="orderDetail.exchangeStatus" />
+      <list-item :label="'兑换时间'" :text="orderDetail.exchangeTime || ''" />
+      <list-item :label="'订单编号'" :text="orderDetail.orderNum || ''" />
+      <list-item :label="'订单状态'" :text="orderDetail.exchangeStatus || ''" />
       <list-item
         v-if="orderDetail.expressName || orderDetail.expressNum"
         :label="'物流信息'"

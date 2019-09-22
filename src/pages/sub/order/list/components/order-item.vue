@@ -38,6 +38,7 @@ export default {
     justify-content: space-between;
     font-size: 24upx;
     color: #676c7c;
+    height: 100%;
     .prize-title {
       font-size: 32upx;
       margin: 8upx 0;

@@ -1,7 +1,7 @@
 <template>
   <view class="address-item">
-    <view class="concat-info">{{concatInfo}}</view>
-    <view class="concat-address">{{concatAddress}}</view>
+    <view class="concat-info">{{concatInfo || ''}}</view>
+    <view class="concat-address">{{concatAddress || ''}}</view>
   </view>
 </template>
 
@@ -19,6 +19,7 @@ export default {
   padding: 28upx 0;
   border-top: 1upx solid #eaecf0;
   border-bottom: 1upx solid #eaecf0;
+  min-height: 70upx;
   .concat-info {
     font-size: 32upx;
     color: #000000;
