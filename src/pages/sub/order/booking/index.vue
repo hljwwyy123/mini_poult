@@ -5,8 +5,11 @@
       <div class="title">{{goodsInfo.goodName || '暂无'}}</div>
       <div class="info">
         <div>
-          <div class="price">{{goodsInfo.goodDownVirtual || 0}}</div>
-          <div class="source-price">{{goodsInfo.goodVirtual || 0}}大力丸</div>
+          <div class="price">{{goodsInfo.goodDownVirtual || goodsInfo.goodVirtual || 0}}</div>
+          <div
+            v-if="!!goodsInfo.goodDownVirtual"
+            class="source-price"
+          >{{goodsInfo.goodVirtual || 0}}大力丸</div>
         </div>
         <div class="source-price">实际商品价格：{{goodsInfo.goodPrice || 0}}元</div>
       </div>
@@ -28,7 +31,7 @@
     </div>
     <div class="footer">
       <div v-if="canBuy" class="footer-left">
-        <div class="text">剩余大力丸:</div>
+        <div class="text">剩余大力丸</div>
         {{userData.score}}
       </div>
       <div @click="handleBooking" class="footer-right">{{canBuy ? "立即兑换" : "大力丸不足，去赚取"}}</div>
@@ -80,6 +83,7 @@ export default {
               telNumber: "15210000000" // FIXME: 测试
             }
           }).then(res => {
+            this.$store.commit("setBookingSuccessTips", res.tips);
             uni.redirectTo({
               url: `/pages/sub/order/booking/success/index?orderId=${res.orderNum}&openId=${this.openId}`
             });

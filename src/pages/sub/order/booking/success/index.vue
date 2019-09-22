@@ -17,22 +17,14 @@
       <div class="intro">
         <div class="intro-header">温馨提示</div>
         <div class="intro-content">
-          <div class="intro-content-text">10元抵用券（满30可用）</div>
-          <div class="intro-content-text">使用说明：</div>
-          <div class="intro-content-text">
-            1.兑换成功后，将订单详情截图（在“我的”-“兑换
-            记录”-“订单详情”）
-          </div>
-          <div class="intro-content-text">
-            2.打开淘宝，搜索店铺“马蜂窝旗舰店”，将砍价订
-            单详情截图发送给店铺客服即可享受立减。
-          </div>
+          <div v-for="(item, index) in tipsArray" :key="index" class="intro-content-text">{{item}}</div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -43,7 +35,18 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapState({
+      bookingSuccessTips: state => state.bookingSuccessTips
+    }),
+    tipsArray() {
+      return this.bookingSuccessTips
+        ? this.bookingSuccessTips.split("&")
+        : [];
+    }
+  },
   onLoad(params) {
+    console.log(this.bookingSuccessTips);
     if (params) {
       this.fetchOrderInfo(params);
     }
@@ -59,7 +62,6 @@ export default {
             orderNum: params.orderId
           }
         }).then(res => {
-          console.log("fetchOrderInfo ", res);
           this.orderDetail = res.data;
         });
       } else {
@@ -68,8 +70,8 @@ export default {
     },
     navigateToList() {
       uni.navigateTo({
-        url: '/pages/sub/order/list/index'
-      })
+        url: "/pages/sub/order/list/index"
+      });
     }
   }
 };

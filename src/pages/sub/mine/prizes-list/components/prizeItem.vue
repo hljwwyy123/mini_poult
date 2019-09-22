@@ -4,10 +4,13 @@
     <div class="prize-info">
       <div class="prize-title">{{prize.goodName}}</div>
       <div class="prize-price">
+        <view
+          class="prize-virtual-price"
+          v-if="!!prize.goodDownVirtual"
+        >{{prize.goodDownVirtual || prize.goodVirtual || 0}}</view>
         <div
           :class="['prize-source-price', !!prize.goodDownVirtual ? 'disabled' : '']"
         >{{prize.goodVirtual}}大力丸</div>
-        <view v-if="!!prize.goodDownVirtual">{{prize.goodDownVirtual}}</view>
       </div>
       <div class="prize-changeNum">已兑换: {{prize.goodNum}}</div>
       <div class="prize-remainNum">剩余: {{prize.goodNum}}</div>
@@ -37,23 +40,37 @@ export default {
     justify-content: space-between;
     font-size: 24upx;
     color: #676c7c;
+    height: 100%;
     .prize-title {
       font-size: 32upx;
-      margin: 8upx 0;
+      margin-bottom: 8upx;
       color: #000;
       font-weight: 500;
       line-height: 1;
     }
     .prize-price {
-      font-size: 14px;
+      display: flex;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      padding-left: 22upx;
+      background-image: url("~@/static/wan.png");
+      background-repeat: no-repeat;
+      background-size: 16upx 26upx;
+      background-position: left center;
+    }
+    .prize-virtual-price {
+      font-size: 28upx;
       color: #fb6f72;
       font-weight: 500;
+      line-height: 28upx;
+      padding-right: 10upx;
     }
     .prize-source-price {
       display: inline-block;
       font-size: 24upx;
       color: #676c7c;
-      padding-right: 10upx;
+
+      line-height: 28upx;
       &.disabled {
         text-decoration: line-through;
       }

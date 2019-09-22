@@ -8,7 +8,8 @@ const store = new Vuex.Store({
         openId: '',
         login: false,
         token: '',
-        isIphoneX: false
+        isIphoneX: false,
+        bookingSuccessTips: ''
     },
     mutations: {
         loginWx(state, provider) {
@@ -23,6 +24,9 @@ const store = new Vuex.Store({
         },
         authed(state, el) {
             state.authed = el
+        },
+        setBookingSuccessTips(state, payload) {
+            state.bookingSuccessTips = payload
         }
     }
 })
