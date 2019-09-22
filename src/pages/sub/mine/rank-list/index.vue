@@ -26,7 +26,11 @@
         @change="toggleTab"
       >
         <swiper-item v-for="tabItem in tabList" :key="tabItem.id">
-          <scroll-view class="panel-scroll-box" :scroll-y="enableScroll" @scrolltolower="loadData">
+          <scroll-view
+            class="panel-scroll-box"
+            :scroll-y="enableScroll"
+            @scrolltolower="loadData('add')"
+          >
             <rank-item
               class="rank-item"
               v-for="(item) in tabItem.list"
@@ -89,13 +93,15 @@ export default {
   },
   onReachBottom() {
     //上滑加载
-    this.loadData("add");
+    if (this.tabList[this.activeTab].loadMoreStatus === 0) {
+      this.loadData("add");
+    }
   },
   onLoad() {
     this.loadData("add");
+    this.pageSize = 10; // 一页数据大小
   },
   methods: {
-    // FIXME: 切换tab会请求两次
     requestData() {
       const self = this;
       let tabItem = this.tabList[this.activeTab];
@@ -104,36 +110,20 @@ export default {
         method: "POST",
         data: {
           currentPage: tabItem.pageNo,
-          type: self.activeTab + 1, //1:friend, 2: total
+          type: self.activeTab + 1, // 1:friend, 2: total
           openid: self.openId
         }
-        // success: res => {
-        //   const { data } = res;
-        //   if (data.code === 200) {
-        //     const {
-        //       result: { friendRanking, integralRanking }
-        //     } = data;
-        //     const ranking = friendRanking || integralRanking;
-        //     if (ranking && ranking.length > 0) {
-        //       tabItem.pageNo++;
-        //       tabItem.list = tabItem.list.concat(ranking);
-        //     } else {
-        //       tabItem.loadMoreStatus = 2;
-        //     }
-        //   }
-        // },
-        // fail: () => {
-        //   uni.showModal({
-        //     content: "请求失败，请重试!",
-        //     showCancel: false
-        //   });
-        // }
       }).then(res => {
         const { friendRanking, integralRanking } = res;
         const ranking = friendRanking || integralRanking;
         if (ranking && ranking.length) {
           tabItem.pageNo++;
           tabItem.list = tabItem.list.concat(ranking);
+          if (ranking.length < this.pageSize) {
+            tabItem.loadMoreStatus = 2;
+          } else {
+            tabItem.loadMoreStatus = 0;
+          }
         } else {
           tabItem.loadMoreStatus = 2;
         }
@@ -151,35 +141,30 @@ export default {
       // 1s 的时间播放加载动画
       setTimeout(() => {
         if (type === "refresh") {
-          if (type === "refresh") {
-            tabItem.list = []; //刷新前清空数组
-          }
-        } else if (type === "refresh") {
+          tabItem.list = []; //刷新前清空数组
           tabItem.refreshing = true;
-        }
-        this.requestData();
-        if (type === "refresh") {
+          tabItem.pageNo = 1; // 重置页码为 1
           this.$refs.mixPulldownRefresh &&
             this.$refs.mixPulldownRefresh.endPulldownRefresh();
-          // #ifdef APP-PLUS
-          tabItem.refreshing = false;
-          // #endif
-          tabItem.loadMoreStatus = 0;
         }
+        tabItem.refreshing = false;
+        tabItem.loadMoreStatus = 0;
+        this.requestData();
       }, 1000);
     },
     toggleTab(e) {
       let index = e;
       //e=number为点击切换，e=object为swiper滑动切换
-      if (typeof e === "object") {
-        index = e.detail.current;
-      }
       if (typeof e === "number") {
         //点击切换时先切换再滚动tabbar，避免同时切换视觉错位
         this.activeTab = index;
       }
-      this.activeTab = index;
-      this.loadData("add");
+      // 将请求放到 swiper 中是为了避免点击tab触发两次toggleTab 从而导致连续请求两次接口
+      if (typeof e === "object") {
+        index = e.detail.current;
+        this.activeTab = index;
+        this.loadData("add");
+      }
     },
     //下拉刷新
     onPulldownReresh() {

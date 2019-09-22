@@ -1,14 +1,14 @@
 <template>
   <view class="list-item">
-    <image src="/static/mine-mark.png"  v-if="itemData.rank === 6" class="mine-mark"></image>
+    <image src="/static/mine-mark.png" v-if="itemData.rank === 6" class="mine-mark" />
     <view class="avatar-container">
       <view class="rank" :class="{top: itemData.rank < 3}">
         <view class="rank-num">{{itemData.rank}}</view>
       </view>
-      <image class="avatar" :src="itemData.avatar" />
+      <image class="avatar" :src="itemData.avatar || '/static/default-avatar.png'" />
       <view class="top-mark" v-if="itemData.rank < 3" />
     </view>
-    <view class="name">{{itemData.nickName}}</view>
+    <view class="name">{{itemData.nickName || '匿名'}}</view>
     <view class="score" :class="{top: itemData.rank < 3}">{{itemData.score}}</view>
   </view>
 </template>
