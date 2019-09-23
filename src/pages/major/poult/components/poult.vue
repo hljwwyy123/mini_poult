@@ -25,7 +25,6 @@ export default {
       serialCount: 0, // 300ms 内连续点击的次数 -> 提高概率
       doubleCount: 0, // 暴击次数
       // TODO: 根据接口确定需要打多少大力丸
-      mostScore: 50, // 最多可以在该小鸡获得都少大力丸 由接口获得
       beatTimer: null, // debounce timerid
       serialDuration: 300, // 连续点击 timer 间隔
       rate: 5, // 单次点击获得大力丸概率 %
@@ -56,6 +55,10 @@ export default {
       type: Number,
       default: 0
     },
+    mostScore: {
+      type: Number,
+      default: 0
+    }, // 最多可以在该小鸡获得都少大力丸 由接口获得
     pageShow: Boolean,
     hitOpenId: String,
     openId: String

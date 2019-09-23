@@ -109,6 +109,16 @@ export default {
     // 别人的鸡
     if (options.hitOpenId) {
       this.hitOpenId = options.hitOpenId;
+      this.$request({
+        url: "/mp/hitUserScore",
+        method: "POST",
+        data: {
+          openid: this.openId,
+          hitOpenid: options.hitOpenId
+        }
+      }).then(res => {
+        this.mostScore = res.differentScore;
+      });
     }
 
     if (this.openId) {

@@ -1,6 +1,6 @@
 <template>
   <view class="list-item">
-    <image src="/static/mine-mark.png" v-if="itemData.rank === 6" class="mine-mark" />
+    <image src="/static/mine-mark.png" v-if="itemData.openid === openId" class="mine-mark" />
     <view class="avatar-container">
       <view class="rank" :class="{top: itemData.rank < 3}">
         <view class="rank-num">{{itemData.rank}}</view>
@@ -13,9 +13,15 @@
   </view>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   props: {
     itemData: {}
+  },
+  computed: {
+    ...mapState({
+      openId: state => state.openId
+    })
   }
 };
 </script>

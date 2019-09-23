@@ -233,7 +233,10 @@ export function formatScore(num) {
  **/
 export const encryptByRsa = (str) => {
     var encrypt = new JSEncrypt();
-    encrypt.setPublicKey("-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDrZZo1+RqfIVCVweAs4myga4B2ioAcbiR9mSz/ADSbk+PhxOU70ah8LecsrrGb38ZoGUtN7mXsWwmb773pWiLi7AotdK3crWX9ZsZU/GSbCUzHDw87mVjwvzo9/yrNRGE40SevvDWCUYkDi3TO3P6DlHgbYKDyN4moGfOYbxvz2wIDAQAB-----END PUBLIC KEY-----");
+    // encrypt.setPublicKey("-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDrZZo1+RqfIVCVweAs4myga4B2ioAcbiR9mSz/ADSbk+PhxOU70ah8LecsrrGb38ZoGUtN7mXsWwmb773pWiLi7AotdK3crWX9ZsZU/GSbCUzHDw87mVjwvzo9/yrNRGE40SevvDWCUYkDi3TO3P6DlHgbYKDyN4moGfOYbxvz2wIDAQAB-----END PUBLIC KEY-----");
+    // encrypt.setPublicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDrZZo1+RqfIVCVweAs4myga4B2ioAcbiR9mSz/ADSbk+PhxOU70ah8LecsrrGb38ZoGUtN7mXsWwmb773pWiLi7AotdK3crWX9ZsZU/GSbCUzHDw87mVjwvzo9/yrNRGE40SevvDWCUYkDi3TO3P6DlHgbYKDyN4moGfOYbxvz2wIDAQAB");
+    encrypt.setPublicKey("-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDU3NJCm5YFlw7VCbdVPeF41AhjNha0dP7wx4o7qKYdmGva687ajnGxvSVPMC6ySvBXrcLkZ54ZWs4JWkEIdyt96unnqto3EZ86bSG1JKncSnWWzxo3G4zJQANi7DGatqA+o1WvSPGdil0wmFm+il6D22vbS/PC0RKAEQzyowtBkQIDAQAB-----END PUBLIC KEY-----")
     var encrypted = encrypt.encrypt(str);
+    console.log('加密串：', encrypted)
     return encrypted
 }
