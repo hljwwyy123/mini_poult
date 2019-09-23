@@ -51,7 +51,7 @@ export default {
       statusIndex: 0, //当前timer 随机取值
       animateTimer: null,
       poultWord: "", // 小鸡当前说的话
-      show_console: true
+      show_console: false
     };
   },
   props: {

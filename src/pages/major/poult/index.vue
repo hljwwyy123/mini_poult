@@ -177,7 +177,7 @@ export default {
         method: "POST",
         data: {
           openid: self.openId,
-          data: score,
+          score: score,
           hitOpenid: self.hitOpenId
         },
         success: res => {
