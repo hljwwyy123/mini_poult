@@ -136,24 +136,55 @@ export default {
   },
   mounted() {
     this.ids = [];
+    uni.getStorage({
+      key: "formIdsStamp",
+      success: res => {
+        const { data } = res;
+        if (data) {
+          const diff = new Date() - data;
+          const diffDays = parseFloat(diff / 1000 / 60 / 60 / 24);
+          // 五天后可再次发送formId
+          if (diffDays > 5) {
+            this.canFetchSave = true;
+          } else {
+            this.canFetchSave = false;
+          }
+        } else {
+          this.canFetchSave = true;
+        }
+      },
+      fail: () => {
+        this.canFetchSave = true;
+      }
+    });
+  },
+  beforeDestroy() {
+    this.clearTimers();
   },
   methods: {
     recordFormId(e) {
-      console.log(e);
-      const { formId } = e.detail;
-      this.ids.push(formId);
+      if (this.canFetchSave) {
+        const { formId } = e.detail;
+        this.ids.push(formId);
+        this.clearTimers();
+        this.submitTimer = setTimeout(() => {
+          uni.setStorage({
+            key: "formIdsStamp",
+            data: new Date("2019/09/20").getTime()
+          });
+          this.$request({
+            url: "/mp/saveFromId",
+            method: "POST",
+            data: {
+              openid: this.openId,
+              formId: this.ids.join(",")
+            }
+          }).then(res => console.log(res));
+        }, 160);
+      }
+    },
+    clearTimers() {
       clearTimeout(this.submitTimer);
-      this.submitTimer = setTimeout(() => {
-        console.log(this.ids);
-        this.$request({
-          url: "/mp/saveFromId",
-          method: "POST",
-          data: {
-            openid: this.openId,
-            formId: this.ids.join(",")
-          }
-        }).then(res => console.log(res));
-      }, 160);
     }
   }
 };
