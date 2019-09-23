@@ -1,20 +1,26 @@
 <template>
-  <view class="prize-wrapper">
+  <scroll-view @scrolltolower="handleScrollToLower" scroll-y class="prize-wrapper">
     <prize-item v-for="item in goodList" :key="item.id" :prize="item" />
-  </view>
+    <mix-load-more v-if="goodList.length > 0" :status="loadMoreStatus"></mix-load-more>
+  </scroll-view>
 </template>
 <script>
 import { mapState, mapMutations } from "vuex";
 import prizeItem from "./components/prizeItem";
-
+import mixLoadMore from "@/components/mix-load-more/mix-load-more";
 export default {
   components: {
-    prizeItem
+    prizeItem,
+    mixLoadMore
   },
   data() {
     return {
-      goodList: []
+      goodList: [],
+      loadMoreStatus: 0
     };
+  },
+  onLoad() {
+    this.currentPage = 1;
   },
   computed: {
     ...mapState({
@@ -22,17 +28,36 @@ export default {
     })
   },
   methods: {
-    // TODO: 分页
     getPrizeList() {
+      if (this.loadMoreStatus === 0) {
+        this.loadMoreStatus = 1;
+      }
       this.$request({
         url: "/mp/goodExchangeList",
         method: "POST",
         data: {
           openid: this.openId,
-          currentPage: 1,
-          pageSize: 10
+          currentPage: this.currentPage,
+          pageSize: this.pageSize
         }
-      }).then(res => (this.goodList = res.data));
+      }).then(res => {
+        const { data, countPage, currentPage } = res;
+        this.currentPage = countPage;
+        if (currentPage >= countPage) {
+          this.loadMoreStatus = 2;
+        } else {
+          this.loadMoreStatus = 0;
+        }
+        if (data && data.length) {
+          this.goodList = res.data;
+        }
+      });
+    },
+    handleScrollToLower() {
+      if (this.loadMoreStatus === 0) {
+        this.currentPage += 1;
+        this.getPrizeList();
+      }
     }
   },
   watch: {

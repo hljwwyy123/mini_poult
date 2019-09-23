@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-      <mix-load-more :status="loadMoreStatus"></mix-load-more>
+      <mix-load-more v-if="list.length" :status="loadMoreStatus"></mix-load-more>
     </scroll-view>
   </div>
 </template>
@@ -49,6 +49,9 @@ export default {
   },
   onLoad() {
     this.handleLoadData();
+    fetchUserData(this.openId).then(res => {
+      this.userData = res;
+    });
     this.currentPage = 1;
     this.pageSize = 10;
   },
@@ -59,9 +62,13 @@ export default {
     };
   },
   methods: {
-    // FIXME: 加载完成 没有更多数据 处理
-    async handleLoadData() {
-      this.loadMoreStatus = 1;
+    handleLoadData() {
+      if (this.loadMoreStatus === 2) {
+        return;
+      }
+      if (this.loadMoreStatus === 0) {
+        this.loadMoreStatus = 1;
+      }
       this.$request({
         url: "/mp/consumeList",
         method: "POST",
@@ -71,27 +78,23 @@ export default {
           pageSize: this.pageSize
         }
       }).then(res => {
-        this.list.push(...res);
-        this.loadMoreStatus = 0;
-        this.currentPage += 1;
+        if (res && res.length) {
+          if (res.length < this.pageSize) {
+            this.loadMoreStatus = 2;
+          } else {
+            this.loadMoreStatus = 0;
+            this.currentPage += 1;
+          }
+          this.list.push(...res);
+        } else {
+          this.loadMoreStatus = 2;
+        }
       });
     },
     handleNavigateTo() {
       uni.navigateTo({
         url: "/pages/sub/mine/rules/index"
       });
-    }
-  },
-  watch: {
-    openId: {
-      handler(newValue) {
-        if (newValue) {
-          fetchUserData(newValue).then(res => {
-            this.userData = res;
-          });
-        }
-      },
-      immediate: true
     }
   },
   components: {
