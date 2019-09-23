@@ -177,6 +177,7 @@ export default {
         data: {
           openid: self.openId,
           data: encData,
+          score,
           hitOpenid: self.hitOpenId
         },
         success: res => {

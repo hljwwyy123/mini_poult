@@ -4,7 +4,7 @@
     <view class="poult-sprit" :class="poultClass" @click="handlePoultClick"></view>
     <view class="score-test-info">
       <view>点击次数：{{beatCount}}</view>
-      <view>获得分数：{{totalScore}}</view>
+      <view>获得分数：{{hitTotalScore}}</view>
       <view class="score-num">连击次数：{{serialCount}}</view>
       <view>暴击次数：{{rateConfig.gainRate}}</view>
       <view>当前概率：{{rate}}</view>
@@ -21,7 +21,7 @@ export default {
     return {
       status: 0, // 0: 调皮 1: 挨揍中
       beatCount: 0, // 点击次数
-      totalScore: 0, // 获得总大力丸
+      hitTotalScore: 0, // 获得总大力丸
       serialCount: 0, // 300ms 内连续点击的次数 -> 提高概率
       doubleCount: 0, // 暴击次数
       // TODO: 根据接口确定需要打多少大力丸
@@ -51,17 +51,15 @@ export default {
     };
   },
   props: {
-    todayScore: {
-      type: Number,
-      default: 0
-    },
-    mostScore: {
-      type: Number,
-      default: 0
-    }, // 最多可以在该小鸡获得都少大力丸 由接口获得
     pageShow: Boolean,
     hitOpenId: String,
     openId: String
+  },
+  mounted() {
+    if (this.hitOpenId && this.openId) {
+      this.fetchList();
+    }
+    this.hitScore = 0; // 单次 / 连击 得到的分数 区别于 hitTotalScore
   },
   watch: {
     pageShow(isShow, old) {
@@ -70,6 +68,11 @@ export default {
         this.animateTimer = null;
       } else {
         this.animate();
+      }
+    },
+    openId(newValue) {
+      if (newValue) {
+        this.fetchScoreInfo();
       }
     }
   },
@@ -115,20 +118,25 @@ export default {
         this.rate = hitRate * 4;
       }
       // 总分数 大于 总分数 4/5 概率下降至 30%
-      if (this.totalScore > this.mostScore * 0.8) {
+      if (this.hitTotalScore > this.restThisPoultScore * 0.8) {
         this.rate = hitRate * 1;
       }
       // 总分数 满了以后 概率变为0
-      if (this.totalScore >= this.mostScore) {
+      if (this.hitTotalScore >= this.restThisPoultScore) {
         this.rate = 0;
       }
       const random = (Math.random() * 100) | 0;
       if (this.rate && random <= this.rate) {
-        // 取余 此处待议
+        // 取余
         const remider = parseInt(random % scoreList.length, 10);
+        console.log(remider);
         const value = Number(scoreList[remider]);
         // 暴击概率映射随机数值
-        if (random <= (this.rate * gainRate) / 100) {
+        let doubleRate = (this.rate * gainRate) / 100;
+        if (doubleRate < 1) {
+          doubleRate = 1;
+        }
+        if (random <= doubleRate) {
           this.doubleCount += 1;
           return value * 2;
         }
@@ -137,22 +145,29 @@ export default {
       return null;
     },
     handlePoultClick(e) {
+      console.log(this.restThisPoultScore);
+      if (this.restThisPoultScore === 0) {
+        console.log("这只小鸡已经没有分数了");
+        return;
+      }
+      if (this.restTotalScore === 0) {
+        console.log("分数满了");
+        return;
+      }
       if (this.hitOpenId) {
         const value = this.beatPoult();
         this.beatCount += 1;
         this.serialCount += 1;
-
-        if (this.totalScore >= this.mostScore) {
-          if (this.mostScore === 0) {
-            console.log("你今天揍到上限了，别揍我了");
-          } else {
-            console.log("这只鸡已经挨揍了50次，再打也不会获得大力丸了");
-          }
-          this.totalScore = Number(this.mostScore);
+        // 打击的分数要小于等于 [还能获得的总分数]和[还能从这个鸡获得的分数] 的最小值
+        const minScore = Math.min(this.restThisPoultScore, this.restTotalScore);
+        if (this.hitTotalScore >= minScore) {
+          // FIXME: 提示语改一下
+          console.log("这只鸡已经挨揍了50次，再打也不会获得大力丸了");
+          this.hitTotalScore = Number(minScore);
         } else if (value) {
-          this.totalScore += value;
+          this.hitTotalScore += value;
+          this.hitScore += value;
           this.$emit("onBingo", value); // 通知父组件更新总积分
-          console.log("props totalScore", this.totalScore);
         }
         this.handleResult();
       } else {
@@ -163,11 +178,11 @@ export default {
     handleResult() {
       clearTimeout(this.beatTimer);
       this.beatTimer = setTimeout(() => {
-        this.$emit("onSendRequest", Number(this.totalScore));
+        this.$emit("onSendRequest", Number(this.hitTotalScore));
         setTimeout(() => {
           this.animate();
         }, 2000);
-        // this.totalScore = 0; // 发送ajax 后重新计算总分数 FIXME:
+        this.hitScore = 0; // 发送ajax 后重新计算总分数
         this.serialCount = 0;
       }, this.serialDuration);
     },
@@ -178,24 +193,52 @@ export default {
         // setTimeout(self.animate, 200);
       }, ANIMTE_DUR);
     },
-    // TODO: 对比分数 限制点击
+    // 获取总共还可以打多少分
     fetchScoreInfo() {
-      this.$request({
+      return this.$request({
         url: "/mp/integralCount",
         method: "POST",
         data: {
           openid: this.openId
         }
-      }).then(res => {
-        console.log(res);
       });
-    }
-  },
-  watch: {
-    openId(newValue) {
-      if (newValue) {
-        this.fetchScoreInfo();
+    },
+    // 获取还可以从该小鸡得多少分
+    fetchCanGetScoreByThis() {
+      if (this.openId && this.hitOpenId) {
+        return this.$request({
+          url: "/mp/hitUserScore",
+          method: "POST",
+          data: {
+            openid: this.openId,
+            hitOpenid: this.hitOpenId
+          }
+        });
       }
+    },
+    // 获取概率和分数list
+    fetchRate() {
+      return this.$request({
+        url: "/mp/commonInterface"
+      });
+    },
+    fetchList() {
+      Promise.all([
+        this.fetchScoreInfo(),
+        this.fetchCanGetScoreByThis(),
+        this.fetchRate()
+      ]).then(([restTotalScore, restThisScore, rate]) => {
+        console.log(restTotalScore, restThisScore, rate);
+        if (restTotalScore) {
+          this.restTotalScore = restTotalScore.differentScore;
+        }
+        if (restThisScore) {
+          this.restThisPoultScore = restThisScore.differentScore;
+        }
+        if (rate) {
+          this.$store.commit("setRateConfig", rate);
+        }
+      });
     }
   }
 };
