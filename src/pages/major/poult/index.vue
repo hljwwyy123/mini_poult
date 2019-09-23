@@ -1,15 +1,23 @@
 <template>
   <div class="wrapper">
     <div class="content" :class="{iphoneX: isIphoneX}">
-      <view v-if="!authed" class="my-info">
-        <image class="avatar" src="/static/default-avatar.png" />
-        <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon" />0
-      </view>
-      <a v-else url="/pages/major/mine/index" class="my-info">
-        <image class="avatar" :src="userInfo.avatarUrl || '/static/default-avatar.png'" />
-        <image src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png" class="wan-icon" />
-        {{totalScore}}
-      </a>
+      <form-ids>
+        <view v-if="!authed" class="my-info">
+          <image class="avatar" src="/static/default-avatar.png" />
+          <image
+            src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png"
+            class="wan-icon"
+          />0
+        </view>
+        <a v-else url="/pages/major/mine/index" class="my-info">
+          <image class="avatar" :src="userInfo.avatarUrl || '/static/default-avatar.png'" />
+          <image
+            src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png"
+            class="wan-icon"
+          />
+          {{totalScore}}
+        </a>
+      </form-ids>
       <div class="rank-info">
         <div class="rank-icon" />
         <!-- {{hitOpenId && hitOpenId !== openId ? 'TA' : '我'}}的排名：{{userData.ranking || 0}} -->
@@ -46,7 +54,7 @@
     <image class="cloud clound-1" src="/static/cloud5.png" />
     <image class="cloud clound-2" src="/static/cloud2.png" />
     <image class="cloud clound-3" src="/static/cloud3.png" />
-    <multi-form-id />
+
     <sign-modal :show="signedInfo.isSigned" :title="`大力丸+${signedInfo.score}`" />
     <auth @authComplete="onGetUserInfo" />
   </div>
@@ -56,7 +64,7 @@ import { mapState, mapMutations } from "vuex";
 import { login, encryptByRsa } from "@/utils/index.js";
 import tabs from "./components/tabs";
 import poult from "./components/poult";
-import multiFormId from "@/components/multiFormId";
+import formIds from "@/components/multiFormId";
 import signModal from "@/components/sign-modal";
 import auth from "@/components/auth-btn";
 import { handleSign as updateSignState, fetchUserData } from "@/services";
@@ -201,7 +209,7 @@ export default {
   components: {
     tabs,
     poult,
-    multiFormId,
+    formIds,
     signModal,
     auth
   }

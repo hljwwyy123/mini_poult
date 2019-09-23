@@ -50,7 +50,42 @@
                                           @submit="recordFormId($event)"
                                         >
                                           <button form-type="submit">
-                                            <div class="btn-box">{{btnText}}</div>
+                                            <div class="btn-box">
+                                              <form
+                                                class="record-formid"
+                                                report-submit
+                                                date-type="submit"
+                                                @submit="recordFormId($event)"
+                                              >
+                                                <button form-type="submit">
+                                                  <div class="btn-box">
+                                                    <form
+                                                      class="record-formid"
+                                                      report-submit
+                                                      date-type="submit"
+                                                      @submit="recordFormId($event)"
+                                                    >
+                                                      <button form-type="submit">
+                                                        <div class="btn-box">
+                                                          <form
+                                                            class="record-formid"
+                                                            report-submit
+                                                            date-type="submit"
+                                                            @submit="recordFormId($event)"
+                                                          >
+                                                            <button form-type="submit">
+                                                              <div class="btn-box">
+                                                                <slot />
+                                                              </div>
+                                                            </button>
+                                                          </form>
+                                                        </div>
+                                                      </button>
+                                                    </form>
+                                                  </div>
+                                                </button>
+                                              </form>
+                                            </div>
                                           </button>
                                         </form>
                                       </div>
@@ -75,7 +110,7 @@
 </template>
 
 <script>
-// TODO: 递归
+import { mapState, mapMutations } from "vuex";
 export default {
   props: {
     type: {
@@ -94,30 +129,62 @@ export default {
       default: ""
     }
   },
+  computed: {
+    ...mapState({
+      openId: state => state.openId
+    })
+  },
+  mounted() {
+    this.ids = [];
+    uni.getStorage({
+      key: "formIdsStamp",
+      success: res => {
+        const { data } = res;
+        if (data) {
+          const diff = new Date() - data;
+          const diffDays = parseFloat(diff / 1000 / 60 / 60 / 24);
+          // 五天后可再次发送formId
+          if (diffDays > 5) {
+            this.canFetchSave = true;
+          } else {
+            this.canFetchSave = false;
+          }
+        } else {
+          this.canFetchSave = true;
+        }
+      },
+      fail: () => {
+        this.canFetchSave = true;
+      }
+    });
+  },
+  beforeDestroy() {
+    this.clearTimers();
+  },
   methods: {
     recordFormId(e) {
-      const self = this;
-      const formId = e.mp.detail.formId || 0;
-      this.mfwSdk.request({
-        url: "/formid/index/insert",
-        method: "GET",
-        data: {
-          data_decorate: {
-            formId: formId,
-            type: self.type,
-            source: self.source,
-            data_style: "default"
-          }
-        },
-        success: function(res) {},
-        fail: function(res) {
-          self.mfwSdk.track("sales_wxmp_js_error", {
-            page_name: "MultiFormId Component",
-            error_type: "Fail to record formId",
-            error_msg: formId
+      if (this.canFetchSave) {
+        const { formId } = e.detail;
+        this.ids.push(formId);
+        this.clearTimers();
+        this.submitTimer = setTimeout(() => {
+          uni.setStorage({
+            key: "formIdsStamp",
+            data: new Date("2019/09/20").getTime()
           });
-        }
-      });
+          this.$request({
+            url: "/mp/saveFromId",
+            method: "POST",
+            data: {
+              openid: this.openId,
+              formId: this.ids.join(",")
+            }
+          }).then(res => console.log(res));
+        }, 160);
+      }
+    },
+    clearTimers() {
+      clearTimeout(this.submitTimer);
     }
   }
 };
@@ -141,13 +208,16 @@ export default {
       left: 0;
     }
     button {
-      height: 1rpx;
-      width: 1rpx;
+      width: 1upx;
+      height: 1upx;
       margin: 0;
       padding: 0;
       border-color: transparent;
       border: none;
       background-color: transparent;
+      &:after {
+        border: none;
+      }
     }
   }
 }
