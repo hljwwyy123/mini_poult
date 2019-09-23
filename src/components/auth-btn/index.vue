@@ -22,7 +22,7 @@ export default {
   methods: {
     handleGetUserInfo(el) {
       const { userInfo } = el.detail;
-      console.log(this.$store)
+      console.log(el.detail);
       if (userInfo) {
         this.$store.commit("loginWx", el.detail.userInfo);
         this.$store.commit("authed", true);

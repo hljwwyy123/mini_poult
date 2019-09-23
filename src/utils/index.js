@@ -1,4 +1,5 @@
 import Store from '@/store/index';
+import { JSEncrypt } from './JSEncript'
 // const serverUrl = 'https://poult.mttsmart.com'; 
 const serverUrl = 'https://www.ipoult.com'
 export function login(data) {
@@ -221,4 +222,18 @@ export function autoUpdateManager() {
 
 export function formatScore(num) {
     return num;
+}
+
+
+
+
+/**rsa加密
+ **@param text 需要加密的文本
+ **@param publicKey 加密需要的公钥  pkcs1 类型的公钥
+ **/
+export const encryptByRsa = (str) => {
+    var encrypt = new JSEncrypt();
+    encrypt.setPublicKey("-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDrZZo1+RqfIVCVweAs4myga4B2ioAcbiR9mSz/ADSbk+PhxOU70ah8LecsrrGb38ZoGUtN7mXsWwmb773pWiLi7AotdK3crWX9ZsZU/GSbCUzHDw87mVjwvzo9/yrNRGE40SevvDWCUYkDi3TO3P6DlHgbYKDyN4moGfOYbxvz2wIDAQAB-----END PUBLIC KEY-----");
+    var encrypted = encrypt.encrypt(str);
+    return encrypted
 }

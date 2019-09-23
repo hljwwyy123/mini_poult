@@ -7,7 +7,7 @@
       </div>
       <div class="count">{{userData.score}}</div>
       <div class="info">我的大力丸余额</div>
-      <button open-type="share" class="button">邀请好友赚100大力丸</button>
+      <button open-type="share" class="button breath-animate">邀请好友赚100大力丸</button>
     </div>
     <scroll-view scroll-y class="content" @scrolltolower="handleLoadData">
       <div class="list">

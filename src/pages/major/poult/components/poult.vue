@@ -1,12 +1,12 @@
 <template>
   <view class="poult-container">
-    <view class="poult-word">{{poultWord}}</view>
+    <view v-show="poultWord" class="poult-word">{{poultWord}}</view>
     <view class="poult-sprit" :class="poultClass" @click="handlePoultClick"></view>
     <view class="score-test-info">
       <view>点击次数：{{beatCount}}</view>
       <view>获得分数：{{totalScore}}</view>
       <view class="score-num">连击次数：{{serialCount}}</view>
-      <view>暴击次数：{{doubleCount}}</view>
+      <view>暴击次数：{{rateConfig.gainRate}}</view>
       <view>当前概率：{{rate}}</view>
     </view>
   </view>
@@ -24,21 +24,20 @@ export default {
       totalScore: 0, // 获得总大力丸
       serialCount: 0, // 300ms 内连续点击的次数 -> 提高概率
       doubleCount: 0, // 暴击次数
-      doubleRate: 20, // 在获得大力丸基础上暴击的概率 %
       // TODO: 根据接口确定需要打多少大力丸
       mostScore: 50, // 最多可以在该小鸡获得都少大力丸 由接口获得
       beatTimer: null, // debounce timerid
       serialDuration: 300, // 连续点击 timer 间隔
       rate: 5, // 单次点击获得大力丸概率 %
-      positiveStatus: ["naughty", "happy", "crazy", "ease"],
       positiveStatusMap: [
+        { status: "sad", words: [] },
         { status: "naughty", words: ["看不惯我？那你揍我啊，嘻嘻~"] },
         { status: "happy", words: ["主人要带我去兜风咯，开心开心~"] },
         { status: "crazy", words: ["不上班的日子，真舒服~"] },
         { status: "ease", words: ["偷偷睡个觉，主人应该不会知道吧~"] }
       ],
-      negativeStatus: ["angry", "sad", "cry", "grievance"],
       negativeStatusMap: [
+        { status: "sad", words: [] },
         { status: "angry", words: ["你敢打我，我也让我家主人去打你的叽叽~"] },
         { status: "sad", words: ["好讨厌啊，不要打了啦~"] },
         { status: "cry", words: ["你再打我我告诉我家主人~"] },
@@ -48,7 +47,8 @@ export default {
         }
       ],
       statusIndex: 0, //当前timer 随机取值
-      animateTimer: null
+      animateTimer: null,
+      poultWord: "" // 小鸡当前说的话
     };
   },
   props: {
@@ -71,6 +71,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      rateConfig: state => state.rateConfig
+    }),
     poultClass() {
       let className = "";
       let status = 0;
@@ -82,11 +85,13 @@ export default {
         if (!this.animateTimer) {
           this.animate();
         }
-        className = `animate-${this.positiveStatus[this.statusIndex]}`;
+        className = `animate-${this.positiveStatusMap[this.statusIndex].status}`;
+        this.poultWord = this.positiveStatusMap[this.statusIndex].words[0];
         // console.log("积极状态: => ", className);
-      } else if (this.serialCount <= 0) {
         // 如果揍过小鸡了，随机从四个负向 状态中抽取播放
-        className = `animate-${this.negativeStatus[this.statusIndex]}`;
+      } else if (this.serialCount <= 0) {
+        className = `animate-${this.negativeStatusMap[this.statusIndex].status}`;
+        this.poultWord = this.negativeStatusMap[this.statusIndex].words[0];
         // console.log("负向状态: => ", className);
       } else {
         // 挨揍中
@@ -94,10 +99,7 @@ export default {
         className = Math.random() > 0.5 ? "beating1" : "beating2";
       }
       return className;
-    },
-    ...mapState({
-      rateConfig: state => state.rateConfig
-    })
+    }
   },
   methods: {
     beatPoult() {
@@ -105,6 +107,9 @@ export default {
       // 连击10次，概率翻倍 todo: 到底翻几倍
       if (this.serialCount > 10) {
         this.rate = hitRate * 2;
+      }
+      if (this.serialCount > 20) {
+        this.rate = hitRate * 4;
       }
       // 总分数 大于 总分数 4/5 概率下降至 30%
       if (this.totalScore > this.mostScore * 0.8) {
@@ -114,16 +119,13 @@ export default {
       if (this.totalScore >= this.mostScore) {
         this.rate = 0;
       }
-      // console.log("rate ", this.rate);
       const random = (Math.random() * 100) | 0;
-      // console.log("random", random);
       if (this.rate && random <= this.rate) {
         // 取余 此处待议
         const remider = parseInt(random % scoreList.length, 10);
-        const value = scoreList[remider];
+        const value = Number(scoreList[remider]);
         // 暴击概率映射随机数值
         if (random <= (this.rate * gainRate) / 100) {
-          console.log("暴击啦~~~~");
           this.doubleCount += 1;
           return value * 2;
         }
@@ -143,19 +145,22 @@ export default {
           } else {
             console.log("这只鸡已经挨揍了50次，再打也不会获得大力丸了");
           }
-          this.totalScore = this.mostScore;
+          this.totalScore = Number(this.mostScore);
         } else if (value) {
           this.totalScore += value;
           this.$emit("onBingo", value); // 通知父组件更新总积分
           console.log("props totalScore", this.totalScore);
         }
         this.handleResult();
+      } else {
+        // 自己的鸡不能揍
+        // todo 小鸡说句话，别揍我
       }
     },
     handleResult() {
       clearTimeout(this.beatTimer);
       this.beatTimer = setTimeout(() => {
-        this.$emit("onSendRequest", this.totalScore);
+        this.$emit("onSendRequest", Number(this.totalScore));
         setTimeout(() => {
           this.animate();
         }, 2000);
@@ -164,8 +169,10 @@ export default {
       }, this.serialDuration);
     },
     animate() {
+      const self = this;
       this.animateTimer = setInterval(() => {
-        this.statusIndex = (Math.random() * 4) | 0;
+        this.statusIndex = (Math.random() * this.positiveStatusMap.length) | 0;
+        // setTimeout(self.animate, 200);
       }, ANIMTE_DUR);
     },
     // TODO: 对比分数 限制点击
@@ -200,15 +207,21 @@ export default {
     margin-left: -142upx;
     width: 340upx;
     height: 425upx;
+    // background: url('') no-repeat;
   }
   .poult-word {
+    position: absolute;
+    top: 440upx;
+    left: 52%;
+    transform: translate3d(-50%, 0, 0);
     padding: 20upx 28upx;
+    // white-space: nowrap;
     background: rgba(255, 222, 23, 1);
     border-radius: 43px;
     border: 3px solid rgba(156, 110, 33, 1);
     color: #592c11;
     font-size: 28upx;
-    line-height: 40upx;
+    line-height: 1.2;
   }
   .score-test-info {
     position: absolute;

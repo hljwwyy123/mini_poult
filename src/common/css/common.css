@@ -17,6 +17,25 @@
     border-bottom-style: solid;
 }
 
+.breath-animate {
+    animation: breath 2.4s ease-in-out infinite;
+}
+
+@keyframes breath {
+    from {
+        opacity: 0.85;
+        scale: 1
+    }
+    50% {
+        opacity: 1;
+        scale: 1.05
+    }
+    to {
+        opacity: 0.85;
+        scale: 1
+    }
+}
+
 .prize-item {
     display: flex;
     margin: 30upx 30upx 30upx 44upx;

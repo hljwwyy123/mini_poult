@@ -12,7 +12,8 @@
       </a>
       <div class="rank-info">
         <div class="rank-icon" />
-        {{hitOpenId && hitOpenId !== openId ? 'TA' : '我'}}的排名：{{userData.ranking || 0}}
+        <!-- {{hitOpenId && hitOpenId !== openId ? 'TA' : '我'}}的排名：{{userData.ranking || 0}} -->
+        我的排名：{{userData.ranking || 0}}
       </div>
       <div class="menu-list">
         <a url="/pages/sub/mine/rank-list/index" class="menu-item">
@@ -51,9 +52,8 @@
   </div>
 </template>
 <script>
-var RSA = require("@/utils/wxapp_rsa.js");
 import { mapState, mapMutations } from "vuex";
-import { login } from "@/utils/index.js";
+import { login, encryptByRsa } from "@/utils/index.js";
 import tabs from "./components/tabs";
 import poult from "./components/poult";
 import multiFormId from "@/components/multiFormId";
@@ -149,32 +149,19 @@ export default {
       // TODO: 动画
     },
     onSendRquest(score) {
-      var encrypt_rsa = new RSA.RSAKey();
-      let encData = "";
-      try {
-        encrypt_rsa = RSA.KEYUTIL.getKey(
-          `-----BEGIN PUBLIC KEY-----${this.rateConfig.publicKey}-----END PUBLIC KEY-----`
-        ); // localStorate | vuex
-        encData = encrypt_rsa.encrypt(score);
-        encData = RSA.hex2b64(encData);
-      } catch (error) {
-        console.log(`error -> ${error}`);
-      }
-      console.log("encData : ", encData);
-      console.log("send Ajax ===== 还需要判断该不该发请求", score);
       if (!score) return;
       const self = this;
+      // const encData = encryptByRsa(score);
+      const encData = encryptByRsa(33);
       this.$request({
         url: "/mp/hitChicken",
         method: "POST",
         data: {
           openid: self.openId,
-          // score: score,
           data: encData,
           hitOpenid: self.hitOpenId
         },
         success: res => {
-          console.log("hit success ===== ", res);
           if (res.data.code === 200) {
             self.fetchIndexData(this.openId);
           }
