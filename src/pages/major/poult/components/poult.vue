@@ -2,7 +2,9 @@
   <view class="poult-container">
     <view v-show="poultWord" class="poult-word">{{poultWord}}</view>
     <view class="poult-sprit" :class="poultClass" @click="handlePoultClick"></view>
-    <view class="score-test-info">
+    <view v-show="serialCount >= 5" class="boom">X{{serialCount}}</view>
+    <view v-for="item in wanList" :key="item" class="wan-icon" :class="{toTop: item == totalScore}"></view>
+    <view v-show="show_console" class="score-test-info">
       <view>点击次数：{{beatCount}}</view>
       <view>获得分数：{{totalScore}}</view>
       <view class="score-num">连击次数：{{serialCount}}</view>
@@ -19,7 +21,8 @@ import { mapActions, mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
-      status: 0, // 0: 调皮 1: 挨揍中
+      animationData: [],
+      wanList: [],
       beatCount: 0, // 点击次数
       totalScore: 0, // 获得总大力丸
       serialCount: 0, // 300ms 内连续点击的次数 -> 提高概率
@@ -47,7 +50,8 @@ export default {
       ],
       statusIndex: 0, //当前timer 随机取值
       animateTimer: null,
-      poultWord: "" // 小鸡当前说的话
+      poultWord: "", // 小鸡当前说的话
+      show_console: true
     };
   },
   props: {
@@ -104,6 +108,14 @@ export default {
       return className;
     }
   },
+  mounted() {
+    console.log("this.mostScore 0> ", this.mostScore);
+    const wanList = [];
+    for (let i = 1; i <= 50; i++) {
+      wanList.push(i);
+    }
+    this.wanList = wanList;
+  },
   methods: {
     beatPoult() {
       const { hitRate, gainRate, scoreList } = this.rateConfig;
@@ -142,13 +154,14 @@ export default {
         this.beatCount += 1;
         this.serialCount += 1;
 
-        if (this.totalScore >= this.mostScore) {
-          if (this.mostScore === 0) {
-            console.log("你今天揍到上限了，别揍我了");
-          } else {
-            console.log("这只鸡已经挨揍了50次，再打也不会获得大力丸了");
-          }
-          this.totalScore = Number(this.mostScore);
+        if (this.mostScore <= 0) {
+          // 这只鸡今天揍完了
+          // if (this.mostScore === 0) {
+          //   console.log("你今天揍到上限了，别揍我了");
+          // } else {
+          //   console.log("这只鸡已经挨揍了50次，再打也不会获得大力丸了");
+          // }
+          this.totalScore = 0;
         } else if (value) {
           this.totalScore += value;
           this.$emit("onBingo", value); // 通知父组件更新总积分
@@ -210,6 +223,7 @@ export default {
     margin-left: -142upx;
     width: 340upx;
     height: 425upx;
+    z-index: 99;
     // background: url('') no-repeat;
   }
   .poult-word {
@@ -225,6 +239,44 @@ export default {
     color: #592c11;
     font-size: 28upx;
     line-height: 1.2;
+  }
+  .boom {
+    position: absolute;
+    right: 110upx;
+    top: 600upx;
+    width: 134upx;
+    height: 87upx;
+    line-height: 87upx;
+    background: url("~@/static/boom.png") no-repeat;
+    background-size: 100% 100%;
+    font-family: "EnterSansmanBoldItalic";
+    text-align: center;
+    font-size: 32upx;
+  }
+  .wan-icon {
+    position: absolute;
+    left: 52%;
+    top: 640upx;
+    width: 32upx;
+    height: 52upx;
+    background: url("~@/static/wan.png") no-repeat;
+    background-size: 100% 100%;
+    z-index: 1;
+    &.toTop {
+      animation: toTop 1s ease-out forwards;
+    }
+  }
+  @keyframes toTop {
+    from {
+      opacity: 1;
+      top: 640upx;
+      transform: rotate(0);
+    }
+    to {
+      opacity: 0;
+      transform: rotate(720deg);
+      top: 100upx;
+    }
   }
   .score-test-info {
     position: absolute;

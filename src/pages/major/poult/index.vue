@@ -78,7 +78,8 @@ export default {
       userData: {}, // 个人数据
       signedInfo: {
         isSigned: false
-      }
+      },
+      mostScore: 0
     };
   },
   computed: {
@@ -114,6 +115,7 @@ export default {
     if (options.invate_openId) {
       this.invate_openId = options.invate_openId;
     }
+    const self = this;
     // 别人的鸡
     if (options.hitOpenId) {
       this.hitOpenId = options.hitOpenId;
@@ -125,7 +127,7 @@ export default {
           hitOpenid: options.hitOpenId
         }
       }).then(res => {
-        this.mostScore = res.differentScore;
+        self.mostScore = res.differentScore;
       });
     }
 
@@ -170,13 +172,12 @@ export default {
       if (!score) return;
       const self = this;
       // const encData = encryptByRsa(score);
-      const encData = encryptByRsa(33);
       this.$request({
         url: "/mp/hitChicken",
         method: "POST",
         data: {
           openid: self.openId,
-          data: encData,
+          data: score,
           hitOpenid: self.hitOpenId
         },
         success: res => {
