@@ -175,7 +175,7 @@ export default {
         // 打击的分数要小于等于 [还能获得的总分数]和[还能从这个鸡获得的分数] 的最小值
         const minScore = Math.min(this.restThisPoultScore, this.restTotalScore);
         if (this.hitTotalScore >= minScore) {
-          // FIXME: 提示语改一下
+          // NOTE: 提示语改一下
           console.log("这只鸡已经挨揍了50次，再打也不会获得大力丸了");
         } else if (value) {
           this.hitTotalScore += value;

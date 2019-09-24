@@ -12,7 +12,7 @@ export default {
           uni.getUserInfo({
             success: info => {
               self.$store.commit("loginWx", info.userInfo);
-              // FIXME: login 放到授权后来做
+              // NOTE: login 放到授权后来做
               // 1. 登录传入头像和昵称等信息
               // 2. 避免未授权的情况下请求接口 造成页面展示不统一
               login(info.userInfo);

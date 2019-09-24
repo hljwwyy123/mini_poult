@@ -80,7 +80,6 @@ export default {
               goodId: this.param.goodsId,
               score: this.goodsInfo.goodDownVirtual,
               ...this.address,
-              telNumber: "15210000000" // FIXME: 测试
             }
           }).then(res => {
             this.$store.commit("setBookingSuccessTips", res.tips);

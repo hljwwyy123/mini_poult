@@ -16,7 +16,6 @@ export default {
     };
   },
   onLoad() {
-    // todo ajax
     this.getPrizeList();
   },
   methods: {
