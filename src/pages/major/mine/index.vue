@@ -54,6 +54,12 @@
                 <div class="menu-item-title">{{item.name}}</div>
               </div>
             </div>
+            <button class="menu-item" open-type="contact">
+              <div class="menu-item-content">
+                <view :class="['menu-item-icon', 'iconfont', `icon-contact`]"></view>
+                <div class="menu-item-title">联系我们</div>
+              </div>
+            </button>
           </div>
         </div>
       </div>
@@ -85,11 +91,6 @@ export default {
           name: "规则说明",
           url: "/pages/sub/mine/rules/index",
           icon: "info"
-        },
-        {
-          name: "联系我们",
-          url: "",
-          icon: "contact"
         }
       ],
       signedData: {},
@@ -296,12 +297,15 @@ export default {
       }
       .menu {
         flex: 1;
+        display: flex;
         .menu-item {
           position: relative;
           display: inline-block;
           width: 31%;
           padding: 15upx;
           box-sizing: border-box;
+          background: white;
+          line-height: 1;
           .menu-item-content {
             display: flex;
             flex-direction: column;
@@ -331,6 +335,9 @@ export default {
             }
           }
         }
+      }
+      button:after {
+        border: none;
       }
       &.section-shadow {
         box-shadow: 0 2upx 10upx 5upx rgba(0, 0, 0, 0.1);
