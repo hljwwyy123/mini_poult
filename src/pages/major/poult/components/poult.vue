@@ -281,7 +281,7 @@ export default {
   }
   .poult-word {
     position: absolute;
-    top: 440upx;
+    bottom: 760upx;
     left: 52%;
     transform: translate3d(-50%, 0, 0);
     padding: 20upx 28upx;
@@ -296,7 +296,7 @@ export default {
   .boom {
     position: absolute;
     right: 110upx;
-    top: 600upx;
+    bottom: 670upx;
     width: 134upx;
     height: 87upx;
     line-height: 87upx;
@@ -309,7 +309,7 @@ export default {
   .wan-icon {
     position: absolute;
     left: 52%;
-    top: 640upx;
+    bottom: 550upx;
     width: 32upx;
     height: 52upx;
     background: url("~@/static/wan.png") no-repeat;
@@ -322,13 +322,13 @@ export default {
   @keyframes toTop {
     from {
       opacity: 1;
-      top: 640upx;
+      bottom: 550upx;
       transform: rotate(0);
     }
     to {
       opacity: 0;
       transform: rotate(720deg);
-      top: 100upx;
+      bottom: 90vh;
     }
   }
   .score-test-info {
