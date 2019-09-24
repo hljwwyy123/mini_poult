@@ -45,7 +45,6 @@
         :hitOpenId="hitOpenId"
         :pageShow="pageShow"
         :todayScore="totalScore"
-        :mostScore="mostScore"
         @onSendRequest="onSendRquest"
         @onBingo="onBingo"
       />
@@ -79,7 +78,6 @@ export default {
       signedInfo: {
         isSigned: false
       },
-      mostScore: 0
     };
   },
   computed: {
@@ -110,7 +108,6 @@ export default {
     }
   },
   onLoad(options) {
-    console.log("options ", options);
     //如果是别人邀请进入
     if (options.invate_openId) {
       this.invate_openId = options.invate_openId;
@@ -119,16 +116,6 @@ export default {
     // 别人的鸡
     if (options.hitOpenId) {
       this.hitOpenId = options.hitOpenId;
-      this.$request({
-        url: "/mp/hitUserScore",
-        method: "POST",
-        data: {
-          openid: this.openId,
-          hitOpenid: options.hitOpenId
-        }
-      }).then(res => {
-        self.mostScore = res.differentScore;
-      });
     }
 
     if (this.openId) {

@@ -3,7 +3,12 @@
     <view v-show="poultWord" class="poult-word">{{poultWord}}</view>
     <view class="poult-sprit" :class="poultClass" @click="handlePoultClick"></view>
     <view v-show="serialCount >= 5" class="boom">X{{serialCount}}</view>
-    <view v-for="item in wanList" :key="item" class="wan-icon" :class="{toTop: item == totalScore}"></view>
+    <view
+      v-for="item in wanList"
+      :key="item"
+      class="wan-icon"
+      :class="{toTop: item == hitTotalScore}"
+    ></view>
     <view v-show="show_console" class="score-test-info">
       <view>点击次数：{{beatCount}}</view>
       <view>获得分数：{{hitTotalScore}}</view>
@@ -27,7 +32,6 @@ export default {
       hitTotalScore: 0, // 获得总大力丸
       serialCount: 0, // 300ms 内连续点击的次数 -> 提高概率
       doubleCount: 0, // 暴击次数
-      // TODO: 根据接口确定需要打多少大力丸
       beatTimer: null, // debounce timerid
       serialDuration: 300, // 连续点击 timer 间隔
       rate: 5, // 单次点击获得大力丸概率 %
@@ -51,7 +55,7 @@ export default {
       statusIndex: 0, //当前timer 随机取值
       animateTimer: null,
       poultWord: "", // 小鸡当前说的话
-      show_console: false
+      show_console: true
     };
   },
   props: {
@@ -63,7 +67,14 @@ export default {
     if (this.hitOpenId && this.openId) {
       this.fetchList();
     }
+
     this.hitScore = 0; // 单次 / 连击 得到的分数 区别于 hitTotalScore
+
+    const wanList = [];
+    for (let i = 1; i <= 50; i++) {
+      wanList.push(i);
+    }
+    this.wanList = wanList;
   },
   watch: {
     pageShow(isShow, old) {
@@ -111,14 +122,6 @@ export default {
       return className;
     }
   },
-  mounted() {
-    console.log("this.mostScore 0> ", this.mostScore);
-    const wanList = [];
-    for (let i = 1; i <= 50; i++) {
-      wanList.push(i);
-    }
-    this.wanList = wanList;
-  },
   methods: {
     beatPoult() {
       const { hitRate, gainRate, scoreList } = this.rateConfig;
@@ -157,12 +160,11 @@ export default {
       return null;
     },
     handlePoultClick(e) {
-      console.log(this.restThisPoultScore);
-      if (this.restThisPoultScore === 0) {
+      if (this.restThisPoultScore <= 0) {
         console.log("这只小鸡已经没有分数了");
         return;
       }
-      if (this.restTotalScore === 0) {
+      if (this.restTotalScore <= 0) {
         console.log("分数满了");
         return;
       }
@@ -175,11 +177,19 @@ export default {
         if (this.hitTotalScore >= minScore) {
           // FIXME: 提示语改一下
           console.log("这只鸡已经挨揍了50次，再打也不会获得大力丸了");
-          this.hitTotalScore = Number(minScore);
         } else if (value) {
           this.hitTotalScore += value;
-          this.hitScore += value;
-          this.$emit("onBingo", value); // 通知父组件更新总积分
+          if (this.hitTotalScore >= minScore) {
+            // 计算超出的分数
+            const diff = this.hitTotalScore - minScore;
+            this.hitTotalScore = Number(minScore);
+            const result = value - diff;
+            this.hitScore = this.hitScore + result;
+            this.$emit("onBingo", result); // 通知父组件更新总积分
+          } else {
+            this.hitScore += value;
+            this.$emit("onBingo", value); // 通知父组件更新总积分
+          }
         }
         this.handleResult();
       } else {
@@ -190,7 +200,7 @@ export default {
     handleResult() {
       clearTimeout(this.beatTimer);
       this.beatTimer = setTimeout(() => {
-        this.$emit("onSendRequest", Number(this.hitTotalScore));
+        this.$emit("onSendRequest", Number(this.hitScore));
         setTimeout(() => {
           this.animate();
         }, 2000);
@@ -239,18 +249,19 @@ export default {
         this.fetchScoreInfo(),
         this.fetchCanGetScoreByThis(),
         this.fetchRate()
-      ]).then(([restTotalScore, restThisScore, rate]) => {
-        console.log(restTotalScore, restThisScore, rate);
-        if (restTotalScore) {
-          this.restTotalScore = restTotalScore.differentScore;
-        }
-        if (restThisScore) {
-          this.restThisPoultScore = restThisScore.differentScore;
-        }
-        if (rate) {
-          this.$store.commit("setRateConfig", rate);
-        }
-      });
+      ])
+        .then(([restTotalScore, restThisScore, rate]) => {
+          if (restTotalScore) {
+            this.restTotalScore = restTotalScore.differentScore;
+          }
+          if (restThisScore) {
+            this.restThisPoultScore = restThisScore.differentScore;
+          }
+          if (rate) {
+            this.$store.commit("setRateConfig", rate);
+          }
+        })
+        .catch(_ => this.$toast("网络异常"));
     }
   }
 };
