@@ -65,10 +65,6 @@ export default {
     openId: String
   },
   mounted() {
-    if (this.hitOpenId && this.openId) {
-      this.fetchList();
-    }
-
     this.hitScore = 0; // 单次 / 连击 得到的分数 区别于 hitTotalScore
 
     const wanList = [];
@@ -86,9 +82,9 @@ export default {
         this.animate();
       }
     },
-    openId(newValue) {
-      if (newValue) {
-        this.fetchScoreInfo();
+    hitOpenId(newValue, oldValue) {
+      if (newValue && newValue !== oldValue) {
+        this.fetchList();
       }
     }
   },

@@ -12,17 +12,15 @@
       <view class="panel-scroll-container">
         <view v-if="activePanelData.length">
           <view class="panel-container">
-            <a
+            <view
               @click="handlePersonClick(item)"
               v-for="(item, index) in activePanelData"
               :key="index"
               class="panel-item"
-              :url="`/pages/major/poult/index?hitOpenId=${item.openid}`"
-              open-type="redirect"
             >
               <image class="item-avatar" :src="item.avatar || '/static/default-avatar.png'" />
               <view class="nick-name">{{item.nickName || '匿名'}}</view>
-            </a>
+            </view>
           </view>
         </view>
         <view v-else>暂无数据</view>

@@ -34,12 +34,11 @@
           <image class="menu-prize" src="/static/menu-invate.png" />
         </button>
       </div>
-      <a
+      <view
         v-if="hitOpenId && openId !== hitOpenId"
-        url="/pages/major/poult/index"
-        open-type="redirect"
         class="back-home"
-      ></a>
+        @click="handleChangePoult({})"
+      ></view>
       <poult
         :openId="openId"
         :hitOpenId="hitOpenId"
@@ -48,7 +47,7 @@
         @onSendRequest="onSendRquest"
         @onBingo="onBingo"
       />
-      <tabs v-if="openId" />
+      <tabs @change-poult="handleChangePoult" v-if="openId" />
     </div>
     <image class="cloud clound-1" src="/static/cloud5.png" />
     <image class="cloud clound-2" src="/static/cloud2.png" />
@@ -112,11 +111,6 @@ export default {
     if (options.invate_openId) {
       this.invate_openId = options.invate_openId;
     }
-    const self = this;
-    // 别人的鸡
-    if (options.hitOpenId) {
-      this.hitOpenId = options.hitOpenId;
-    }
 
     if (this.openId) {
       this.fetchIndexData(this.openId);
@@ -141,6 +135,14 @@ export default {
     };
   },
   methods: {
+    handleChangePoult(data) {
+      console.log(data);
+      if (data && data.openid) {
+        this.hitOpenId = data.openid;
+      } else {
+        this.hitOpenId = null;
+      }
+    },
     onGetUserInfo(el) {
       const self = this;
       login({
