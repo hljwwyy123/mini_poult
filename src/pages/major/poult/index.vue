@@ -77,7 +77,7 @@ export default {
       userData: {}, // 个人数据
       signedInfo: {
         isSigned: false
-      },
+      }
     };
   },
   computed: {
@@ -135,7 +135,9 @@ export default {
   onShareAppMessage(res) {
     return {
       title: "揍小鸡换奖品",
-      path: `/pages/major/poult/index?invate_openId=${this.openId}`
+      path: `/pages/major/poult/index?invate_openId=${this.openId}`,
+      imageUrl:
+        "https://poult-1300165852.cos.ap-beijing.myqcloud.com/share-img.png"
     };
   },
   methods: {

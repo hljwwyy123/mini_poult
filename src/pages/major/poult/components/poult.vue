@@ -4,6 +4,7 @@
     <view class="poult-sprit" :class="poultClass" @click="handlePoultClick"></view>
     <view v-show="serialCount >= 5" class="boom">X{{serialCount}}</view>
     <view
+      v-show="pageShow"
       v-for="item in wanList"
       :key="item"
       class="wan-icon"
@@ -55,7 +56,7 @@ export default {
       statusIndex: 0, //当前timer 随机取值
       animateTimer: null,
       poultWord: "", // 小鸡当前说的话
-      show_console: true
+      show_console: false
     };
   },
   props: {
@@ -273,7 +274,7 @@ export default {
     position: absolute;
     bottom: 350upx;
     left: 50%;
-    margin-left: -142upx;
+    margin-left: -170upx;
     width: 340upx;
     height: 425upx;
     z-index: 99;
@@ -282,7 +283,7 @@ export default {
   .poult-word {
     position: absolute;
     bottom: 760upx;
-    left: 52%;
+    left: 50%;
     transform: translate3d(-50%, 0, 0);
     padding: 20upx 28upx;
     // white-space: nowrap;

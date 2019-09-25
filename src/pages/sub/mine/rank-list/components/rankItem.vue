@@ -2,14 +2,14 @@
   <view class="list-item">
     <image src="/static/mine-mark.png" v-if="itemData.openid === openId" class="mine-mark" />
     <view class="avatar-container">
-      <view class="rank" :class="{top: itemData.rank < 3}">
+      <view class="rank" :class="{top: itemData.rank <= 3}">
         <view class="rank-num">{{itemData.rank}}</view>
       </view>
       <image class="avatar" :src="itemData.avatar || '/static/default-avatar.png'" />
-      <view class="top-mark" v-if="itemData.rank < 3" />
+      <view :class="['top-mark',`mark-${itemData.rank}`]" v-if="itemData.rank <= 3" />
     </view>
     <view class="name">{{itemData.nickName || '匿名'}}</view>
-    <view class="score" :class="{top: itemData.rank < 3}">{{itemData.score}}</view>
+    <view class="score" :class="{top: itemData.rank <= 3}">{{itemData.score}}</view>
   </view>
 </template>
 <script>
@@ -92,9 +92,18 @@ export default {
       right: -27upx;
       width: 60upx;
       height: 60upx;
-      background: url("https://poult-1300165852.cos.ap-beijing.myqcloud.com/avatar-mark.png")
-        no-repeat;
-      background-size: 100% 100%;
+      &.mark-1 {
+        background: url("~@/static/mark-1.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.mark-2 {
+        background: url("~@/static/mark-2.png") no-repeat;
+        background-size: 100% 100%;
+      }
+      &.mark-3 {
+        background: url("~@/static/mark-3.png") no-repeat;
+        background-size: 100% 100%;
+      }
     }
   }
   .name {

@@ -58,7 +58,9 @@ export default {
   onShareAppMessage: function(res) {
     return {
       title: "揍小鸡，得奖品",
-      path: `/pages/major/poult/index?invate_openId=${this.openId}&isSharePage=1`
+      path: `/pages/major/poult/index?invate_openId=${this.openId}&isSharePage=1`,
+      imageUrl:
+        "https://poult-1300165852.cos.ap-beijing.myqcloud.com/share-img.png"
     };
   },
   methods: {
