@@ -125,6 +125,12 @@ export default {
         this.poultWord = "";
         this.fetchList();
       }
+      if (!newValue) {
+        //回家喽
+        console.log("回家喽~~~");
+        this.poultWord = "";
+        this.animateClass = "animate-normal";
+      }
     }
   },
   computed: {
