@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <div class="footer">
+    <div class="footer" :class="{'iphoneX-bottom': isIphoneX}">
       <div v-if="canBuy" class="footer-left">
         <div class="text">剩余大力丸</div>
         {{userData.score}}
@@ -62,7 +62,8 @@ export default {
   },
   computed: {
     ...mapState({
-      openId: state => state.openId
+      openId: state => state.openId,
+      isIphoneX: state => state.isIphoneX
     }),
     canBuy() {
       return this.userData.score >= this.goodsInfo.goodDownVirtual;
@@ -79,7 +80,7 @@ export default {
               openid: this.openId,
               goodId: this.param.goodsId,
               score: this.goodsInfo.goodDownVirtual,
-              ...this.address,
+              ...this.address
             }
           }).then(res => {
             this.$store.commit("setBookingSuccessTips", res.tips);

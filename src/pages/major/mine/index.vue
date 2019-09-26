@@ -40,7 +40,7 @@
         </div>
         <goods-list />
       </div>
-      <div class="section section-shadow">
+      <div class="section section-shadow" :class="{'iphoneX-margin-bottom': isIphoneX}">
         <div class="section-content">
           <div class="menu">
             <div
