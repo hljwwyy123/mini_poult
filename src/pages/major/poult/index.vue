@@ -31,7 +31,7 @@
           <image class="menu-prize" src="/static/prize-menu.png" />
         </a>
         <button class="menu-item" open-type="share">
-          <image class="menu-prize" src="/static/menu-invate.png" />
+          <image class="menu-prize shake" src="/static/menu-invate.png" />
         </button>
       </div>
       <view
@@ -136,11 +136,16 @@ export default {
   },
   methods: {
     handleChangePoult(data) {
-      console.log(data);
       if (data && data.openid) {
         this.hitOpenId = data.openid;
+        if (data.openid !== this.openId) {
+          this.$toast(`正在去找 ${data.nickName} 家的小鸡`);
+        } else {
+          this.$toast('回家喽~');
+        }
       } else {
         this.hitOpenId = null;
+        this.$toast('回家喽~');
       }
     },
     onGetUserInfo(el) {
@@ -316,6 +321,7 @@ export default {
       margin-bottom: 27upx;
       padding: 0;
       background-color: transparent;
+      width: 100%;
     }
     button:after {
       border: none;
@@ -389,6 +395,34 @@ export default {
     to {
       transform: translate3d(1000upx, 0, 0);
     }
+  }
+}
+.shake {
+  transform-origin: center bottom;
+  animation: shake-frames 2s linear infinite;
+}
+
+@keyframes shake-frames {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-3deg);
+  }
+  20% {
+    transform: rotate(3deg);
+  }
+  30% {
+    transform: rotate(-3deg);
+  }
+  40% {
+    transform: rotate(3deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(0deg);
   }
 }
 </style>
