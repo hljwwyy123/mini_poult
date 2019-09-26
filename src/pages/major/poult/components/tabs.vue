@@ -23,7 +23,7 @@
             </view>
           </view>
         </view>
-        <view v-else>暂无数据</view>
+        <button open-type="share" class="pannel-text" v-else>还没有好友哦，快来邀请大家一起玩吧~</button>
       </view>
     </view>
   </view>
@@ -65,6 +65,14 @@ export default {
   },
   mounted() {
     this.getLists();
+  },
+   onShareAppMessage: function(res) {
+    return {
+      title: "揍小鸡，得奖品",
+      path: `/pages/major/poult/index?invate_openId=${this.openId}&isSharePage=1`,
+      imageUrl:
+        "https://poult-1300165852.cos.ap-beijing.myqcloud.com/share-img.png"
+    };
   },
   methods: {
     handeTabClick(index) {
@@ -164,6 +172,19 @@ export default {
           }
         }
       }
+    }
+  }
+  .pannel-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #663b23;
+    font-size: 28upx;
+    height: 140upx;
+    background-color: transparent;
+    border: none;
+    &::after {
+      border: none;
     }
   }
 }

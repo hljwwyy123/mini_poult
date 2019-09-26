@@ -141,7 +141,6 @@ export default {
       if (this.rate && random <= this.rate) {
         // 取余
         const remider = parseInt(random % scoreList.length, 10);
-        console.log(remider);
         const value = Number(scoreList[remider]);
         // 暴击概率映射随机数值
         let doubleRate = (this.rate * gainRate) / 100;
