@@ -138,8 +138,14 @@ export default {
     handleChangePoult(data) {
       if (data && data.openid) {
         this.hitOpenId = data.openid;
+        if (data.openid !== this.openId) {
+          this.$toast(`正在去找 ${data.nickName} 家的小鸡`);
+        } else {
+          this.$toast('回家喽~');
+        }
       } else {
         this.hitOpenId = null;
+        this.$toast('回家喽~');
       }
     },
     onGetUserInfo(el) {
