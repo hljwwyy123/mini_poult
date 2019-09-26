@@ -121,7 +121,8 @@ export default {
     },
     hitOpenId(newValue, oldValue) {
       if (newValue && newValue !== oldValue) {
-        this.initAnimation();
+        this.animateClass = "animate-normal";
+        this.poultWord = "";
         this.fetchList();
       }
     }
