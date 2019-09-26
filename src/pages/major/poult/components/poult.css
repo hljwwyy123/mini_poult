@@ -75,3 +75,8 @@
     animation: four-step 0.8s steps(4, start) 0ms infinite normal;
     background-size: auto 425upx;
 }
+
+.poult-sprit.animate-normal {
+    background: url("~@/static/poult/normal.png") no-repeat;
+    background-size: 100% 100%;
+}

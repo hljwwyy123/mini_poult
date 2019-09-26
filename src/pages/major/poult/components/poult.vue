@@ -1,10 +1,9 @@
 <template>
   <view class="poult-container">
     <view v-show="poultWord" class="poult-word">{{poultWord}}</view>
-    <view class="poult-sprit" :class="poultClass" @click="handlePoultClick"></view>
+    <view class="poult-sprit" :class="animateClass" @click="handlePoultClick"></view>
     <view v-show="serialCount >= 5" class="boom">X{{serialCount}}</view>
     <view
-      v-show="pageShow"
       v-for="item in wanList"
       :key="item"
       class="wan-icon"
@@ -37,26 +36,62 @@ export default {
       serialDuration: 300, // 连续点击 timer 间隔
       rate: 5, // 单次点击获得大力丸概率 %
       positiveStatusMap: [
-        { status: "sad", words: [] },
-        { status: "naughty", words: ["看不惯我？那你揍我啊，嘻嘻~"] },
-        { status: "happy", words: ["主人要带我去兜风咯，开心开心~"] },
-        { status: "crazy", words: ["不上班的日子，真舒服~"] },
-        { status: "ease", words: ["偷偷睡个觉，主人应该不会知道吧~"] }
+        {
+          status: "naughty",
+          words: ["看不惯我？那你揍我啊，嘻嘻~"],
+          sleep: 5000,
+          during: 3000
+        },
+        {
+          status: "happy",
+          words: ["主人要带我去兜风咯，开心开心~"],
+          sleep: 6000,
+          during: 3000
+        },
+        {
+          status: "crazy",
+          words: ["不上班的日子，真舒服~"],
+          sleep: 7000,
+          during: 3000
+        },
+        {
+          status: "ease",
+          words: ["偷偷睡个觉，主人应该不会知道吧~"],
+          sleep: 8000,
+          during: 3000
+        }
       ],
       negativeStatusMap: [
-        { status: "sad", words: [] },
-        { status: "angry", words: ["你敢打我，我也让我家主人去打你的叽叽~"] },
-        { status: "sad", words: ["好讨厌啊，不要打了啦~"] },
-        { status: "cry", words: ["你再打我我告诉我家主人~"] },
+        {
+          status: "angry",
+          words: ["你敢打我，我也让我家主人去打你的叽叽~"],
+          sleep: 5000,
+          during: 10000
+        },
+        {
+          status: "sad",
+          words: ["好讨厌啊，不要打了啦~"],
+          sleep: 5000,
+          during: 8000
+        },
+        {
+          status: "cry",
+          words: ["你再打我我告诉我家主人~"],
+          sleep: 5000,
+          during: 10000
+        },
         {
           status: "grievance",
-          words: ["你怎么狠心打小鸡，叽叽这么可爱呀，人家都被你打肿了~"]
+          words: ["你怎么狠心打小鸡，叽叽这么可爱呀，人家都被你打肿了~"],
+          sleep: 5000,
+          during: 10000
         }
       ],
       statusIndex: 0, //当前timer 随机取值
       animateTimer: null,
       poultWord: "", // 小鸡当前说的话
-      show_console: false
+      show_console: false,
+      animateClass: "animate-normal"
     };
   },
   props: {
@@ -66,12 +101,14 @@ export default {
   },
   mounted() {
     this.hitScore = 0; // 单次 / 连击 得到的分数 区别于 hitTotalScore
-
     const wanList = [];
     for (let i = 1; i <= 50; i++) {
       wanList.push(i);
     }
     this.wanList = wanList;
+    setTimeout(() => {
+      this.animateLoop();
+    }, 2000);
   },
   watch: {
     pageShow(isShow, old) {
@@ -79,7 +116,7 @@ export default {
         clearInterval(this.animateTimer);
         this.animateTimer = null;
       } else {
-        this.animate();
+        // this.animate();
       }
     },
     hitOpenId(newValue, oldValue) {
@@ -91,37 +128,14 @@ export default {
   computed: {
     ...mapState({
       rateConfig: state => state.rateConfig
-    }),
-    poultClass() {
-      let className = "";
-      let status = 0;
-      // 初始化状态，没揍小鸡的时候。随机从4个正向状态中选一个播放
-      if (!this.pageShow) {
-        return "";
-      }
-      if (this.beatCount <= 0) {
-        if (!this.animateTimer) {
-          this.animate();
-        }
-        className = `animate-${this.positiveStatusMap[this.statusIndex].status}`;
-        this.poultWord = this.positiveStatusMap[this.statusIndex].words[0];
-        // console.log("积极状态: => ", className);
-        // 如果揍过小鸡了，随机从四个负向 状态中抽取播放
-      } else if (this.serialCount <= 0) {
-        className = `animate-${this.negativeStatusMap[this.statusIndex].status}`;
-        this.poultWord = this.negativeStatusMap[this.statusIndex].words[0];
-        // console.log("负向状态: => ", className);
-      } else {
-        // 挨揍中
-        clearInterval(this.animateTimer);
-        className = Math.random() > 0.5 ? "beating1" : "beating2";
-      }
-      return className;
-    }
+    })
   },
   methods: {
     beatPoult() {
       const { hitRate, gainRate, scoreList } = this.rateConfig;
+      clearTimeout(this.animateTimer);
+      this.animateClass = Math.random() > 0.5 ? "beating1" : "beating2";
+      this.poultWord = "";
       // 连击10次，概率翻倍 todo: 到底翻几倍
       if (this.serialCount > 10) {
         this.rate = hitRate * 2;
@@ -198,20 +212,28 @@ export default {
       clearTimeout(this.beatTimer);
       this.beatTimer = setTimeout(() => {
         this.$emit("onSendRequest", Number(this.hitScore));
-        setTimeout(() => {
-          this.animate();
-        }, 2000);
         this.hitScore = 0; // 发送ajax 后重新计算总分数
         this.serialCount = 0;
+        // 播放一次负面状态后继续正常吊儿郎当
+        this.animateLoop(this.negativeStatusMap);
       }, this.serialDuration);
     },
-    animate() {
-      const self = this;
-      this.animateTimer = setInterval(() => {
-        this.statusIndex = (Math.random() * this.positiveStatusMap.length) | 0;
-        // setTimeout(self.animate, 200);
-      }, ANIMTE_DUR);
+    animateLoop(statusMap = this.positiveStatusMap) {
+      let animateInfo = statusMap[(Math.random() * statusMap.length) | 0];
+      this.animateClass = `animate-${animateInfo.status}`;
+      console.log("this.animateClass == ", this.animateClass);
+      // 一个状态可能会有多句话
+      this.poultWord =
+        animateInfo.words[(Math.random() * animateInfo.words.length) | 0];
+      this.animateTimer = setTimeout(() => {
+        this.animateClass = "animate-normal";
+        this.poultWord = "";
+        setTimeout(() => {
+          this.animateLoop();
+        }, animateInfo.sleep);
+      }, animateInfo.during);
     },
+    animate() {},
     // 获取总共还可以打多少分
     fetchScoreInfo() {
       return this.$request({
@@ -274,7 +296,6 @@ export default {
     width: 340upx;
     height: 425upx;
     z-index: 99;
-    // background: url('') no-repeat;
   }
   .poult-word {
     position: absolute;
