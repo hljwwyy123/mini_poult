@@ -20,13 +20,11 @@
 </template>
 
 <script>
-const ANIMTE_DUR = 3200;
 import "./poult.css";
 import { mapActions, mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
-      animationData: [],
       wanList: [],
       beatCount: 0, // 点击次数
       hitTotalScore: 0, // 获得总大力丸
@@ -39,56 +37,58 @@ export default {
         {
           status: "naughty",
           words: ["看不惯我？那你揍我啊，嘻嘻~"],
-          sleep: 5000,
-          during: 3000
+          sleep: 2000, // 该状态播放完成后，切换为normal 状态，等待下一次随机状态的时间，给用户一个等待时间
+          during: 3000 //这一状态动画持续时间
         },
         {
           status: "happy",
           words: ["主人要带我去兜风咯，开心开心~"],
-          sleep: 6000,
+          sleep: 2000,
           during: 3000
         },
         {
           status: "crazy",
           words: ["不上班的日子，真舒服~"],
-          sleep: 7000,
+          sleep: 2000,
           during: 3000
         },
         {
           status: "ease",
           words: ["偷偷睡个觉，主人应该不会知道吧~"],
-          sleep: 8000,
+          sleep: 2000,
           during: 3000
         }
       ],
       negativeStatusMap: [
+        // 每次挨打后，随机从这里选取一个状态播放，播放完后再回到正常状态随机播放
         {
           status: "angry",
           words: ["你敢打我，我也让我家主人去打你的叽叽~"],
-          sleep: 5000,
-          during: 10000
+          sleep: 4000,
+          during: 5000
         },
         {
           status: "sad",
           words: ["好讨厌啊，不要打了啦~"],
-          sleep: 5000,
-          during: 8000
+          sleep: 3000,
+          during: 6000
         },
         {
           status: "cry",
           words: ["你再打我我告诉我家主人~"],
-          sleep: 5000,
-          during: 10000
+          sleep: 4000,
+          during: 4000
         },
         {
           status: "grievance",
           words: ["你怎么狠心打小鸡，叽叽这么可爱呀，人家都被你打肿了~"],
-          sleep: 5000,
-          during: 10000
+          sleep: 3000,
+          during: 8000
         }
       ],
       statusIndex: 0, //当前timer 随机取值
       animateTimer: null,
+      sleepTimer: null,
       poultWord: "", // 小鸡当前说的话
       show_console: false,
       animateClass: "animate-normal"
@@ -121,6 +121,7 @@ export default {
     },
     hitOpenId(newValue, oldValue) {
       if (newValue && newValue !== oldValue) {
+        this.initAnimation();
         this.fetchList();
       }
     }
@@ -131,9 +132,19 @@ export default {
     })
   },
   methods: {
+    initAnimation() {
+      this.animateClass = "animate-normal";
+      this.poultWord = "";
+      clearTimeout(this.animateTimer);
+      clearTimeout(this.sleepTimer);
+      setTimeout(() => {
+        this.animateLoop();
+      }, 1000);
+    },
     beatPoult() {
       const { hitRate, gainRate, scoreList } = this.rateConfig;
       clearTimeout(this.animateTimer);
+      clearTimeout(this.sleepTimer);
       this.animateClass = Math.random() > 0.5 ? "beating1" : "beating2";
       this.poultWord = "";
       // 连击10次，概率翻倍 todo: 到底翻几倍
@@ -155,6 +166,7 @@ export default {
       if (this.rate && random <= this.rate) {
         // 取余
         const remider = parseInt(random % scoreList.length, 10);
+        console.log(remider);
         const value = Number(scoreList[remider]);
         // 暴击概率映射随机数值
         let doubleRate = (this.rate * gainRate) / 100;
@@ -204,11 +216,14 @@ export default {
         this.handleResult();
       } else {
         // 自己的鸡不能揍
-        // todo 小鸡说句话，别揍我
+        // this.initAnimation();
+        this.poultWord = "自己的鸡不能揍";
       }
     },
     handleResult() {
       clearTimeout(this.beatTimer);
+      clearTimeout(this.animateTimer);
+      clearTimeout(this.sleepTimer);
       this.beatTimer = setTimeout(() => {
         this.$emit("onSendRequest", Number(this.hitScore));
         this.hitScore = 0; // 发送ajax 后重新计算总分数
@@ -220,14 +235,13 @@ export default {
     animateLoop(statusMap = this.positiveStatusMap) {
       let animateInfo = statusMap[(Math.random() * statusMap.length) | 0];
       this.animateClass = `animate-${animateInfo.status}`;
-      console.log("this.animateClass == ", this.animateClass);
       // 一个状态可能会有多句话
       this.poultWord =
         animateInfo.words[(Math.random() * animateInfo.words.length) | 0];
       this.animateTimer = setTimeout(() => {
         this.animateClass = "animate-normal";
         this.poultWord = "";
-        setTimeout(() => {
+        this.sleepTimer = setTimeout(() => {
           this.animateLoop();
         }, animateInfo.sleep);
       }, animateInfo.during);
