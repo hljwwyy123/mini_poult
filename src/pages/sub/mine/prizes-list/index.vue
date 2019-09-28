@@ -15,7 +15,7 @@ export default {
       goodList: []
     };
   },
-  onLoad() {
+  onShow() {
     this.getPrizeList();
   },
   methods: {
@@ -36,9 +36,3 @@ export default {
   }
 };
 </script>
-<style scoped lang="scss">
-.rank-wrapper {
-  .scroll-wrapper {
-  }
-}
-</style>
