@@ -47,7 +47,8 @@
         @onSendRequest="onSendRquest"
         @onBingo="onBingo"
       />
-      <tabs @change-poult="handleChangePoult" v-if="openId" />
+      <tabs @change-poult="handleChangePoult" />
+      <guide />
     </div>
     <image class="cloud clound-1" src="/static/cloud5.png" />
     <image class="cloud clound-2" src="/static/cloud2.png" />
@@ -65,6 +66,7 @@ import poult from "./components/poult";
 import formIds from "@/components/multiFormId";
 import signModal from "@/components/sign-modal";
 import auth from "@/components/auth-btn";
+import guide from "@/components/guide";
 import { handleSign as updateSignState, fetchUserData } from "@/services";
 export default {
   data() {
@@ -141,11 +143,11 @@ export default {
         if (data.openid !== this.openId) {
           this.$toast(`正在去找 ${data.nickName} 家的小鸡`);
         } else {
-          this.$toast('回家喽~');
+          this.$toast("回家喽~");
         }
       } else {
         this.hitOpenId = null;
-        this.$toast('回家喽~');
+        this.$toast("回家喽~");
       }
     },
     onGetUserInfo(el) {
@@ -208,7 +210,8 @@ export default {
     poult,
     formIds,
     signModal,
-    auth
+    auth,
+    guide
   }
 };
 </script>
