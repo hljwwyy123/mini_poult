@@ -4,13 +4,13 @@
     <div class="prize-info">
       <div class="prize-title">{{prize.goodName}}</div>
       <div class="prize-price">
-        <view
+        <text
           class="prize-virtual-price"
           v-if="!!prize.goodDownVirtual"
-        >{{prize.goodDownVirtual || prize.goodVirtual || 0}}</view>
-        <div
+        >{{prize.goodDownVirtual || prize.goodVirtual || 0}}</text>
+        <text
           :class="['prize-source-price', !!prize.goodDownVirtual ? 'disabled' : '']"
-        >{{prize.goodVirtual}}大力丸</div>
+        >{{prize.goodVirtual}}大力丸</text>
       </div>
       <div class="prize-changeNum">已兑换: {{prize.goodNum}}</div>
       <div class="prize-remainNum">剩余: {{prize.goodNum}}</div>
@@ -50,12 +50,13 @@ export default {
     }
     .prize-price {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       flex-wrap: wrap;
       padding-left: 22upx;
+      height: 30upx;
       background-image: url("~@/static/wan.png");
       background-repeat: no-repeat;
-      background-size: 16upx 26upx;
+      background-size: 16upx 28upx;
       background-position: left center;
     }
     .prize-virtual-price {
@@ -69,7 +70,6 @@ export default {
       display: inline-block;
       font-size: 24upx;
       color: #676c7c;
-
       line-height: 28upx;
       &.disabled {
         text-decoration: line-through;
