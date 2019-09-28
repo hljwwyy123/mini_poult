@@ -19,9 +19,8 @@
             <div class="item-subtitle">{{item.operateTime}}</div>
           </div>
           <div class="item-right">
-            <div
-              :class="['item-detail', item.score.indexOf('-') >= 0 ? 'danger' : '']"
-            >{{item.score}}</div>
+            <div v-if="item.score.indexOf('-') >= 0" class="item-detail danger">{{item.score}}</div>
+            <div v-else class="item-detail">+{{item.score}}</div>
           </div>
         </div>
       </div>
