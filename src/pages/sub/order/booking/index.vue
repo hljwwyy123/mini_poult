@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="footer" :class="{'iphoneX-bottom': isIphoneX}">
-      <div v-if="canBuy" class="footer-left">
+      <div class="footer-left">
         <div class="text">剩余大力丸</div>
         {{userData.score}}
       </div>

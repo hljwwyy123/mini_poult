@@ -49,15 +49,13 @@ export default {
       line-height: 1;
     }
     .prize-price {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
       padding-left: 22upx;
       height: 30upx;
+      line-height: 30upx;
       background-image: url("~@/static/wan.png");
       background-repeat: no-repeat;
       background-size: 16upx 28upx;
-      background-position: left center;
+      background-position: left top;
     }
     .prize-virtual-price {
       font-size: 28upx;
