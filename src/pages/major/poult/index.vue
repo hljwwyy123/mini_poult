@@ -26,7 +26,8 @@
       <div class="rank-info">
         <div class="rank-icon" />
         <!-- {{hitOpenId && hitOpenId !== openId ? 'TA' : '我'}}的排名：{{userData.ranking || 0}} -->
-        我的排名：{{userData.ranking || 0}}
+        <div v-if="!hitRank">我的排名：{{userData.ranking || 0}}</div>
+        <div v-else>TA的排名：{{hitRank || 0}}</div>
       </div>
       <div class="menu-list">
         <a url="/pages/sub/mine/rank-list/index" class="menu-item">
@@ -102,7 +103,8 @@ export default {
       },
       showCut: false, //切换别人家的鸡 转场动画
       hitNickName: null, // 切换别人家鸡的名字
-      hitScore: 0 // 别人的score
+      hitScore: 0, // 别人的score
+      hitRank: null
     };
   },
   computed: {
@@ -176,6 +178,7 @@ export default {
           if (data.openid !== this.openId) {
             this.hitAvatar = data.avatar;
             this.hitScore = Number(data.socre);
+            this.hitRank = data.rank;
           }
         } else {
           this.hitOpenId = null;
