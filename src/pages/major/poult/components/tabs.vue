@@ -23,7 +23,10 @@
             </view>
           </view>
         </view>
-        <button open-type="share" class="pannel-text" v-else>还没有好友哦，快来邀请大家一起玩吧~</button>
+        <button open-type="share" class="pannel-text" v-else>
+          还没有好友哦，快来邀请大家一起玩吧~
+          <image class="wechat-icon" src="/static/wechat-icon.png" />
+        </button>
       </view>
     </view>
   </view>
@@ -192,6 +195,11 @@ export default {
     border: none;
     &::after {
       border: none;
+    }
+    .wechat-icon {
+      width: 64upx;
+      height: 64upx;
+      display: inline-block;
     }
   }
 }

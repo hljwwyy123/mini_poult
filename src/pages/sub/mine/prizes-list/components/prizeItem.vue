@@ -1,6 +1,6 @@
 <template>
   <view class="prize-item">
-    <image class="prize-item-img" :src="prize.goodImg || '/static/goods.jpg'" />
+    <image class="prize-item-img" mode="aspectFill" :src="prize.goodImg || '/static/goods.jpg'" />
     <div class="prize-info">
       <div class="prize-title">{{prize.goodName}}</div>
       <div class="prize-price">

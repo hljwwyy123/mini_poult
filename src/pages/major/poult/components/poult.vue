@@ -190,10 +190,12 @@ export default {
     },
     handlePoultClick(e) {
       if (this.restThisPoultScore <= 0) {
+        this.poultWord = "今天次数已达到上限";
         console.log("这只小鸡已经没有分数了");
         return;
       }
       if (this.restTotalScore <= 0) {
+        this.poultWord = "今天次数已达到上限";
         console.log("分数满了");
         return;
       }
@@ -224,7 +226,7 @@ export default {
       } else {
         // 自己的鸡不能揍
         // this.initAnimation();
-        this.poultWord = "自己的鸡不能揍";
+        this.poultWord = "不可以揍自己的宝宝哦！快去看看附近的人";
       }
     },
     handleResult() {
