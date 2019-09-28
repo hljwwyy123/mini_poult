@@ -394,7 +394,7 @@ export default {
   }
   .back-home {
     position: absolute;
-    bottom: 340upx;
+    bottom: 360upx;
     left: 32upx;
     width: 83upx;
     height: 103upx;
@@ -489,7 +489,6 @@ export default {
   }
 }
 .shake {
-  transform-origin: center bottom;
   animation: shake-frames 1.5s linear infinite;
 }
 
@@ -498,22 +497,22 @@ export default {
     transform: rotate(0deg) scale(1);
   }
   10% {
-    transform: rotate(-10deg);
+    transform: rotate(-20deg);
   }
   20% {
-    transform: rotate(10deg);
+    transform: rotate(20deg);
   }
   30% {
-    transform: rotate(-10deg) scale(1.2);
+    transform: rotate(-20deg) scale(1.2);
   }
   40% {
-    transform: rotate(10deg);
+    transform: rotate(20deg);
   }
   50% {
-    transform: rotate(-10deg);
+    transform: rotate(-20deg);
   }
   60% {
-    transform: rotate(10deg);
+    transform: rotate(20deg);
   }
   70% {
     transform: rotate(0deg) scale(1);
