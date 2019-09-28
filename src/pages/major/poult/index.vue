@@ -178,12 +178,13 @@ export default {
           this.hitOpenId = data.openid;
           if (data.openid !== this.openId) {
             this.hitAvatar = data.avatar;
-            this.hitScore = Number(data.socre);
+            this.hitScore = Number(data.score);
             this.hitRank = data.rank;
           }
         } else {
           this.hitOpenId = null;
           this.hitAvatar = null;
+          this.hitRank = null;
         }
         setTimeout(() => {
           this.showCut = false;
