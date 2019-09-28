@@ -5,9 +5,11 @@
         了解大力丸
         <image class="tips-icon" src="/static/wan.png" />
       </div>
-      <div class="count">{{userData.score}}</div>
-      <div class="info">我的大力丸余额</div>
-      <button open-type="share" class="button breath-animate">邀请好友赚100大力丸</button>
+      <div class="header-content">
+        <div class="count">{{userData.score}}</div>
+        <div class="info">我的大力丸余额</div>
+        <button open-type="share" class="button breath-animate">邀请好友赚100大力丸</button>
+      </div>
     </div>
     <scroll-view scroll-y class="content" @scrolltolower="handleLoadData">
       <div class="list">
@@ -116,16 +118,20 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     height: 400upx;
     background-image: linear-gradient(45deg, #ffb784, #fb6f72);
     color: #fff;
+    &-content {
+      text-align: center;
+    }
     .tips {
       position: relative;
       font-size: 30upx;
       align-self: flex-end;
-      padding-right: 10upx;
+      width: 100%;
+      text-align: right;
       padding-right: 40upx;
+      margin-top: 13upx;
       &-icon {
         position: absolute;
         width: 18.64upx;
