@@ -24,7 +24,7 @@ export default {
       const { userInfo } = el.detail;
       console.log(el.detail);
       if (userInfo) {
-        this.$store.commit("loginWx", el.detail.userInfo);
+        this.$store.commit("setUserInfo", el.detail.userInfo);
         this.$store.commit("authed", true);
         this.$emit("authComplete", el);
       }

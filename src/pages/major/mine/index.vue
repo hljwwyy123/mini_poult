@@ -157,7 +157,7 @@ export default {
     getUserInfo(e) {
       const { userInfo } = e.detail;
       if (userInfo) {
-        this.$store.commit("loginWx", userInfo);
+        this.$store.commit("setUserInfo", userInfo);
         this.$store.commit("authed", true);
         login(userInfo).then(res => {
           this.signed();

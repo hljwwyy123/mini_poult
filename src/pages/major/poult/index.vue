@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="content" :class="{iphoneX: isIphoneX}">
       <form-ids>
-        <view v-if="!authed" class="my-info">
+        <view v-if="!authed" class="my-info" :class="{'showOther': hitAvatar}">
           <image class="avatar" src="/static/default-avatar.png" />
           <image
             src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png"
@@ -10,7 +10,12 @@
           />0
         </view>
         <a v-else url="/pages/major/mine/index" class="my-info">
-          <image class="avatar" :src="userInfo.avatarUrl || '/static/default-avatar.png'" />
+          <image
+            v-if="!hitAvatar"
+            class="avatar"
+            :src="userInfo.avatarUrl || '/static/default-avatar.png'"
+          />
+          <image v-else class="avatar" :src="hitAvatar" />
           <image
             src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png"
             class="wan-icon"
@@ -37,6 +42,7 @@
       <view
         v-if="hitOpenId && openId !== hitOpenId"
         class="back-home"
+        :class="{'iphoneX-margin-bottom': isIphoneX}"
         @click="handleChangePoult({})"
       ></view>
       <poult
@@ -54,6 +60,20 @@
     <image class="cloud clound-3" src="/static/cloud3.png" />
 
     <sign-modal :show="signedInfo.isSigned" :title="`大力丸+${signedInfo.score}`" />
+    <!-- <cut-mark v-if="showCut"></cut-mark> -->
+    <view class="cut-mark" v-if="showCut">
+      <view class="cut-content">
+        <image class="cut-poult-img" src="/static/poult/normal.png" />
+        <view v-if="hitNickName" class="cut-word">
+          <view>
+            去
+            <span>{{hitNickName}}</span>家揍小鸡
+          </view>
+          <view>偷大力丸去喽！</view>
+        </view>
+        <view v-else class="cut-word">回家喽</view>
+      </view>
+    </view>
     <auth @authComplete="onGetUserInfo" />
   </div>
 </template>
@@ -74,9 +94,12 @@ export default {
       invate_openId: null, //邀请人Opoenid
       hitOpenId: "",
       userData: {}, // 个人数据
+      hitAvatar: null, // 被揍人的头像
       signedInfo: {
         isSigned: false
-      }
+      },
+      showCut: false, //切换别人家的鸡 转场动画
+      hitNickName: null // 切换别人家鸡的名字
     };
   },
   computed: {
@@ -136,17 +159,28 @@ export default {
   },
   methods: {
     handleChangePoult(data) {
+      this.showCut = true;
       if (data && data.openid) {
-        this.hitOpenId = data.openid;
         if (data.openid !== this.openId) {
-          this.$toast(`正在去找 ${data.nickName} 家的小鸡`);
-        } else {
-          this.$toast('回家喽~');
+          this.hitNickName = data.nickName;
         }
       } else {
-        this.hitOpenId = null;
-        this.$toast('回家喽~');
+        this.hitNickName = null;
       }
+      setTimeout(() => {
+        if (data && data.openid) {
+          this.hitOpenId = data.openid;
+          if (data.openid !== this.openId) {
+            this.hitAvatar = data.avatar;
+          }
+        } else {
+          this.hitOpenId = null;
+          this.hitAvatar = null;
+        }
+        setTimeout(() => {
+          this.showCut = false;
+        }, 700);
+      }, 700);
     },
     onGetUserInfo(el) {
       const self = this;
@@ -253,6 +287,7 @@ export default {
     line-height: 70upx;
     font-size: 36pux;
     overflow: visible;
+    transition: 0.15s ease-out;
     &:after {
       content: "";
       position: absolute;
@@ -262,6 +297,9 @@ export default {
       bottom: 5upx;
       border: 1px solid rgba(255, 255, 255, 0.4);
       border-radius: 35upx;
+    }
+    &.showOther {
+      width: 0;
     }
     .avatar {
       position: absolute;
@@ -394,6 +432,43 @@ export default {
     }
     to {
       transform: translate3d(1000upx, 0, 0);
+    }
+  }
+}
+.cut-mark {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.9);
+  animation: fadeIn 1.4s ease-out forwards;
+  z-index: 1000;
+  .cut-content {
+    width: 100%;
+    position: absolute;
+    bottom: 50vh;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    .cut-poult-img {
+      margin: auto;
+      width: 204upx;
+      height: 255upx;
+    }
+    .cut-word {
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-size: 30upx;
+      line-height: 42upx;
+      font-weight: 400;
+      white-space: nowrap;
+      span {
+        padding: 0 6upx;
+        color: rgba(255, 222, 23, 1);
+      }
     }
   }
 }

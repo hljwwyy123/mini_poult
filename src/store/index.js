@@ -17,7 +17,7 @@ const store = new Vuex.Store({
         rateConfig: {}
     },
     mutations: {
-        loginWx(state, provider) {
+        setUserInfo(state, provider) {
             state.userInfo = provider;
         },
         updateIsIphoneX(state, el) {

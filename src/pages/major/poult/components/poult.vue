@@ -129,7 +129,7 @@ export default {
         //回家喽
         console.log("回家喽~~~");
         this.poultWord = "";
-        this.animateClass = "animate-normal";
+        this.animateClass = "animate-happy";
       }
     }
   },

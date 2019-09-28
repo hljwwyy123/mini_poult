@@ -70,3 +70,16 @@
 .iphoneX-margin-bottom {
     margin-bottom: 34upx;
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    40%,
+    70% {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
