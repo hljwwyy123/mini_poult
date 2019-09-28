@@ -18,7 +18,7 @@
         </view>
       </view>
     </view>
-    <view class="footer">最终解释权归北京国马科技有限公司。</view>
+    <view class="footer">最终解释权归盛世伟杰（北京）广告有限公司。</view>
   </view>
 </template>
 <script>
