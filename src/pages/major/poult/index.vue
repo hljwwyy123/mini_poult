@@ -36,7 +36,8 @@
           <image class="menu-prize" src="/static/prize-menu.png" />
         </a>
         <button class="menu-item" open-type="share">
-          <image class="menu-prize shake" src="/static/menu-invate.png" />
+          <image class="menu-prize" src="/static/menu-invate.png" />
+          <image class="menu-invite shake" src="/static/invite-content-icon.png" />
         </button>
       </div>
       <view
@@ -361,10 +362,20 @@ export default {
       height: 103upx;
     }
     .menu-item {
+      position: relative;
       margin-bottom: 27upx;
       padding: 0;
       background-color: transparent;
       width: 100%;
+    }
+    .menu-invite {
+      position: absolute;
+      z-index: 1;
+      top: 14upx;
+      left: 31%;
+      // transform: translateX(-50%);
+      width: 48upx;
+      height: 50upx;
     }
     button:after {
       border: none;
@@ -479,27 +490,33 @@ export default {
 }
 .shake {
   transform-origin: center bottom;
-  animation: shake-frames 2s linear infinite;
+  animation: shake-frames 1.5s linear infinite;
 }
 
 @keyframes shake-frames {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(0deg) scale(1);
   }
   10% {
-    transform: rotate(-3deg);
+    transform: rotate(-10deg);
   }
   20% {
-    transform: rotate(3deg);
+    transform: rotate(10deg);
   }
   30% {
-    transform: rotate(-3deg);
+    transform: rotate(-10deg) scale(1.2);
   }
   40% {
-    transform: rotate(3deg);
+    transform: rotate(10deg);
   }
   50% {
-    transform: rotate(0deg);
+    transform: rotate(-10deg);
+  }
+  60% {
+    transform: rotate(10deg);
+  }
+  70% {
+    transform: rotate(0deg) scale(1);
   }
   100% {
     transform: rotate(0deg);
