@@ -20,7 +20,7 @@
             src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png"
             class="wan-icon"
           />
-          {{totalScore}}
+          {{ !hitAvatar ? totalScore : hitScore}}
         </a>
       </form-ids>
       <div class="rank-info">
@@ -53,7 +53,8 @@
         @onSendRequest="onSendRquest"
         @onBingo="onBingo"
       />
-      <tabs @change-poult="handleChangePoult" v-if="openId" />
+      <tabs @change-poult="handleChangePoult" />
+      <guide />
     </div>
     <image class="cloud clound-1" src="/static/cloud5.png" />
     <image class="cloud clound-2" src="/static/cloud2.png" />
@@ -85,6 +86,7 @@ import poult from "./components/poult";
 import formIds from "@/components/multiFormId";
 import signModal from "@/components/sign-modal";
 import auth from "@/components/auth-btn";
+import guide from "@/components/guide";
 import { handleSign as updateSignState, fetchUserData } from "@/services";
 export default {
   data() {
@@ -99,7 +101,8 @@ export default {
         isSigned: false
       },
       showCut: false, //切换别人家的鸡 转场动画
-      hitNickName: null // 切换别人家鸡的名字
+      hitNickName: null, // 切换别人家鸡的名字
+      hitScore: 0 // 别人的score
     };
   },
   computed: {
@@ -172,6 +175,7 @@ export default {
           this.hitOpenId = data.openid;
           if (data.openid !== this.openId) {
             this.hitAvatar = data.avatar;
+            this.hitScore = Number(data.socre);
           }
         } else {
           this.hitOpenId = null;
@@ -242,7 +246,8 @@ export default {
     poult,
     formIds,
     signModal,
-    auth
+    auth,
+    guide
   }
 };
 </script>

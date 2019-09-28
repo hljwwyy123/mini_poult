@@ -63,10 +63,17 @@ export default {
       nickName: state => state.nickName
     })
   },
+  watch: {
+    openId(newValue) {
+      if (newValue) {
+        this.getLists();
+      }
+    }
+  },
   mounted() {
     this.getLists();
   },
-   onShareAppMessage: function(res) {
+  onShareAppMessage: function(res) {
     return {
       title: "揍小鸡，得奖品",
       path: `/pages/major/poult/index?invate_openId=${this.openId}&isSharePage=1`,
