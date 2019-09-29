@@ -72,7 +72,7 @@
             去
             <span>{{hitNickName}}</span>家揍小鸡
           </view>
-          <view>‘偷’大力丸去喽！</view>
+          <view>“偷”大力丸去喽！</view>
         </view>
         <view v-else class="cut-word">回家喽</view>
       </view>

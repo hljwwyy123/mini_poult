@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <image class="image" :src="goodsInfo.goodImg" />
+    <image class="image" mode="aspectFit" :src="goodsInfo.goodImg" />
     <div class="content">
       <div class="title">{{goodsInfo.goodName || '暂无'}}</div>
       <div class="info">
@@ -66,7 +66,10 @@ export default {
       isIphoneX: state => state.isIphoneX
     }),
     canBuy() {
-      return this.userData.score >= this.goodsInfo.goodDownVirtual;
+      return (
+        this.userData.score >=
+        (this.goodsInfo.goodDownVirtual || this.goodsInfo.goodVirtual)
+      );
     }
   },
   methods: {
