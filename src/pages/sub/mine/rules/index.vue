@@ -22,13 +22,22 @@
   </view>
 </template>
 <script>
-import { wanRules, exchangeRules } from "@/utils/rules";
 export default {
   data() {
     return {
-      wanRules: wanRules || [],
-      exchangeRules: exchangeRules || []
+      wanRules: [],
+      exchangeRules: []
     };
+  },
+  onLoad() {
+    this.$request({
+      url: "/mp/activeRules",
+      method: "GET"
+    }).then(res => {
+      console.log(res);
+      this.wanRules = res.wanRules;
+      this.exchangeRules = res.exchangeRules;
+    });
   }
 };
 </script>
