@@ -53,6 +53,8 @@
         :pageShow="pageShow"
         :todayScore="totalScore"
         @onSendRequest="onSendRquest"
+        :positiveStatusMap="positiveStatusMap"
+        :negativeStatusMap="negativeStatusMap"
         @onBingo="onBingo"
       />
       <tabs @change-poult="handleChangePoult" />
@@ -105,7 +107,9 @@ export default {
       showCut: false, //切换别人家的鸡 转场动画
       hitNickName: null, // 切换别人家鸡的名字
       hitScore: 0, // 别人的score
-      hitRank: null
+      hitRank: null,
+      positiveStatusMap: [],
+      negativeStatusMap: []
     };
   },
   computed: {
@@ -148,6 +152,7 @@ export default {
     if (this.authed && this.userInfo && this.userInfo.avatar) {
       this.handleSign();
     }
+    this.fetchAnimationData();
   },
   onHide() {
     this.pageShow = false;
@@ -224,6 +229,15 @@ export default {
             self.fetchIndexData(this.openId);
           }
         }
+      });
+    },
+    fetchAnimationData() {
+      this.$request({
+        url: "/mp/animationNotify",
+        method: "GET"
+      }).then(res => {
+        this.positiveStatusMap = res.positiveStatusMap;
+        this.negativeStatusMap = res.negativeStatusMap;
       });
     },
     fetchIndexData(openid = this.openId) {

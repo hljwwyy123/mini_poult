@@ -1,7 +1,7 @@
 <template>
   <view class="wrapper">
     <view class="header">
-      <image mode="aspectFit" class="header-bg" src="/static/rules_bg.png" />
+      <image mode="aspectFill" class="header-bg" src="/static/rules_bg.png" />
     </view>
     <view class="content">
       <view class="content-title">大力丸说明</view>

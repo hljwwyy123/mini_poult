@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <image class="image" mode="aspectFit" :src="goodsInfo.goodImg" />
+    <image class="image" mode="aspectFill" :src="goodsInfo.goodImg" />
     <div class="content">
       <div class="title">{{goodsInfo.goodName || '暂无'}}</div>
       <div class="info">

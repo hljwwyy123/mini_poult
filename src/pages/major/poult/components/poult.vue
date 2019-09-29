@@ -33,59 +33,7 @@ export default {
       beatTimer: null, // debounce timerid
       serialDuration: 300, // 连续点击 timer 间隔
       rate: 5, // 单次点击获得大力丸概率 %
-      positiveStatusMap: [
-        {
-          status: "naughty",
-          words: ["看不惯我？那你揍我啊，嘻嘻~"],
-          sleep: 2000, // 该状态播放完成后，切换为normal 状态，等待下一次随机状态的时间，给用户一个等待时间
-          during: 3000 //这一状态动画持续时间
-        },
-        {
-          status: "happy",
-          words: ["主人要带我去兜风咯，开心开心~"],
-          sleep: 2000,
-          during: 3000
-        },
-        {
-          status: "crazy",
-          words: ["不上班的日子，真舒服~"],
-          sleep: 2000,
-          during: 3000
-        },
-        {
-          status: "ease",
-          words: ["偷偷睡个觉，主人应该不会知道吧~"],
-          sleep: 2000,
-          during: 3000
-        }
-      ],
-      negativeStatusMap: [
-        // 每次挨打后，随机从这里选取一个状态播放，播放完后再回到正常状态随机播放
-        {
-          status: "angry",
-          words: ["你敢打我，我也让我家主人去打你的叽叽~"],
-          sleep: 4000,
-          during: 5000
-        },
-        {
-          status: "sad",
-          words: ["好讨厌啊，不要打了啦~"],
-          sleep: 3000,
-          during: 6000
-        },
-        {
-          status: "cry",
-          words: ["你再打我我告诉我家主人~"],
-          sleep: 4000,
-          during: 4000
-        },
-        {
-          status: "grievance",
-          words: ["你怎么狠心打小鸡，叽叽这么可爱呀，人家都被你打肿了~"],
-          sleep: 3000,
-          during: 8000
-        }
-      ],
+
       statusIndex: 0, //当前timer 随机取值
       animateTimer: null,
       sleepTimer: null,
@@ -97,7 +45,9 @@ export default {
   props: {
     pageShow: Boolean,
     hitOpenId: String,
-    openId: String
+    openId: String,
+    positiveStatusMap: Array,
+    negativeStatusMap: Array
   },
   mounted() {
     this.hitScore = 0; // 单次 / 连击 得到的分数 区别于 hitTotalScore
