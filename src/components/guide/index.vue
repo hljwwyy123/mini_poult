@@ -53,6 +53,7 @@ export default {
           key: "isShowGiud",
           data: false
         });
+        this.$emit("hideGuide", true);
       }
     }
   }
@@ -66,7 +67,7 @@ export default {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 100;
+  z-index: 1000;
   .guide {
     display: flex;
     flex-direction: column;

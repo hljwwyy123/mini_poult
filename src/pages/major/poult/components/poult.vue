@@ -56,9 +56,9 @@ export default {
       wanList.push(i);
     }
     this.wanList = wanList;
-    setTimeout(() => {
-      this.animateLoop();
-    }, 2000);
+    // setTimeout(() => {
+    //   this.animateLoop();
+    // }, 2000);
   },
   watch: {
     pageShow(isShow, old) {
@@ -68,6 +68,12 @@ export default {
       } else {
         // this.animate();
       }
+    },
+    positiveStatusMap(newValue) {
+      console.log("newValue", newValue);
+      setTimeout(() => {
+        this.animateLoop();
+      }, 2000);
     },
     hitOpenId(newValue, oldValue) {
       if (newValue && newValue !== oldValue) {

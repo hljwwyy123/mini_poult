@@ -58,7 +58,6 @@
         @onBingo="onBingo"
       />
       <tabs @change-poult="handleChangePoult" />
-      <guide />
     </div>
     <image class="cloud clound-1" src="/static/cloud5.png" />
     <image class="cloud clound-2" src="/static/cloud2.png" />
@@ -79,7 +78,8 @@
         <view v-else class="cut-word">回家喽</view>
       </view>
     </view>
-    <auth @authComplete="onGetUserInfo" />
+    <guide v-if="showGuide" @hideGuide="onHideGuide" />
+    <auth v-if="!showGuide" @authComplete="onGetUserInfo" />
   </div>
 </template>
 <script>
@@ -109,7 +109,8 @@ export default {
       hitScore: 0, // 别人的score
       hitRank: null,
       positiveStatusMap: [],
-      negativeStatusMap: []
+      negativeStatusMap: [],
+      showGuide: false // 全局引导
     };
   },
   computed: {
@@ -127,6 +128,7 @@ export default {
     openId(newValue, oldValue) {
       if (newValue) {
         this.fetchIndexData(newValue);
+        this.fetchAnimationData();
         if (this.authed) {
           this.handleSign();
         }
@@ -152,7 +154,16 @@ export default {
     if (this.authed && this.userInfo && this.userInfo.avatar) {
       this.handleSign();
     }
-    this.fetchAnimationData();
+    uni.getStorage({
+      key: "isShowGiud",
+      success: res => {
+        const { data } = res;
+        this.showGuide = data;
+      },
+      fail: () => {
+        this.showGuide = true;
+      }
+    });
   },
   onHide() {
     this.pageShow = false;
@@ -236,6 +247,7 @@ export default {
         url: "/mp/animationNotify",
         method: "GET"
       }).then(res => {
+        console.log(res);
         this.positiveStatusMap = res.positiveStatusMap;
         this.negativeStatusMap = res.negativeStatusMap;
       });
@@ -258,6 +270,9 @@ export default {
           isSigned: true
         };
       });
+    },
+    onHideGuide() {
+      this.showGuide = false;
     }
   },
   components: {
