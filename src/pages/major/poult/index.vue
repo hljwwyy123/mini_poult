@@ -10,12 +10,8 @@
           />0
         </view>
         <a v-else url="/pages/major/mine/index" class="my-info">
-          <image
-            v-if="!hitAvatar"
-            class="avatar"
-            :src="userInfo.avatarUrl || '/static/default-avatar.png'"
-          />
-          <image v-else class="avatar" :src="hitAvatar" />
+          <image v-if="!hitAvatar" class="avatar" :src="userInfo.avatarUrl | avatarUrlFilter" />
+          <image v-else class="avatar" :src="hitAvatar | avatarUrlFilter" />
           <image
             src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/wan.png"
             class="wan-icon"
@@ -146,6 +142,7 @@ export default {
     if (options.invate_openId) {
       this.invate_openId = options.invate_openId;
     }
+    this.lineNo = options.lineNo;
 
     if (this.openId) {
       this.fetchIndexData(this.openId);
@@ -208,10 +205,9 @@ export default {
       }, 700);
     },
     onGetUserInfo(el) {
-      const self = this;
       login({
-        openid: self.openId,
-        regSource: self.invate_openId,
+        openid: this.openId,
+        regSource: this.invate_openId || this.lineNo || "",
         avatar: this.userInfo.avatarUrl,
         nickName: this.userInfo.nickName
       }).then(() => {
@@ -282,6 +278,17 @@ export default {
     signModal,
     auth,
     guide
+  },
+  filters: {
+    avatarUrlFilter(value) {
+      if (value) {
+        if (value.indexOf("https") >= 0) {
+          return value;
+        }
+        return "/static/default-avatar.png";
+      }
+      return "/static/default-avatar.png";
+    }
   }
 };
 </script>

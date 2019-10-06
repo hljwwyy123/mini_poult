@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <image class="image" mode="aspectFill" :src="goodsInfo.goodImg" />
+    <image class="image" mode="aspectFit" :src="goodsInfo.goodImg" />
     <div class="content">
       <div class="title">{{goodsInfo.goodName || '暂无'}}</div>
       <div class="info">
@@ -138,6 +138,7 @@ export default {
     width: 100%;
     height: 434upx;
     border-radius: 20upx;
+    background-color: #eee;
   }
   .content {
     padding-top: 20upx;

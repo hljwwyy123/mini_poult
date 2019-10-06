@@ -22,11 +22,13 @@ export default {
   methods: {
     handleGetUserInfo(el) {
       const { userInfo } = el.detail;
-      console.log(el.detail);
       if (userInfo) {
         this.$store.commit("setUserInfo", el.detail.userInfo);
         this.$store.commit("authed", true);
-        this.$emit("authComplete", el);
+        // 有时候没有头像 怀疑是此处的原因
+        setTimeout(() => {
+          this.$emit("authComplete", el);
+        }, 10);
       }
     }
   }

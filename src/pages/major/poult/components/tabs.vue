@@ -18,7 +18,7 @@
               :key="index"
               class="panel-item"
             >
-              <image class="item-avatar" :src="item.avatar || '/static/default-avatar.png'" />
+              <image class="item-avatar" :src="item.avatar | avatarUrlFilter" />
               <view class="nick-name">{{item.nickName || '匿名'}}</view>
             </view>
           </view>
@@ -115,6 +115,17 @@ export default {
           this.tabs = newTabs;
         });
       }
+    }
+  },
+  filters: {
+    avatarUrlFilter(value) {
+      if (value) {
+        if (value.indexOf("https") >= 0) {
+          return value;
+        }
+        return "/static/default-avatar.png";
+      }
+      return "/static/default-avatar.png";
     }
   }
 };
