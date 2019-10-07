@@ -142,7 +142,10 @@ export default {
     if (options.invate_openId) {
       this.invate_openId = options.invate_openId;
     }
-    this.lineNo = options.lineNo;
+
+    if (options.lineNo) {
+      this.regSource = options ? JSON.stringify(options) : "";
+    }
 
     if (this.openId) {
       this.fetchIndexData(this.openId);
@@ -207,7 +210,7 @@ export default {
     onGetUserInfo(el) {
       login({
         openid: this.openId,
-        regSource: this.invate_openId || this.lineNo || "",
+        regSource: this.invate_openId || this.regSource || "",
         avatar: this.userInfo.avatarUrl,
         nickName: this.userInfo.nickName
       }).then(() => {
@@ -243,7 +246,6 @@ export default {
         url: "/mp/animationNotify",
         method: "GET"
       }).then(res => {
-        console.log(res);
         this.positiveStatusMap = res.positiveStatusMap;
         this.negativeStatusMap = res.negativeStatusMap;
       });
