@@ -159,7 +159,7 @@ export default {
       if (userInfo) {
         this.$store.commit("setUserInfo", userInfo);
         this.$store.commit("authed", true);
-        login(userInfo).then(res => {
+        login({ ...userInfo, avatar: userInfo.avatarUrl }).then(res => {
           this.signed();
         });
       }
