@@ -13,19 +13,29 @@
         </div>
         <div class="source-price">实际商品价格：{{goodsInfo.goodPrice || 0}}元</div>
       </div>
-      <div class="address" @click="getAddrees">
-        <div v-if="!address.telNumber" class="address-button">添加地址</div>
-        <div v-else class="address-content">
-          <div class="address-info">
-            <div class="address-info-header">
-              <div style="padding-right: 10upx">{{address.userName}}</div>
-              <div>{{address.telNumber}}</div>
+      <div class="address">
+        <div v-if="reAuthAddress">
+          <button
+            class="address-button"
+            style="boder:none"
+            open-type="openSetting"
+            @opensetting="openSettingHandler"
+          >添加地址</button>
+        </div>
+        <div v-else>
+          <div v-if="!address.telNumber" @click="getAddrees" class="address-button">添加地址</div>
+          <div v-else class="address-content">
+            <div class="address-info">
+              <div class="address-info-header">
+                <div style="padding-right: 10upx">{{address.userName}}</div>
+                <div>{{address.telNumber}}</div>
+              </div>
+              <div
+                class="address-info-footer"
+              >{{address.provinceName}} {{address.cityName}} {{address.countyName}} {{address.detailInfo}}</div>
             </div>
-            <div
-              class="address-info-footer"
-            >{{address.provinceName}} {{address.cityName}} {{address.countyName}} {{address.detailInfo}}</div>
+            <div class="iconfont icon-arrow_right"></div>
           </div>
-          <div class="iconfont icon-arrow_right"></div>
         </div>
       </div>
     </div>
@@ -50,7 +60,8 @@ export default {
       address: {},
       userData: {
         score: 0
-      }
+      },
+      reAuthAddress: false
     };
   },
   onLoad(param) {
@@ -59,6 +70,17 @@ export default {
     this.param = param;
     this.fetchGoodsInfo();
     this.getUserData();
+    uni.getSetting().then(authRes => {
+      console.log(authRes);
+      let authInfo = authRes[1];
+      let addressAuth = authInfo.authSetting["scope.address"];
+      console.log(addressAuth);
+      if (authInfo.authSetting && addressAuth) {
+        // 之前拒绝过授权获取address 重新授权
+        console.log("重新授权吧=======");
+        this.reAuthAddress = true;
+      }
+    });
   },
   computed: {
     ...mapState({
@@ -117,15 +139,24 @@ export default {
       fetchUserData(this.openId).then(res => (this.userData = res));
     },
     getAddrees() {
+      const self = this;
       uni.chooseAddress({
         success: res => {
           delete res.errMsg;
           this.address = res;
         },
         fail(error) {
-          console.error(error);
+          self.reAuthAddress = true;
         }
       });
+    },
+    // Setting-page 回调函数
+    openSettingHandler(data) {
+      const self = this;
+      if (data.mp.detail.authSetting["scope.address"] == true) {
+        // 如果开启授权
+        self.reAuthAddress = false;
+      }
     }
   }
 };
@@ -176,11 +207,13 @@ export default {
         display: inline-block;
         box-sizing: border-box;
         height: 65upx;
+        line-height: 1.6;
         padding: 10upx 20upx;
         border-radius: 33upx;
         color: #fb6f72;
         font-size: 28upx;
         border: 1upx solid #fb6f72;
+        background: white;
       }
       .address-content {
         display: flex;
