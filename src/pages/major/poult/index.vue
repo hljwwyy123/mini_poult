@@ -59,7 +59,7 @@
     <image class="cloud clound-2" src="/static/cloud2.png" />
     <image class="cloud clound-3" src="/static/cloud3.png" />
 
-    <sign-modal :show="signedInfo.isSigned" :title="`大力丸+${signedInfo.score}`" />
+    <sign-modal :show="signedInfo.isSigned" :title="`能量值+${signedInfo.score}`" />
     <!-- <cut-mark v-if="showCut"></cut-mark> -->
     <view class="cut-mark" v-if="showCut">
       <view class="cut-content">
@@ -69,7 +69,7 @@
             去
             <span>{{hitNickName}}</span>家揍小鸡
           </view>
-          <view>“偷”大力丸去喽！</view>
+          <view>“偷”能量值去喽！</view>
         </view>
         <view v-else class="cut-word">回家喽</view>
       </view>
@@ -91,7 +91,7 @@ import { handleSign as updateSignState, fetchUserData } from "@/services";
 export default {
   data() {
     return {
-      totalScore: 0, // 获得总大力丸
+      totalScore: 0, // 获得总能量值
       pageShow: true, // 当前页面是否onShow
       invate_openId: null, //邀请人Opoenid
       hitOpenId: "",
@@ -261,7 +261,7 @@ export default {
      */
     handleSign() {
       updateSignState(this.openId, res => {
-        // 打卡成功后 拉去最新的大力丸数据
+        // 打卡成功后 拉去最新的能量值数据
         this.fetchIndexData();
         this.signedInfo = {
           ...res,

@@ -6,7 +6,7 @@
         <div class="info">
           <div class="item-title">{{orderDetail.goodName}}</div>
           <div class="item-subtitle">
-            消耗大力丸：
+            消耗能量值：
             <span class="wan-count">{{orderDetail.score || 0}}</span>
           </div>
         </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <image class="image" mode="aspectFit" :src="goodsInfo.goodImg" />
+    <image class="image" mode="aspectFill" :src="goodsInfo.goodImg" />
     <div class="content">
       <div class="title">{{goodsInfo.goodName || '暂无'}}</div>
       <div class="info">
@@ -9,7 +9,7 @@
           <div
             v-if="!!goodsInfo.goodDownVirtual"
             class="source-price"
-          >{{goodsInfo.goodVirtual || 0}}大力丸</div>
+          >{{goodsInfo.goodVirtual || 0}}能量值</div>
         </div>
         <div class="source-price">实际商品价格：{{goodsInfo.goodPrice || 0}}元</div>
       </div>
@@ -31,10 +31,10 @@
     </div>
     <div class="footer" :class="{'iphoneX-bottom': isIphoneX}">
       <div class="footer-left">
-        <div class="text">剩余大力丸</div>
+        <div class="text">剩余能量值</div>
         {{userData.score}}
       </div>
-      <div @click="handleBooking" class="footer-right">{{canBuy ? "立即兑换" : "大力丸不足，去赚取"}}</div>
+      <div @click="handleBooking" class="footer-right">{{canBuy ? "立即兑换" : "能量值不足，去赚取"}}</div>
     </div>
   </div>
 </template>
@@ -55,7 +55,7 @@ export default {
   },
   onLoad(param) {
     // fetch prizes info
-    // fetch 大力丸 info
+    // fetch 能量值 info
     this.param = param;
     this.fetchGoodsInfo();
     this.getUserData();
@@ -136,9 +136,8 @@ export default {
   padding: 30upx;
   .image {
     width: 100%;
-    height: 434upx;
+    height: 100vw;
     border-radius: 20upx;
-    background-color: #eee;
   }
   .content {
     padding-top: 20upx;

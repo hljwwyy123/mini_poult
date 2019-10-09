@@ -11,7 +11,7 @@ const store = new Vuex.Store({
         isIphoneX: false,
         bookingSuccessTips: '',
         publicKey: '', // RSA 加密KEY
-        hitRate: 5, // 命中大力丸概率
+        hitRate: 5, // 命中能量值概率
         gainRate: 5, // 暴击概率
         scoreList: [1, 2, 3], // 随机分值表
         rateConfig: {}

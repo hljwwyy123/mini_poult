@@ -26,7 +26,7 @@ export default {
     },
     title: {
       type: String,
-      default: "大力丸"
+      default: "能量值"
     },
     info: {
       type: String,

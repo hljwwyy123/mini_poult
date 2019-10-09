@@ -4,7 +4,7 @@
       <image mode="aspectFill" class="header-bg" src="/static/rules_bg.png" />
     </view>
     <view class="content">
-      <view class="content-title">大力丸说明</view>
+      <view class="content-title">能量值说明</view>
       <view class="rule-list" v-for="(item, index) in wanRules" :key="index">
         <view class="rule-title" v-if="item.title">{{item.title}}</view>
         <view class="rule-content">

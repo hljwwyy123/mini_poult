@@ -2,13 +2,13 @@
   <div class="wrapper">
     <div class="header">
       <div @click="handleNavigateTo" class="tips">
-        了解大力丸
+        了解能量值
         <image class="tips-icon" src="/static/wan.png" />
       </div>
       <div class="header-content">
         <div class="count">{{userData.score}}</div>
-        <div class="info">我的大力丸余额</div>
-        <button open-type="share" class="button breath-animate">邀请好友赚100大力丸</button>
+        <div class="info">我的能量值余额</div>
+        <button open-type="share" class="button breath-animate">邀请好友赚100能量值</button>
       </div>
     </div>
     <scroll-view scroll-y class="content" @scrolltolower="handleLoadData">

@@ -22,7 +22,7 @@ export default {
   },
   async mounted() {
     this.$request({
-      url: "/mp/newsNotify",
+      url: "/mp/newsNotify"
       // url: '/mp/goodsExchangeNotify' // 后续 需要切换的接口
     }).then(res => {
       this.tips = res;
@@ -39,12 +39,12 @@ export default {
   .tips-content {
     display: flex;
     align-items: center;
-    width: 490upx;
+    width: 80%;
     height: 58upx;
     background-color: rgba(251, 111, 114, 0.06);
     border-radius: 29upx;
     font-size: 24upx;
-    padding: 0 30upx;
+    padding: 0 20upx;
     box-sizing: border-box;
     margin-top: 26upx;
     .tips-icon {
@@ -60,6 +60,7 @@ export default {
       color: #676c7c;
       &-content {
         padding-left: 10upx;
+        line-height: 1;
       }
     }
   }

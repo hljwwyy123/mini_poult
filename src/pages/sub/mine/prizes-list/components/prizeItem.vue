@@ -10,7 +10,7 @@
         >{{prize.goodDownVirtual || prize.goodVirtual || 0}}</text>
         <text
           :class="['prize-source-price', !!prize.goodDownVirtual ? 'disabled' : '']"
-        >{{prize.goodVirtual}}大力丸</text>
+        >{{prize.goodVirtual}}能量值</text>
       </div>
       <div class="prize-changeNum">已兑换: {{prize.exchangeNum || 0}}</div>
       <div class="prize-remainNum">剩余: {{prize.goodNum}}</div>

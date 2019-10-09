@@ -10,7 +10,7 @@
               <div>
                 <div
                   :class="['prizes-source-price', !!item.goodDownVirtual ? 'disabled' : '']"
-                >{{item.goodVirtual}}大力丸</div>
+                >{{item.goodVirtual}}能量值</div>
                 <div v-if="!!item.goodDownVirtual" class="prizes-price">{{item.goodDownVirtual}}</div>
               </div>
             </div>
@@ -85,6 +85,10 @@ export default {
       font-size: 28upx;
       color: #000;
       font-weight: 500;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 100%;
     }
     .prizes-price {
       font-size: 14px;
