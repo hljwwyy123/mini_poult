@@ -56,9 +56,6 @@ export default {
       wanList.push(i);
     }
     this.wanList = wanList;
-    // setTimeout(() => {
-    //   this.animateLoop();
-    // }, 2000);
   },
   watch: {
     pageShow(isShow, old) {
@@ -70,7 +67,6 @@ export default {
       }
     },
     positiveStatusMap(newValue) {
-      console.log("newValue", newValue);
       setTimeout(() => {
         this.animateLoop();
       }, 2000);

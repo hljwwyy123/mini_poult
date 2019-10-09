@@ -67,9 +67,8 @@
         <view v-if="hitNickName" class="cut-word">
           <view>
             去
-            <span>{{hitNickName}}</span>家揍小鸡
+            <span>{{hitNickName}}</span>家喽
           </view>
-          <view>“偷”能量值去喽！</view>
         </view>
         <view v-else class="cut-word">回家喽</view>
       </view>
