@@ -140,6 +140,7 @@ export default {
     //如果是别人邀请进入
     if (options.invate_openId) {
       this.invate_openId = options.invate_openId;
+      console.log("invate_openId ----->>>>>> ", options.invate_openId);
     }
 
     if (options.lineNo) {
@@ -208,8 +209,8 @@ export default {
     },
     onGetUserInfo(el) {
       login({
-        openid: this.openId,
-        regSource: this.invate_openId || this.regSource || "",
+        openid: this.invate_openId || "",
+        regSource: this.regSource || "",
         avatar: this.userInfo.avatarUrl,
         nickName: this.userInfo.nickName
       }).then(() => {

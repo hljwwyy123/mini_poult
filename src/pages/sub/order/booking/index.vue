@@ -72,7 +72,6 @@ export default {
     this.getUserData();
     uni.getSetting().then(authRes => {
       let authInfo = authRes[1];
-      console.log(authInfo, authInfo.hasOwnProperty("scope.address"));
       if (
         authInfo.authSetting &&
         authInfo.hasOwnProperty("scope.address") &&
