@@ -48,7 +48,7 @@ export default {
     box-sizing: border-box;
     margin-top: 26upx;
     .tips-icon {
-      margin-top: 6upx;
+      margin-top: 2upx;
     }
     .swiper {
       flex: 1;

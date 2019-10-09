@@ -395,7 +395,7 @@ export default {
     display: flex;
     flex-direction: column;
     .menu-rank {
-      width: 125upx;
+      width: 105upx;
       height: 103upx;
     }
     .menu-prize {
