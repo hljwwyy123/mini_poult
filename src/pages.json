@@ -65,7 +65,7 @@
                 {
                     "path": "rank-list/index",
                     "style": {
-                        "navigationBarTitleText": "能量值排行版",
+                        "navigationBarTitleText": "能量值排行榜",
                         "enablePullDownRefresh": false,
                         "navigationBarBackgroundColor": "#fff",
                         "navigationBarTextStyle": "black",
