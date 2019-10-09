@@ -22,8 +22,8 @@
             @opensetting="openSettingHandler"
           >添加地址</button>
         </div>
-        <div v-else>
-          <div v-if="!address.telNumber" @click="getAddrees" class="address-button">添加地址</div>
+        <div v-else @click="getAddrees">
+          <div v-if="!address.telNumber" class="address-button">添加地址</div>
           <div v-else class="address-content">
             <div class="address-info">
               <div class="address-info-header">
@@ -71,13 +71,14 @@ export default {
     this.fetchGoodsInfo();
     this.getUserData();
     uni.getSetting().then(authRes => {
-      console.log(authRes);
       let authInfo = authRes[1];
-      let addressAuth = authInfo.authSetting["scope.address"];
-      console.log(addressAuth);
-      if (authInfo.authSetting && addressAuth) {
+      console.log(authInfo, authInfo.hasOwnProperty("scope.address"));
+      if (
+        authInfo.authSetting &&
+        authInfo.hasOwnProperty("scope.address") &&
+        !authInfo.authSetting["scope.address"]
+      ) {
         // 之前拒绝过授权获取address 重新授权
-        console.log("重新授权吧=======");
         this.reAuthAddress = true;
       }
     });
@@ -146,7 +147,9 @@ export default {
           this.address = res;
         },
         fail(error) {
-          self.reAuthAddress = true;
+          if (error.errMsg.indexOf("fail auth") > -1) {
+            self.reAuthAddress = true;
+          }
         }
       });
     },
