@@ -59,7 +59,7 @@
     <image class="cloud clound-2" src="/static/cloud2.png" />
     <image class="cloud clound-3" src="/static/cloud3.png" />
 
-    <sign-modal :show="signedInfo.isSigned" :title="`能量值+${signedInfo.score}`" />
+    <sign-modal :show="signedInfo.isSigned" :title="`元气值+${signedInfo.score}`" />
     <!-- <cut-mark v-if="showCut"></cut-mark> -->
     <view class="cut-mark" v-if="showCut">
       <view class="cut-content">
@@ -90,7 +90,7 @@ import { handleSign as updateSignState, fetchUserData } from "@/services";
 export default {
   data() {
     return {
-      totalScore: 0, // 获得总能量值
+      totalScore: 0, // 获得总元气值
       pageShow: true, // 当前页面是否onShow
       invate_openId: null, //邀请人Opoenid
       hitOpenId: "",
@@ -261,7 +261,7 @@ export default {
      */
     handleSign() {
       updateSignState(this.openId, res => {
-        // 打卡成功后 拉去最新的能量值数据
+        // 打卡成功后 拉去最新的元气值数据
         this.fetchIndexData();
         this.signedInfo = {
           ...res,

@@ -31,7 +31,7 @@
                 {
                     "path": "rules/index",
                     "style": {
-                        "navigationBarTitleText": "规则",
+                        "navigationBarTitleText": "规则说明",
                         "enablePullDownRefresh": false,
                         "navigationBarBackgroundColor": "#fff",
                         "navigationBarTextStyle": "black"
@@ -40,7 +40,7 @@
                 {
                     "path": "score-detail/index",
                     "style": {
-                        "navigationBarTitleText": "能量值明细",
+                        "navigationBarTitleText": "元气值明细",
                         "navigationBarBackgroundColor": "#fff",
                         "navigationBarTextStyle": "black",
                         "enablePullDownRefresh": false
@@ -65,7 +65,7 @@
                 {
                     "path": "rank-list/index",
                     "style": {
-                        "navigationBarTitleText": "能量值排行榜",
+                        "navigationBarTitleText": "元气值排行榜",
                         "enablePullDownRefresh": false,
                         "navigationBarBackgroundColor": "#fff",
                         "navigationBarTextStyle": "black",

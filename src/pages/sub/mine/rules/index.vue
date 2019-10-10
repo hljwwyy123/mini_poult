@@ -1,10 +1,14 @@
 <template>
   <view class="wrapper">
     <view class="header">
-      <image mode="aspectFill" class="header-bg" src="/static/rules_bg.png" />
+      <image
+        mode="aspectFill"
+        class="header-bg"
+        src="https://poult-1300165852.cos.ap-beijing.myqcloud.com/rule-title.png"
+      />
     </view>
     <view class="content">
-      <view class="content-title">能量值说明</view>
+      <view class="content-title">元气值说明</view>
       <view class="rule-list" v-for="(item, index) in wanRules" :key="index">
         <view class="rule-title" v-if="item.title">{{item.title}}</view>
         <view class="rule-content">

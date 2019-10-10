@@ -2,13 +2,13 @@
   <div class="wrapper">
     <div class="header">
       <div @click="handleNavigateTo" class="tips">
-        了解能量值
+        了解元气值
         <image class="tips-icon" src="/static/wan.png" />
       </div>
       <div class="header-content">
         <div class="count">{{userData.score}}</div>
-        <div class="info">我的能量值余额</div>
-        <button open-type="share" class="button breath-animate">邀请好友得能量值</button>
+        <div class="info">我的元气值余额</div>
+        <button open-type="share" class="button breath-animate">邀请好友得元气值</button>
       </div>
     </div>
     <scroll-view scroll-y class="content" @scrolltolower="handleLoadData">

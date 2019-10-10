@@ -27,12 +27,12 @@ export default {
     return {
       wanList: [],
       beatCount: 0, // 点击次数
-      hitTotalScore: 0, // 获得总能量值
+      hitTotalScore: 0, // 获得总元气值
       serialCount: 0, // 300ms 内连续点击的次数 -> 提高概率
       doubleCount: 0, // 暴击次数
       beatTimer: null, // debounce timerid
       serialDuration: 300, // 连续点击 timer 间隔
-      rate: 5, // 单次点击获得能量值概率 %
+      rate: 5, // 单次点击获得元气值概率 %
 
       statusIndex: 0, //当前timer 随机取值
       animateTimer: null,
@@ -159,7 +159,7 @@ export default {
         const minScore = Math.min(this.restThisPoultScore, this.restTotalScore);
         if (this.hitTotalScore >= minScore) {
           // NOTE: 提示语改一下
-          console.log("这只鸡已经挨揍了50次，再打也不会获得能量值了");
+          console.log("这只鸡已经挨揍了50次，再打也不会获得元气值了");
         } else if (value) {
           this.hitTotalScore += value;
           if (this.hitTotalScore >= minScore) {
