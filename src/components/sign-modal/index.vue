@@ -107,7 +107,7 @@ export default {
       position: absolute;
       bottom: 0;
       left: 50%;
-      transform: translate(-50%, 45upx);
+      transform: translate(-45%, 45upx);
     }
     .footer-text {
       font-size: 24upx;
