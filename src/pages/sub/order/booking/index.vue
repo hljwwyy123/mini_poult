@@ -9,7 +9,7 @@
           <div
             v-if="!!goodsInfo.goodDownVirtual"
             class="source-price"
-          >{{goodsInfo.goodVirtual || 0}}能量值</div>
+          >{{goodsInfo.goodVirtual || 0}}元气值</div>
         </div>
         <div class="source-price">实际商品价格：{{goodsInfo.goodPrice || 0}}元</div>
       </div>
@@ -41,10 +41,10 @@
     </div>
     <div class="footer" :class="{'iphoneX-bottom': isIphoneX}">
       <div class="footer-left">
-        <div class="text">剩余能量值</div>
+        <div class="text">剩余元气值</div>
         {{userData.score}}
       </div>
-      <div @click="handleBooking" class="footer-right">{{canBuy ? "立即兑换" : "能量值不足，去赚取"}}</div>
+      <div @click="handleBooking" class="footer-right">{{canBuy ? "立即兑换" : "元气值不足，去赚取"}}</div>
     </div>
   </div>
 </template>
@@ -66,7 +66,7 @@ export default {
   },
   onLoad(param) {
     // fetch prizes info
-    // fetch 能量值 info
+    // fetch 元气值 info
     this.param = param;
     this.fetchGoodsInfo();
     this.getUserData();

@@ -10,7 +10,7 @@
               <div>
                 <div
                   :class="['prizes-source-price', !!item.goodDownVirtual ? 'disabled' : '']"
-                >{{item.goodVirtual}}能量值</div>
+                >{{item.goodVirtual}}元气值</div>
                 <div v-if="!!item.goodDownVirtual" class="prizes-price">{{item.goodDownVirtual}}</div>
               </div>
             </div>

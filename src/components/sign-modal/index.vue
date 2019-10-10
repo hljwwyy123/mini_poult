@@ -26,7 +26,7 @@ export default {
     },
     title: {
       type: String,
-      default: "能量值"
+      default: "元气值"
     },
     info: {
       type: String,

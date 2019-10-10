@@ -2,7 +2,7 @@
   <div class="wrapper">
     <home-bar />
     <div class="summary" :class="{iphoneX: isIphoneX}">
-      <div class="info">{{userInfo.nickName || '我'}}的能量值</div>
+      <div class="info">{{userInfo.nickName || '我'}}的元气值</div>
       <div class="score">{{userData.score || 0}}</div>
       <div
         v-if="userInfo.nickName"
@@ -27,7 +27,7 @@
           </div>
         </div>
         <sign v-if="openId" :openId="openId" :signedDays="signedDays" />
-        <button open-type="share" class="share-button breath-animate">邀请好友立得100能量值</button>
+        <button open-type="share" class="share-button breath-animate">邀请好友立得100元气值</button>
         <scroll-tips />
       </div>
       <div class="section section-shadow">
@@ -64,7 +64,7 @@
         </div>
       </div>
     </div>
-    <sign-modal :show="signedInfo.isSigned" :title="`能量值+${signedInfo.score}`" />
+    <sign-modal :show="signedInfo.isSigned" :title="`元气值+${signedInfo.score}`" />
   </div>
 </template>
 <script>
@@ -134,7 +134,7 @@ export default {
   methods: {
     signed() {
       updateSignState(this.openId, res => {
-        // 打卡成功后 拉去最新的能量值数据
+        // 打卡成功后 拉去最新的元气值数据
         this.getUserData();
         this.signedInfo = {
           ...res,

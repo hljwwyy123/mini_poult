@@ -50,7 +50,7 @@ export function handleSign(openId, callback) {
 }
 
 /**
- * 获取 用户数据 能量值数量 排名 登录天数 等信息
+ * 获取 用户数据 元气值数量 排名 登录天数 等信息
  * @param {*} openId 
  */
 export const fetchUserData = openId => {
