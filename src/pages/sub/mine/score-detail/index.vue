@@ -81,14 +81,15 @@ export default {
           pageSize: this.pageSize
         }
       }).then(res => {
-        if (res && res.length) {
-          if (res.length < this.pageSize) {
+        if (res) {
+          const { count, data } = res;
+          if (!count) {
             this.loadMoreStatus = 2;
           } else {
             this.loadMoreStatus = 0;
             this.currentPage += 1;
           }
-          this.list.push(...res);
+          this.list.push(...data);
         } else {
           this.loadMoreStatus = 2;
         }
