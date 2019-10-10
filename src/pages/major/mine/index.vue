@@ -27,7 +27,7 @@
           </div>
         </div>
         <sign v-if="openId" :openId="openId" :signedDays="signedDays" />
-        <button open-type="share" class="share-button breath-animate">邀请好友立得100元气值</button>
+        <button open-type="share" class="share-button breath-animate">邀请好友得元气值</button>
         <scroll-tips />
       </div>
       <div class="section section-shadow">
