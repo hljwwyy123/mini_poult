@@ -49,11 +49,11 @@ export default {
     })
   },
   onLoad() {
+    this.currentPage = 1;
     this.handleLoadData();
     fetchUserData(this.openId).then(res => {
       this.userData = res;
     });
-    this.currentPage = 1;
     this.pageSize = 10;
   },
   onShareAppMessage: function(res) {
