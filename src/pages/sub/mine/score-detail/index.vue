@@ -8,7 +8,7 @@
       <div class="header-content">
         <div class="count">{{userData.score}}</div>
         <div class="info">我的能量值余额</div>
-        <button open-type="share" class="button breath-animate">邀请好友赚100能量值</button>
+        <button open-type="share" class="button breath-animate">邀请好友得能量值</button>
       </div>
     </div>
     <scroll-view scroll-y class="content" @scrolltolower="handleLoadData">
