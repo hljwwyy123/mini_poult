@@ -276,11 +276,11 @@ export default {
     bottom: 760upx;
     left: 50%;
     transform: translate3d(-50%, 0, 0);
-    padding: 20upx 28upx;
-    // white-space: nowrap;
-    background: rgba(255, 222, 23, 1);
-    border-radius: 43px;
-    border: 3px solid rgba(156, 110, 33, 1);
+    padding: 20upx 28upx 30upx;
+    background-image: url('~@/static/word-bg.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 100% 100%;
     color: #592c11;
     font-size: 28upx;
     line-height: 1.2;
