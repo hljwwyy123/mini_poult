@@ -76,6 +76,7 @@ export default {
         this.animateClass = "animate-normal";
         this.poultWord = "";
         this.fetchList();
+        this.hitTotalScore = 0;
       }
       if (!newValue) {
         //回家喽
@@ -277,7 +278,7 @@ export default {
     left: 50%;
     transform: translate3d(-50%, 0, 0);
     padding: 20upx 28upx 30upx;
-    background-image: url('~@/static/word-bg.png');
+    background-image: url("~@/static/word-bg.png");
     background-repeat: no-repeat;
     background-position: left center;
     background-size: 100% 100%;
