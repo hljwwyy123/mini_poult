@@ -87,6 +87,11 @@ export default {
   methods: {
     handeTabClick(index) {
       this.activeIndex = index;
+      const now = new Date().getTime();
+      // 如果切换tab的时候距离上次请求超过半分钟 则重新拉去数据
+      if (now - this.requestTime > 1000 * 30) {
+        this.getLists();
+      }
     },
     /**
      * 切换别人的小鸡
@@ -108,6 +113,7 @@ export default {
             currentPage: 1
           }
         }).then(res => {
+          this.requestTime = new Date().getTime();
           const newTabs = this.tabs;
           newTabs.forEach(tab => {
             tab.data = res[tab.key];

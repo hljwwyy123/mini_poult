@@ -170,7 +170,7 @@ export default {
         this.submitTimer = setTimeout(() => {
           uni.setStorage({
             key: "formIdsStamp",
-            data: new Date("2019/09/20").getTime()
+            data: new Date().getTime()
           });
           this.$request({
             url: "/mp/saveFromId",
